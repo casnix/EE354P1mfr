@@ -199,96 +199,257 @@ C:\Program Files (x86)\Rigel\Reads51\Include\Rc51Regs.inc
      198      16   00000                                                          ; #line 4 // -----------------------------------------------------
      199      17   00000                                                          ; #line 5
      200      18   00000                                                          ; #line 6 // Matt Rienzo, CFuncTest.c 8/25/2018
-     201      19   00000                                                          ; #line 7
-     202      20   00000                                                          ; #line 8
-     203      21   00000                                                          ; #line 9
-     204      22   00000                                                          ; #line 10 char increment(char i);
-     205      23   00000                                                          ; #line 11
-     206      24   00000                                                          ; #line 12 char Cmain(char in){
-     207      25   00000                                                          ; -----------------------------------------------
-     208      26   00000                            rseg    CodeSeg               ; CHGSEG(2)
-     209      27   00000                  _Cmain:                                 ; DECLPUBm(Cmain)
-     210      28   00000 D0F0                       pop     b                     ; ENTER
-     211      29   00002 D0E0                       pop     acc
-     212      30   00004 120000                     lcall   __enter
+     201      19   00000                                                          ; #line 7 /*"#C:\Program Files (x86)\Rigel\Reads51\Include\sfr51.h"*/
+     202      20   00000                                                          ; #line 8 // --- 8051 registers ---
+     203      21   00000                                                          ; #line 9 sfr ACC (0xE0),
+     204      22   00000                                                          ; #line 10     B   (0xF0),
+     205      23   00000                                                          ; #line 11     DPH (0x83),
+     206      24   00000                                                          ; #line 12     DPL (0x82),
+     207      25   00000                                                          ; #line 13     IE  (0xA8),
+     208      26   00000                                                          ; #line 14     IP  (0xB8),
+     209      27   00000                                                          ; #line 15     P0  (0x80),
+     210      28   00000                                                          ; #line 16     P1  (0x90),
+     211      29   00000                                                          ; #line 17     P2  (0xA0),
+     212      30   00000                                                          ; #line 18     P3  (0xB0),
+     213      31   00000                                                          ; #line 19     PCON(0x87),
+     214      32   00000                                                          ; #line 20     PSW (0xD0),
+     215      33   00000                                                          ; #line 21     SBUF(0x99),
+     216      34   00000                                                          ; #line 22     SCON(0x98),
+     217      35   00000                                                          ; #line 23     SP  (0x81),
+     218      36   00000                                                          ; #line 24     TCON(0x88),
+     219      37   00000                                                          ; #line 25     TH0 (0x8C),
+     220      38   00000                                                          ; #line 26     TH1 (0x8D),
+     221      39   00000                                                          ; #line 27     TL0 (0x8A),
+     222      40   00000                                                          ; #line 28     TL1 (0x8B),
+     223      41   00000                                                          ; #line 29     TMOD(0x89);
+     224      42   00000                                                          ; #line 30
+     225      43   00000                                                          ; #line 31 // --- 8051 register bit fields ---
+     226      44   00000                                                          ; #line 32 // IE
+     227      45   00000                                                          ; #line 33 sfrbit EA  (0xAF),
+     228      46   00000                                                          ; #line 34        ES  (0xAC),
+     229      47   00000                                                          ; #line 35        ET1 (0xAB),
+     230      48   00000                                                          ; #line 36        EX1 (0xAA),
+     231      49   00000                                                          ; #line 37        ET0 (0xA9),
+     232      50   00000                                                          ; #line 38        EX0 (0xA8),
+     233      51   00000                                                          ; #line 39 // IP
+     234      52   00000                                                          ; #line 40        PS  (0xBC),
+     235      53   00000                                                          ; #line 41        PT1 (0xBB),
+     236      54   00000                                                          ; #line 42        PX1 (0xBA),
+     237      55   00000                                                          ; #line 43        PT0 (0xB9),
+     238      56   00000                                                          ; #line 44        PX0 (0xB8),
+     239      57   00000                                                          ; #line 45 // P0
+     240      58   00000                                                          ; #line 46        P0_0(0x80),
+     241      59   00000                                                          ; #line 47        P0_1(0x81),
+     242      60   00000                                                          ; #line 48        P0_2(0x82),
+     243      61   00000                                                          ; #line 49        P0_3(0x83),
+     244      62   00000                                                          ; #line 50        P0_4(0x84),
+     245      63   00000                                                          ; #line 51        P0_5(0x85),
+     246      64   00000                                                          ; #line 52        P0_6(0x86),
+     247      65   00000                                                          ; #line 53        P0_7(0x87),
+     248      66   00000                                                          ; #line 54 // P1
+     249      67   00000                                                          ; #line 55        P1_0(0x90),
+     250      68   00000                                                          ; #line 56        P1_1(0x91),
+     251      69   00000                                                          ; #line 57        P1_2(0x92),
+     252      70   00000                                                          ; #line 58        P1_3(0x93),
+     253      71   00000                                                          ; #line 59        P1_4(0x94),
+     254      72   00000                                                          ; #line 60        P1_5(0x95),
+     255      73   00000                                                          ; #line 61        P1_6(0x96),
+     256      74   00000                                                          ; #line 62        P1_7(0x97),
+     257      75   00000                                                          ; #line 63 // P2
+     258      76   00000                                                          ; #line 64        P2_0(0xA0),
+     259      77   00000                                                          ; #line 65        P2_1(0xA1),
+     260      78   00000                                                          ; #line 66        P2_2(0xA2),
+     261      79   00000                                                          ; #line 67        P2_3(0xA3),
+     262      80   00000                                                          ; #line 68        P2_4(0xA4),
+     263      81   00000                                                          ; #line 69        P2_5(0xA5),
+     264      82   00000                                                          ; #line 70        P2_6(0xA6),
+     265      83   00000                                                          ; #line 71        P2_7(0xA7),
+     266      84   00000                                                          ; #line 72 // P3
+     267      85   00000                                                          ; #line 73        P3_0(0xB0),
+     268      86   00000                                                          ; #line 74        P3_1(0xB1),
+     269      87   00000                                                          ; #line 75        P3_2(0xB2),
+     270      88   00000                                                          ; #line 76        P3_3(0xB3),
+     271      89   00000                                                          ; #line 77        P3_4(0xB4),
+     272      90   00000                                                          ; #line 78        P3_5(0xB5),
+     273      91   00000                                                          ; #line 79        P3_6(0xB6),
+     274      92   00000                                                          ; #line 80        P3_7(0xB7),
+     275      93   00000                                                          ; #line 81 // P3 alternate function pin names
+     276      94   00000                                                          ; #line 82        RD  (0xB7),
+     277      95   00000                                                          ; #line 83        WR  (0xB6),
+     278      96   00000                                                          ; #line 84        T1  (0xB5),
+     279      97   00000                                                          ; #line 85        T0  (0xB4),
+     280      98   00000                                                          ; #line 86        INT1(0xB3),
+     281      99   00000                                                          ; #line 87        INT0(0xB2),
+     282     100   00000                                                          ; #line 88        TXD (0xB1),
+     283     101   00000                                                          ; #line 89        RXD (0xB0),
+     284     102   00000                                                          ; #line 90 // PSW
+     285     103   00000                                                          ; #line 91        CY  (0xD7),
+     286     104   00000                                                          ; #line 92        AC  (0xD6),
+     287     105   00000                                                          ; #line 93        F0  (0xD5),
+     288     106   00000                                                          ; #line 94        RS1 (0xD4),
+     289     107   00000                                                          ; #line 95        RS0 (0xD3),
+     290     108   00000                                                          ; #line 96        OV  (0xD2),
+     291     109   00000                                                          ; #line 97        P   (0xD0),
+     292     110   00000                                                          ; #line 98 // TCON
+     293     111   00000                                                          ; #line 99        TF1 (0x8F),
+     294     112   00000                                                          ; #line 100        TR1 (0x8E),
+     295     113   00000                                                          ; #line 101        TF0 (0x8D),
+     296     114   00000                                                          ; #line 102        TR0 (0x8C),
+     297     115   00000                                                          ; #line 103        IE1 (0x8B),
+     298     116   00000                                                          ; #line 104        IT1 (0x8A),
+     299     117   00000                                                          ; #line 105        IE0 (0x89),
+     300     118   00000                                                          ; #line 106        IT0 (0x88),
+     301     119   00000                                                          ; #line 107 // SCON
+     302     120   00000                                                          ; #line 108        SM0 (0x9F),
+     303     121   00000                                                          ; #line 109        SM1 (0x9E),
+     304     122   00000                                                          ; #line 110        SM2 (0x9D),
+     305     123   00000                                                          ; #line 111        REN (0x9C),
+     306     124   00000                                                          ; #line 112        TB8 (0x9B),
+     307     125   00000                                                          ; #line 113        RB8 (0x9A),
+     308     126   00000                                                          ; #line 114        TI  (0x99),
+     309     127   00000                                                          ; #line 115        RI  (0x98);
+     310     128   00000                                                          ; #line 116
+     311     129   00000                                                          ; #line 117 /*"#../include/c/Registers.h"*/
+     312     130   00000                                                          ; #line 118 // Matt Rienzo, Registers.h 8/28/2018
+     313     131   00000                                                          ; #line 119 #asm
+     314     132   00000                  ; Matt Rienzo, Registers.inc 8/25/2018
+     315     133   00000                  ;-- Alias/enumeration of registers and banks
+     316     134   00000                  a0	equ	0
+     317     135   00000                  a1	equ	1
+     318     136   00000                  a2	equ	2
+     319     137   00000                  a3	equ	3
+     320     138   00000                  a4	equ	4
+     321     139   00000                  a5	equ	5
+     322     140   00000                  a6	equ	6
+     323     141   00000                  a7	equ	7
+     324     142   00000                  b0	equ	8
+     325     143   00000                  b1	equ	9
+     326     144   00000                  b2	equ	10
+     327     145   00000                  b3	equ	11
+     328     146   00000                  b4	equ	12
+     329     147   00000                  b5	equ	13
+     330     148   00000                  b6	equ	14
+     331     149   00000                  b7	equ	15
+     332     150   00000                  c0	equ	16
+     333     151   00000                  c1	equ	17
+     334     152   00000                  c2	equ	18
+     335     153   00000                  c3	equ	19
+     336     154   00000                  c4	equ	20
+     337     155   00000                  c5	equ	21
+     338     156   00000                  c6	equ	22
+     339     157   00000                  c7	equ	23
+     340     158   00000                  ;-- SFRs
+     341     159   00000                  bcc equ 0xf0
+     342     160   00000                                                          ; #line 153
+     343     161   00000                                                          ; #line 154 //#define     OPTIMIZE
+     344     162   00000                                                          ; #line 155
+     345     163   00000                                                          ; #line 156 #asm
+     346     164   00000                  extern      code    __HIL_C_test
+     347     165   00000                  extern      code    __sspush
+     348     166   00000                  extern      code    __sspop
+     349     167   00000                                                          ; #line 162
+     350     168   00000                                                          ; #line 163 char increment(char i);
+     351     169   00000                                                          ; #line 164
+     352     170   00000                                                          ; #line 165 char Cmain(char in){
+     353     171   00000                                                          ; -----------------------------------------------
+     354     172   00000                            rseg    CodeSeg               ; CHGSEG(2)
+     355     173   00000                  _Cmain:                                 ; DECLPUBm(Cmain)
+     356     174   00000 D0F0                       pop     b                     ; ENTER
+     357     175   00002 D0E0                       pop     acc
+     358     176   00004 120000                     lcall   __enter
                          0000220840      
-     213      31   00007                                                          ; #line 13     in =increment(in);
-     214      32   00007                                                          ; -----------------------------------------------
-     215      33   00007 74FA                       mov     a, #0xFA              ; GETb1s(-6)
-     216      34   00009 75F0FF                     mov     b, #0xFF
-     217      35   0000C 120000                     lcall   __getb1s
-                         0000320840      
-     218      36   0000F 120000                     lcall   __push1               ; PUSH1
-                         00002E0840      
-     219      37   00012 750C01                     mov     ARGCNT, #0x01         ; ARGCNTn(1)
-     220      38   00015 120033                     lcall   _increment            ; CALLm(_increment)
-                         0033020040      
-     221      39   00018 74FE                       mov     a, #0xFE              ; ADDSP(-2)
-     222      40   0001A 75F0FF                     mov     b, #0xFF
-     223      41   0001D 120000                     lcall   __addsp
-                         0000460840      
-     224      42   00020 74FA                       mov     a, #0xFA              ; PUTb1s(-6)
-     225      43   00022 75F0FF                     mov     b, #0xFF
-     226      44   00025 120000                     lcall   __putb1s
+     359     177   00007                                                          ; #line 166 #asm
+     360     178   00007 74E1                 mov     a,      #0xe1
+     361     179   00009 120000               lcall   __HIL_C_test
+                         0000340840      
+     362     180   0000C 120000               lcall __sspop pop acc
+                         00004C0840      
+     363     181   0000F D0E0                                                     ; #line 171     in =increment(in);
+     364     182   00011                                                          ; -----------------------------------------------
+     365     183   00011 74FA                       mov     a, #0xFA              ; GETb1s(-6)
+     366     184   00013 75F0FF                     mov     b, #0xFF
+     367     185   00016 120000                     lcall   __getb1s
+                         0000330840      
+     368     186   00019 120000                     lcall   __push1               ; PUSH1
+                         00002F0840      
+     369     187   0001C 750C01                     mov     ARGCNT, #0x01         ; ARGCNTn(1)
+     370     188   0001F 12003D                     lcall   _increment            ; CALLm(_increment)
+                         003D020040      
+     371     189   00022 74FE                       mov     a, #0xFE              ; ADDSP(-2)
+     372     190   00024 75F0FF                     mov     b, #0xFF
+     373     191   00027 120000                     lcall   __addsp
+                         0000480840      
+     374     192   0002A 74FA                       mov     a, #0xFA              ; PUTb1s(-6)
+     375     193   0002C 75F0FF                     mov     b, #0xFF
+     376     194   0002F 120000                     lcall   __putb1s
+                         00004D0840      
+     377     195   00032                                                          ; #line 172     return in;
+     378     196   00032                                                          ; -----------------------------------------------
+     379     197   00032 74FA                       mov     a, #0xFA              ; GETb1s(-6)
+     380     198   00034 75F0FF                     mov     b, #0xFF
+     381     199   00037 120000                     lcall   __getb1s
+                         0000330840      
+     382     200   0003A                                                          ; -----------------------------------------------
+     383     201   0003A 120000                     lcall   __return              ; RETURN(0)
                          00004A0840      
-     227      45   00028                                                          ; #line 14     return in;
-     228      46   00028                                                          ; -----------------------------------------------
-     229      47   00028 74FA                       mov     a, #0xFA              ; GETb1s(-6)
-     230      48   0002A 75F0FF                     mov     b, #0xFF
-     231      49   0002D 120000                     lcall   __getb1s
-                         0000320840      
-     232      50   00030                                                          ; -----------------------------------------------
-     233      51   00030 120000                     lcall   __return              ; RETURN(0)
-                         0000480840      
-     234      52   00033                                                          ; #line 15 }
-     235      53   00033                                                          ; #line 16
-     236      54   00033                                                          ; #line 17 char increment(char i){
-     237      55   00033                                                          ; -----------------------------------------------
-     238      56   00033                  _increment:                             ; DECLPUBm(increment)
-     239      57   00033 D0F0                       pop     b                     ; ENTER
-     240      58   00035 D0E0                       pop     acc
-     241      59   00037 120000                     lcall   __enter
+     384     202   0003D                                                          ; #line 173 }
+     385     203   0003D                                                          ; #line 174
+     386     204   0003D                                                          ; #line 175 char increment(char i){
+     387     205   0003D                                                          ; -----------------------------------------------
+     388     206   0003D                  _increment:                             ; DECLPUBm(increment)
+     389     207   0003D D0F0                       pop     b                     ; ENTER
+     390     208   0003F D0E0                       pop     acc
+     391     209   00041 120000                     lcall   __enter
                          0000220840      
-     242      60   0003A                                                          ; #line 18     i++;
-     243      61   0003A                                                          ; -----------------------------------------------
-     244      62   0003A 74FA                       mov     a, #0xFA              ; POINT2s(-6)
-     245      63   0003C 75F0FF                     mov     b, #0xFF
-     246      64   0003F 120000                     lcall   __point2s
+     392     210   00044                                                          ; #line 176     i++;
+     393     211   00044                                                          ; -----------------------------------------------
+     394     212   00044 74FA                       mov     a, #0xFA              ; POINT2s(-6)
+     395     213   00046 75F0FF                     mov     b, #0xFF
+     396     214   00049 120000                     lcall   __point2s
                          0000090840      
-     247      65   00042 850282                     mov     dpl, SRL              ; INCbp
-     248      66   00045 850383                     mov     dph, SRH
-     249      67   00048 E0                         movx    a, @dptr
-     250      68   00049 2401                       add     a, #1
-     251      69   0004B F0                         movx    @dptr, a
-     252      70   0004C                                                          ; #line 19     return i;
-     253      71   0004C                                                          ; -----------------------------------------------
-     254      72   0004C 74FA                       mov     a, #0xFA              ; GETb1s(-6)
-     255      73   0004E 75F0FF                     mov     b, #0xFF
-     256      74   00051 120000                     lcall   __getb1s
-                         0000320840      
-     257      75   00054                                                          ; -----------------------------------------------
-     258      76   00054 120000                     lcall   __return              ; RETURN(0)
-                         0000480840      
-     259      77   00057                                                          ; #line 20 }
-     260      78   00057                                                          ; -----------------------------------------------
-     261      79   00057                            end                           ; ENDSEG(2)
+     397     215   0004C 850282                     mov     dpl, SRL              ; INCbp
+     398     216   0004F 850383                     mov     dph, SRH
+     399     217   00052 E0                         movx    a, @dptr
+     400     218   00053 2401                       add     a, #1
+     401     219   00055 F0                         movx    @dptr, a
+     402     220   00056                                                          ; #line 177     return i;
+     403     221   00056                                                          ; -----------------------------------------------
+     404     222   00056 74FA                       mov     a, #0xFA              ; GETb1s(-6)
+     405     223   00058 75F0FF                     mov     b, #0xFF
+     406     224   0005B 120000                     lcall   __getb1s
+                         0000330840      
+     407     225   0005E                                                          ; -----------------------------------------------
+     408     226   0005E 120000                     lcall   __return              ; RETURN(0)
+                         00004A0840      
+     409     227   00061                                                          ; #line 178 }
+     410     228   00061                                                          ; -----------------------------------------------
+     411     229   00061                            end                           ; ENDSEG(2)
 
 
 *** Symbols ***
 name                    hex      dec          type     segment
 --------------------------------------------------------------
-_increment           0x0033       51          code     CodeSeg
+_increment           0x003D       61          code     CodeSeg
+c0                   0x0010       16        number     absolute
 TR1                  0x008E      142           bit     absolute
 T0                   0x00B4      180           bit     absolute
 ET1                  0x00AB      171           bit     absolute
 SCON                 0x0098      152          data     absolute
 PRH                  0x0001        1          data     absolute
+c1                   0x0011       17        number     absolute
+b0                   0x0008        8        number     absolute
 IE0                  0x0089      137           bit     absolute
 T1                   0x00B5      181           bit     absolute
+c2                   0x0012       18        number     absolute
+b1                   0x0009        9        number     absolute
+a0                   0x0000        0        number     absolute
 IE1                  0x008B      139           bit     absolute
 AC                   0x00D6      214           bit     absolute
 SBUF                 0x0099      153          data     absolute
 ARGCNT               0x000C       12          data     absolute
+c3                   0x0013       19        number     absolute
+b2                   0x000A       10        number     absolute
+a1                   0x0001        1        number     absolute
 SM0                  0x009F      159           bit     absolute
 IT0                  0x0088      136           bit     absolute
 RD                   0x00B7      183           bit     absolute
@@ -296,12 +457,18 @@ PS                   0x00BC      188           bit     absolute
 PCON                 0x0087      135          data     absolute
 CNT                  0x0006        6          data     absolute
 SRH                  0x0003        3          data     absolute
+c4                   0x0014       20        number     absolute
+b3                   0x000B       11        number     absolute
+a2                   0x0002        2        number     absolute
 RB8                  0x009A      154           bit     absolute
 REN                  0x009C      156           bit     absolute
 SM1                  0x009E      158           bit     absolute
 IT1                  0x008A      138           bit     absolute
 P0                   0x0080      128          data     absolute
 PRL                  0x0000        0          data     absolute
+c5                   0x0015       21        number     absolute
+b4                   0x000C       12        number     absolute
+a3                   0x0003        3        number     absolute
 SM2                  0x009D      157           bit     absolute
 CY                   0x00D7      215           bit     absolute
 INT0                 0x00B2      178           bit     absolute
@@ -309,12 +476,18 @@ TL0                  0x008A      138          data     absolute
 P1                   0x0090      144          data     absolute
 BPH                  0x000B       11          data     absolute
 SPH                  0x0009        9          data     absolute
+c6                   0x0016       22        number     absolute
+b5                   0x000D       13        number     absolute
+a4                   0x0004        4        number     absolute
 TI                   0x0099      153           bit     absolute
 TB8                  0x009B      155           bit     absolute
 INT1                 0x00B3      179           bit     absolute
 PX0                  0x00B8      184           bit     absolute
 TL1                  0x008B      139          data     absolute
 P2                   0x00A0      160          data     absolute
+c7                   0x0017       23        number     absolute
+b6                   0x000E       14        number     absolute
+a5                   0x0005        5        number     absolute
 OV                   0x00D2      210           bit     absolute
 PX1                  0x00BA      186           bit     absolute
 P3                   0x00B0      176          data     absolute
@@ -322,7 +495,10 @@ IP                   0x00B8      184          data     absolute
 DPH                  0x0083      131          data     absolute
 MODFLAGREG           0x0007        7          data     absolute
 SRL                  0x0002        2          data     absolute
+b7                   0x000F       15        number     absolute
+a6                   0x0006        6        number     absolute
 RI                   0x0098      152           bit     absolute
+a7                   0x0007        7        number     absolute
 RXD                  0x00B0      176           bit     absolute
 TH0                  0x008C      140          data     absolute
 BPL                  0x000A       10          data     absolute
@@ -339,6 +515,7 @@ TF1                  0x008F      143           bit     absolute
 WR                   0x00B6      182           bit     absolute
 EX0                  0x00A8      168           bit     absolute
 ACC                  0x00E0      224          data     absolute
+bcc                  0x00F0      240        number     absolute
 RS0                  0x00D3      211           bit     absolute
 EX1                  0x00AA      170           bit     absolute
 EA                   0x00AF      175           bit     absolute
@@ -402,6 +579,7 @@ __dbl1               0x0000        0          code
 __pushs              0x0000        0          code 
 __getw1m             0x0000        0          code 
 __incwp              0x0000        0          code 
+__sspush             0x0000        0          code 
 __getb2s             0x0000        0          code 
 __and12              0x0000        0          code 
 __pushs0             0x0000        0          code 
@@ -411,6 +589,7 @@ __lt12               0x0000        0          code
 __ne12               0x0000        0          code 
 __getw2p             0x0000        0          code 
 __getb1s             0x0000        0          code 
+__HIL_C_test         0x0000        0          code 
 __push2              0x0000        0          code 
 __putwp1             0x0000        0          code 
 __getw1p             0x0000        0          code 
@@ -434,6 +613,7 @@ __addsp              0x0000        0          code
 __umul12             0x0000        0          code 
 __return             0x0000        0          code 
 __getw1p0            0x0000        0          code 
+__sspop              0x0000        0          code 
 __putb1s             0x0000        0          code 
 __lneg1              0x0000        0          code 
 __ge12               0x0000        0          code 
@@ -444,5 +624,5 @@ __add21              0x0000        0          code
 *** Publics (Exports) ***
 name                    hex      dec          type
 --------------------------------------------------
-_increment           0x0033       51          code 
+_increment           0x003D       61          code 
 _Cmain               0x0000        0          code 

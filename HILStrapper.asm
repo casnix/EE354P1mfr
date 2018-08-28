@@ -19,7 +19,9 @@
 HIL		segment	code
 	
 public	__HIL_init
-public	main
+#ifdef      DEBUG
+public	__HIL_C_test
+#endif
 rseg	HIL
     extern  code    __sspop
     extern  code    __sspush
@@ -31,7 +33,7 @@ rseg	HIL
         ; 1) Check battery voltage
         acall   __HIL_enable_ADC
         lowEA                               ; Disable interrupts for while we check devices on ADC
-        sspushl(#0x00)                      ; Channel byte for ADC/Battery voltage
+        sspushl(0x00)                      ; Channel byte for ADC/Battery voltage
         acall   __HIL_select_ADCCh
         acall   __HIL_enable_ADCCollect     ; Enable ADC collection on the channel for the battery
         acall   __HIL_check_batt_voltage    ; Check battery voltage
@@ -51,7 +53,7 @@ rseg	HIL
         mov     adcf,       #0x01
         mov     adcon,      #0x20
         mov     adclk,      #0x00
-#ifdef  DEBUG
+#ifdef      DEBUG
         mov     c7,         adcf
         mov     c6,         adcon
         mov     c5,         adclk
@@ -115,7 +117,7 @@ rseg	HIL
 #endif        
         pop     bcc
         pop     acc
-        sspushl(#0x00)
+        sspushl(0x00)
         ret
 
     ; __HIL_disable_batterylo : Turns on BATT_LOW led, and red square.
@@ -124,7 +126,7 @@ rseg	HIL
     __HIL_disable_batterylo:
         ; Turn on battery low light
         ; Turn on red square
-        sspushl(#0xff)
+        sspushl(0xff)
         ret
 
 
@@ -138,12 +140,17 @@ rseg	HIL
         ; Handler for battery power measuring
         ; Handler for accelerometer
         ; Handler for vibration motor
-        sspushl(0x00)
-  		ret
-		
-	main:
+	
+	HIL_init_fail:
+        sspushl(0xff)
+        ret
+	
+#ifdef      DEBUG        
+    __HIL_C_test:
+        sspushl(0xe4)
 		; Order of operation:
 		ret
+#endif
 		
 		
 end

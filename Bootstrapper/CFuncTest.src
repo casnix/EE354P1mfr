@@ -16,19 +16,169 @@ public            _Cmain
                                         ; #line 4 // ----------------------------------------------------- 
                                         ; #line 5 
                                         ; #line 6 // Matt Rienzo, CFuncTest.c 8/25/2018
-                                        ; #line 7 
-                                        ; #line 8 
-                                        ; #line 9 
-                                        ; #line 10 char increment(char i);
-                                        ; #line 11 
-                                        ; #line 12 char Cmain(char in){
+                                        ; #line 7 /*"#C:\Program Files (x86)\Rigel\Reads51\Include\sfr51.h"*/
+                                        ; #line 8 // --- 8051 registers ---
+                                        ; #line 9 sfr ACC (0xE0),
+                                        ; #line 10     B   (0xF0),
+                                        ; #line 11     DPH (0x83),
+                                        ; #line 12     DPL (0x82),
+                                        ; #line 13     IE  (0xA8),
+                                        ; #line 14     IP  (0xB8),
+                                        ; #line 15     P0  (0x80),
+                                        ; #line 16     P1  (0x90),
+                                        ; #line 17     P2  (0xA0),
+                                        ; #line 18     P3  (0xB0),
+                                        ; #line 19     PCON(0x87),
+                                        ; #line 20     PSW (0xD0),
+                                        ; #line 21     SBUF(0x99),
+                                        ; #line 22     SCON(0x98),
+                                        ; #line 23     SP  (0x81),
+                                        ; #line 24     TCON(0x88),
+                                        ; #line 25     TH0 (0x8C),
+                                        ; #line 26     TH1 (0x8D),
+                                        ; #line 27     TL0 (0x8A),
+                                        ; #line 28     TL1 (0x8B),
+                                        ; #line 29     TMOD(0x89);
+                                        ; #line 30 
+                                        ; #line 31 // --- 8051 register bit fields ---
+                                        ; #line 32 // IE
+                                        ; #line 33 sfrbit EA  (0xAF),
+                                        ; #line 34        ES  (0xAC),
+                                        ; #line 35        ET1 (0xAB),
+                                        ; #line 36        EX1 (0xAA),
+                                        ; #line 37        ET0 (0xA9),
+                                        ; #line 38        EX0 (0xA8),
+                                        ; #line 39 // IP 
+                                        ; #line 40        PS  (0xBC),
+                                        ; #line 41        PT1 (0xBB),
+                                        ; #line 42        PX1 (0xBA),
+                                        ; #line 43        PT0 (0xB9),
+                                        ; #line 44        PX0 (0xB8),
+                                        ; #line 45 // P0
+                                        ; #line 46        P0_0(0x80),
+                                        ; #line 47        P0_1(0x81),
+                                        ; #line 48        P0_2(0x82),
+                                        ; #line 49        P0_3(0x83),
+                                        ; #line 50        P0_4(0x84),
+                                        ; #line 51        P0_5(0x85),
+                                        ; #line 52        P0_6(0x86),
+                                        ; #line 53        P0_7(0x87),
+                                        ; #line 54 // P1
+                                        ; #line 55        P1_0(0x90),
+                                        ; #line 56        P1_1(0x91),
+                                        ; #line 57        P1_2(0x92),
+                                        ; #line 58        P1_3(0x93),
+                                        ; #line 59        P1_4(0x94),
+                                        ; #line 60        P1_5(0x95),
+                                        ; #line 61        P1_6(0x96),
+                                        ; #line 62        P1_7(0x97),
+                                        ; #line 63 // P2
+                                        ; #line 64        P2_0(0xA0),
+                                        ; #line 65        P2_1(0xA1),
+                                        ; #line 66        P2_2(0xA2),
+                                        ; #line 67        P2_3(0xA3),
+                                        ; #line 68        P2_4(0xA4),
+                                        ; #line 69        P2_5(0xA5),
+                                        ; #line 70        P2_6(0xA6),
+                                        ; #line 71        P2_7(0xA7),
+                                        ; #line 72 // P3
+                                        ; #line 73        P3_0(0xB0),
+                                        ; #line 74        P3_1(0xB1),
+                                        ; #line 75        P3_2(0xB2),
+                                        ; #line 76        P3_3(0xB3),
+                                        ; #line 77        P3_4(0xB4),
+                                        ; #line 78        P3_5(0xB5),
+                                        ; #line 79        P3_6(0xB6),
+                                        ; #line 80        P3_7(0xB7),
+                                        ; #line 81 // P3 alternate function pin names
+                                        ; #line 82        RD  (0xB7),
+                                        ; #line 83        WR  (0xB6),
+                                        ; #line 84        T1  (0xB5),
+                                        ; #line 85        T0  (0xB4),
+                                        ; #line 86        INT1(0xB3),
+                                        ; #line 87        INT0(0xB2),
+                                        ; #line 88        TXD (0xB1),
+                                        ; #line 89        RXD (0xB0),
+                                        ; #line 90 // PSW
+                                        ; #line 91        CY  (0xD7),
+                                        ; #line 92        AC  (0xD6),
+                                        ; #line 93        F0  (0xD5),
+                                        ; #line 94        RS1 (0xD4),
+                                        ; #line 95        RS0 (0xD3),
+                                        ; #line 96        OV  (0xD2),
+                                        ; #line 97        P   (0xD0),
+                                        ; #line 98 // TCON
+                                        ; #line 99        TF1 (0x8F),
+                                        ; #line 100        TR1 (0x8E),
+                                        ; #line 101        TF0 (0x8D),
+                                        ; #line 102        TR0 (0x8C),
+                                        ; #line 103        IE1 (0x8B),
+                                        ; #line 104        IT1 (0x8A),
+                                        ; #line 105        IE0 (0x89),
+                                        ; #line 106        IT0 (0x88),
+                                        ; #line 107 // SCON
+                                        ; #line 108        SM0 (0x9F),
+                                        ; #line 109        SM1 (0x9E),
+                                        ; #line 110        SM2 (0x9D),
+                                        ; #line 111        REN (0x9C),
+                                        ; #line 112        TB8 (0x9B),
+                                        ; #line 113        RB8 (0x9A),
+                                        ; #line 114        TI  (0x99),
+                                        ; #line 115        RI  (0x98);
+                                        ; #line 116 
+                                        ; #line 117 /*"#../include/c/Registers.h"*/
+                                        ; #line 118 // Matt Rienzo, Registers.h 8/28/2018
+                                        ; #line 119 #asm
+; Matt Rienzo, Registers.inc 8/25/2018
+;-- Alias/enumeration of registers and banks
+a0	equ	0
+a1	equ	1
+a2	equ	2
+a3	equ	3
+a4	equ	4
+a5	equ	5
+a6	equ	6
+a7	equ	7
+b0	equ	8
+b1	equ	9
+b2	equ	10
+b3	equ	11
+b4	equ	12
+b5	equ	13
+b6	equ	14
+b7	equ	15
+c0	equ	16
+c1	equ	17
+c2	equ	18
+c3	equ	19
+c4	equ	20
+c5	equ	21
+c6	equ	22
+c7	equ	23
+;-- SFRs
+bcc equ 0xf0
+                                        ; #line 153 
+                                        ; #line 154 //#define     OPTIMIZE
+                                        ; #line 155 
+                                        ; #line 156 #asm
+extern      code    __HIL_C_test
+extern      code    __sspush
+extern      code    __sspop
+                                        ; #line 162 
+                                        ; #line 163 char increment(char i);
+                                        ; #line 164 
+                                        ; #line 165 char Cmain(char in){
                                         ; -----------------------------------------------
           rseg    CodeSeg               ; CHGSEG(2)
 _Cmain:                                 ; DECLPUBm(Cmain)
           pop     b                     ; ENTER
           pop     acc
           lcall   __enter
-                                        ; #line 13     in =increment(in);
+                                        ; #line 166 #asm    
+    mov     a,      #0xe1
+    lcall   __HIL_C_test
+    lcall __sspop pop acc
+                                        ; #line 171     in =increment(in);
                                         ; -----------------------------------------------
           mov     a, #0xFA              ; GETb1s(-6)
           mov     b, #0xFF
@@ -42,22 +192,22 @@ _Cmain:                                 ; DECLPUBm(Cmain)
           mov     a, #0xFA              ; PUTb1s(-6)
           mov     b, #0xFF
           lcall   __putb1s
-                                        ; #line 14     return in;
+                                        ; #line 172     return in;
                                         ; -----------------------------------------------
           mov     a, #0xFA              ; GETb1s(-6)
           mov     b, #0xFF
           lcall   __getb1s
                                         ; -----------------------------------------------
           lcall   __return              ; RETURN(0)
-                                        ; #line 15 }
-                                        ; #line 16 
-                                        ; #line 17 char increment(char i){
+                                        ; #line 173 }
+                                        ; #line 174 
+                                        ; #line 175 char increment(char i){
                                         ; -----------------------------------------------
 _increment:                             ; DECLPUBm(increment)
           pop     b                     ; ENTER
           pop     acc
           lcall   __enter
-                                        ; #line 18     i++;
+                                        ; #line 176     i++;
                                         ; -----------------------------------------------
           mov     a, #0xFA              ; POINT2s(-6)
           mov     b, #0xFF
@@ -67,13 +217,13 @@ _increment:                             ; DECLPUBm(increment)
           movx    a, @dptr
           add     a, #1
           movx    @dptr, a
-                                        ; #line 19     return i;
+                                        ; #line 177     return i;
                                         ; -----------------------------------------------
           mov     a, #0xFA              ; GETb1s(-6)
           mov     b, #0xFF
           lcall   __getb1s
                                         ; -----------------------------------------------
           lcall   __return              ; RETURN(0)
-                                        ; #line 20 }
+                                        ; #line 178 }
                                         ; -----------------------------------------------
           end                           ; ENDSEG(2)

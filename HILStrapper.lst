@@ -93,71 +93,127 @@ Y:\Development\8051\Bootstrapper\HILStrapper.asm
       90      19   00000                  HIL		segment	code
       91      20   00000                  
       92      21   00000                  public	__HIL_init
-      93      22   00000                  public	main
-      94      23   00000                  rseg	HIL
-      95      24   00000                      extern  code    __sspop
-      96      25   00000                      extern  code    __sspush
-      97      26   00000                  	__HIL_init:
-      98      27   00000                          ; 1) Turn on ADC.
-      99      28   00000 75F601                   mov     adcf,       #0x01
-     100      29   00003 75F320                   mov     adcon,      #0x20
-     101      30   00006 75F200                   mov     adclk,      #0x00
-     102      32   00009 85F617                   mov     c7,         adcf
-     103      33   0000C 85F316                   mov     c6,         adcon
-     104      34   0000F 85F215                   mov     c5,         adclk
-     105      36   00012                  
-     106      37   00012                          ; Disable interrupts for while we check devices on ADC
-     107      38   00012 53A87F                   lowEA
-     108      39   00015                          ; 2) Check battery voltage.  Too low? Turn on red square and battery low LEDs.
-     109      40   00015                          ; battery voltage/division will be routed to ADC channel 0
-     110      41   00015 53F3F8                   anl     adcon,      #0xf8
-     111      42   00018 43F300                   orl     adcon,      #0x00
-     112      43   0001B 43F320                   orl     adcon,      #0x20
-     113      44   0001E                  
-     114      45   0001E                          ; Start the ADC collection
-     115      46   0001E 43F308                   orl     adcon,      #0x08
-     116      47   00021 C0E0                     push    acc
-     117      48   00023                      hsWdbADCON:
-     118      49   00023 E5F3                     mov     a,          adcon
-     119      50   00025 5510                     anl     a,          0x10
-     120      51   00027 B510F9                   cjne    a,          0x10,   hsWdbADCON
-     121      52   0002A                  
-     122      53   0002A                          ; Voltage check
-     123      54   0002A                  #define     MINIMUM_BATT_VOLTAGEh   0x0f    ; will change
-     124      56   0002A C0F0                     push    bcc
-     125      58   0002C 74FF                     mov     a,          #0xff
-     126      59   0002E 7400                     mov     a,          #0x00
-     127      60   00030 74FF                     mov     a,          #0xff
-     128      61   00032                      dbgloop:
-     129      62   00032 C3                       clr     c
-     130      63   00033 740F                     mov     a,          #0x0f
-     131      64   00035 940F                     subb    a,          #MINIMUM_BATT_VOLTAGEh
-     132      65   00037                         ; mov     a,          c
-     133      66   00037                  
-     134      67   00037                  
-     135      68   00037                      dbgdo:
-     136      69   00037 80F9                     sjmp    dbgloop
-     137      71   00039                  
-     138      72   00039                  
-     139      73   00039                          ; 3) Turn on accelerometer
-     140      74   00039                          ; 4) Switch interrupts?
-     141      75   00039                          ; 5) Return success
-     142      76   00039                          ; Handler for turning on LEDs
-     143      77   00039                          ; Handler for LED array
-     144      78   00039                          ; Handler for power touch button
-     145      79   00039                          ; Handler for battery power measuring
-     146      80   00039                          ; Handler for accelerometer
-     147      81   00039                          ; Handler for vibration motor
-     148      82   00039 751800                   sspushl(0x00)
-     149      83   0003C C018               		ret
-     150      84   0003E 120000           
+      93      23   00000                  public	__HIL_C_test
+      94      25   00000                  rseg	HIL
+      95      26   00000                      extern  code    __sspop
+      96      27   00000                      extern  code    __sspush
+      97      28   00000                      ; __HIL_init : initializes hardware components, and defines functions/callbacks for hardware
+      98      29   00000                      ;   manipulate by the HAL.
+      99      30   00000                      ; args: none
+     100      31   00000                      ; rets: SS(#retval) -- Immediate byte off short stack to tell __entry whether or not we failed.
+     101      32   00000                  	__HIL_init:
+     102      33   00000                          ; 1) Check battery voltage
+     103      34   00000 111B                     acall   __HIL_enable_ADC
+                         001B010040      
+     104      35   00002 53A87F                   lowEA                               ; Disable interrupts for while we check devices on ADC
+     105      36   00005 751800                   sspushl(0x00)                      ; Channel byte for ADC/Battery voltage
+     106      37   00008 C018                     acall   __HIL_select_ADCCh
+     107      38   0000A 120000                   acall   __HIL_enable_ADCCollect     ; Enable ADC collection on the channel for the battery
                          0000000840      
-     151      85   00041 22               	main:
-     152      86   00042                  		; Order of operation:
-     153      87   00042 22               		ret
-     154      88   00043                  
-     155      89   00043                  
-     156      90   00043                  end
+     108      39   0000D 1131                     acall   __HIL_check_batt_voltage    ; Check battery voltage
+                         0031010040      
+     109      40   0000F 113B                     sspop(acc)
+                         003B010040      
+     110      41   00011 113F                     cjne    a,          #0x00,  HIL_init_fail
+                         003F010040      
+     111      42   00013 120000           
+                         0000010840      
+     112      43   00016 D0E0                     ; 2) Turn on accelerometer
+     113      44   00018 B4004B           
+     114      45   0001B                  
+     115      46   0001B                  
+     116      47   0001B                      ; __HIL_enable_ADC : Turns on and resets ADC
+     117      48   0001B                      ; args: none
+     118      49   0001B                      ; rets: none
+     119      50   0001B                      __HIL_enable_ADC:
+     120      51   0001B                          ; 1) Turn on ADC.
+     121      52   0001B 75F600                   mov     adcf,       #0x00   ; reset
+     122      53   0001E 75F601                   mov     adcf,       #0x01
+     123      54   00021 75F320                   mov     adcon,      #0x20
+     124      55   00024 75F200                   mov     adclk,      #0x00
+     125      57   00027 85F617                   mov     c7,         adcf
+     126      58   0002A 85F316                   mov     c6,         adcon
+     127      59   0002D 85F215                   mov     c5,         adclk
+     128      61   00030 22                       ret
+     129      62   00031                  
+     130      63   00031                      ; __HIL_select_ADCCh : Selects the active ADC channel
+     131      64   00031                      ; args: SS(#channel)    -- byte on short stack
+     132      65   00031                      ; rets: none
+     133      66   00031                      __HIL_select_ADCCh:
+     134      67   00031                          ; battery voltage/division will be routed to ADC channel 0
+     135      68   00031 53F3F8                   anl     adcon,      #0xf8   ; Reset ADC channel selection
+     136      69   00034 43F300                   orl     adcon,      #0x00   ; Select channel 0
+     137      70   00037 43F320                   orl     adcon,      #0x20   ; Select standard mode
+     138      71   0003A 22                       ret
+     139      72   0003B                  
+     140      73   0003B                      ; __HIL_enable_ADCCollect : Enables ADC collection on selected channel
+     141      74   0003B                      ; args: none
+     142      75   0003B                      ; rets: none
+     143      76   0003B                      __HIL_enable_ADCCollect:
+     144      77   0003B                          ; Start the ADC collection
+     145      78   0003B 43F308                   orl     adcon,      #0x08   ; Enable ADC collectors
+     146      79   0003E 22                       ret
+     147      80   0003F                  
+     148      81   0003F                      ; __HIL_check_batt_voltage : Checks the battery voltage
+     149      82   0003F                      ; args: none
+     150      83   0003F                      ; rets: SS(#retval)     -- byte 0x00 for success, 0xff for fail
+     151      84   0003F                      __HIL_check_batt_voltage:
+     152      85   0003F C0E0                     push    acc
+     153      86   00041                      hsWdbADCON:
+     154      87   00041 E5F3                     mov     a,          adcon
+     155      88   00043 5510                     anl     a,          0x10
+     156      89   00045 B510F9                   cjne    a,          0x10,   hsWdbADCON
+     157      90   00048                  
+     158      91   00048                          ; Voltage check
+     159      92   00048                  #define     MINIMUM_BATT_VOLTAGEh   0x0f    ; will change
+     160      93   00048                  #define     MINIMUM_BATT_VOLTAGEl   0xFF    ; will change
+     161      94   00048 C0F0                     push    bcc
+     162      96   0004A 74FF                     mov     a,          #0xff
+     163      97   0004C 7400                     mov     a,          #0x00
+     164      98   0004E 74FF                     mov     a,          #0xff
+     165     117   00050                  #endif
+     166     118   00050 D0F0                     pop     bcc
+     167     119   00052 D0E0                     pop     acc
+     168     120   00054 751800                   sspushl(0x00)
+     169     121   00057 C018                     ret
+     170     122   00059 120000           
+                         0000000840      
+     171     123   0005C 22                   ; __HIL_disable_batterylo : Turns on BATT_LOW led, and red square.
+     172     124   0005D                      ; args: none
+     173     125   0005D                      ; rets: SS(#0xff)
+     174     126   0005D                      __HIL_disable_batterylo:
+     175     127   0005D                          ; Turn on battery low light
+     176     128   0005D                          ; Turn on red square
+     177     129   0005D 7518FF                   sspushl(0xff)
+     178     130   00060 C018                     ret
+     179     131   00062 120000           
+                         0000000840      
+     180     132   00065 22               
+     181     133   00066                  
+     182     134   00066                          ; 3) Turn on accelerometer
+     183     135   00066                          ; 4) Switch interrupts?
+     184     136   00066                          ; 5) Return success
+     185     137   00066                          ; Handler for turning on LEDs
+     186     138   00066                          ; Handler for LED array
+     187     139   00066                          ; Handler for power touch button
+     188     140   00066                          ; Handler for battery power measuring
+     189     141   00066                          ; Handler for accelerometer
+     190     142   00066                          ; Handler for vibration motor
+     191     143   00066                  
+     192     144   00066                  	HIL_init_fail:
+     193     145   00066 7518FF                   sspushl(0xff)
+     194     146   00069 C018                     ret
+     195     147   0006B 120000           
+                         0000000840      
+     196     148   0006E 22               #ifdef      DEBUG
+     197     149   0006F                      __HIL_C_test:
+     198     150   0006F 7518E4                   sspushl(0xe4)
+     199     151   00072 C018             		; Order of operation:
+     200     152   00074 120000           		ret
+                         0000000840      
+     201     154   00077 22               
+     202     155   00078                  
+     203     156   00078                  end
 
 
 *** Symbols ***
@@ -174,6 +230,7 @@ s1                   0x0019       25        number     absolute
 c2                   0x0012       18        number     absolute
 b1                   0x0009        9        number     absolute
 a0                   0x0000        0        number     absolute
+HIL_init_fail        0x0066      102          code     HIL
 __HIL_init           0x0000        0          code     HIL
 iph1                 0x00F7      247        number     absolute
 ien1                 0x00E8      232        number     absolute
@@ -182,6 +239,7 @@ s2                   0x001A       26        number     absolute
 c3                   0x0013       19        number     absolute
 b2                   0x000A       10        number     absolute
 a1                   0x0001        1        number     absolute
+__HIL_check_batt_voltage 0x003F       63          code     HIL
 s3                   0x001B       27        number     absolute
 c4                   0x0014       20        number     absolute
 b3                   0x000B       11        number     absolute
@@ -204,19 +262,21 @@ s7                   0x001F       31        number     absolute
 b7                   0x000F       15        number     absolute
 a6                   0x0006        6        number     absolute
 a7                   0x0007        7        number     absolute
-main                 0x0042       66          code     HIL
-hsWdbADCON           0x0023       35          code     HIL
+__HIL_C_test         0x006F      111          code     HIL
+hsWdbADCON           0x0041       65          code     HIL
 adclk                0x00F2      242        number     absolute
 adcon                0x00F3      243        number     absolute
-dbgloop              0x0032       50          code     HIL
+__HIL_disable_batterylo 0x005D       93          code     HIL
 addl                 0x00F4      244        number     absolute
 acc                  0x00E0      224        number     absolute
 bcc                  0x00F0      240        number     absolute
-dbgdo                0x0037       55          code     HIL
 msz                  0x0022       34        number     absolute
 psw                  0x00D0      208        number     absolute
 sp                   0x0081      129        number     absolute
+__HIL_enable_ADCCollect 0x003B       59          code     HIL
+__HIL_select_ADCCh   0x0031       49          code     HIL
 ipl0                 0x00B8      184        number     absolute
+__HIL_enable_ADC     0x001B       27          code     HIL
 ipl1                 0x00F8      248        number     absolute
 
 
@@ -231,4 +291,4 @@ __sspop              0x0000        0          code
 name                    hex      dec          type
 --------------------------------------------------
 __HIL_init           0x0000        0          code 
-main                 0x0042       66          code 
+__HIL_C_test         0x006F      111          code 

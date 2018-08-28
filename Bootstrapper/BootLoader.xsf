@@ -165,18 +165,16 @@ rseg	boot
 ;					(2) tell the Hardware Abstration Layer to initialize
 ;					(3) jump into the main program
 		lcall	__HIL_init	; pushes return code onto ss
-		lcall __sspop pop c1
-        mov     a,      c1
+		lcall __sspop pop acc
 		cjne	a,		#0x00,	__entry_HIL_error
 		
 		lcall	__HAL_init
-		lcall __sspop pop c1
-        mov     a,      c1
+		lcall __sspop pop acc
 		cjne	a,		#0x00,	__entry_HAL_error
 		
+        mov     a,      #0xe4
 		lcall	_Cmain
-		lcall __sspop pop c1
-        mov     a,      c1
+		lcall __sspop pop acc
 		cjne	a,		#0x00,	__entry_main_error
 		
 		ljmp	__shutdown

@@ -5,12 +5,170 @@ Embedded Small C, Version 1.0
 // ----------------------------------------------------- 
 
 // Matt Rienzo, CFuncTest.c 8/25/2018
+/*"#C:\Program Files (x86)\Rigel\Reads51\Include\sfr51.h"*/
+// --- 8051 registers ---
+sfr ACC (0xE0),
+    B   (0xF0),
+    DPH (0x83),
+    DPL (0x82),
+    IE  (0xA8),
+    IP  (0xB8),
+    P0  (0x80),
+    P1  (0x90),
+    P2  (0xA0),
+    P3  (0xB0),
+    PCON(0x87),
+    PSW (0xD0),
+    SBUF(0x99),
+    SCON(0x98),
+    SP  (0x81),
+    TCON(0x88),
+    TH0 (0x8C),
+    TH1 (0x8D),
+    TL0 (0x8A),
+    TL1 (0x8B),
+    TMOD(0x89);
 
+// --- 8051 register bit fields ---
+// IE
+sfrbit EA  (0xAF),
+       ES  (0xAC),
+       ET1 (0xAB),
+       EX1 (0xAA),
+       ET0 (0xA9),
+       EX0 (0xA8),
+// IP 
+       PS  (0xBC),
+       PT1 (0xBB),
+       PX1 (0xBA),
+       PT0 (0xB9),
+       PX0 (0xB8),
+// P0
+       P0_0(0x80),
+       P0_1(0x81),
+       P0_2(0x82),
+       P0_3(0x83),
+       P0_4(0x84),
+       P0_5(0x85),
+       P0_6(0x86),
+       P0_7(0x87),
+// P1
+       P1_0(0x90),
+       P1_1(0x91),
+       P1_2(0x92),
+       P1_3(0x93),
+       P1_4(0x94),
+       P1_5(0x95),
+       P1_6(0x96),
+       P1_7(0x97),
+// P2
+       P2_0(0xA0),
+       P2_1(0xA1),
+       P2_2(0xA2),
+       P2_3(0xA3),
+       P2_4(0xA4),
+       P2_5(0xA5),
+       P2_6(0xA6),
+       P2_7(0xA7),
+// P3
+       P3_0(0xB0),
+       P3_1(0xB1),
+       P3_2(0xB2),
+       P3_3(0xB3),
+       P3_4(0xB4),
+       P3_5(0xB5),
+       P3_6(0xB6),
+       P3_7(0xB7),
+// P3 alternate function pin names
+       RD  (0xB7),
+       WR  (0xB6),
+       T1  (0xB5),
+       T0  (0xB4),
+       INT1(0xB3),
+       INT0(0xB2),
+       TXD (0xB1),
+       RXD (0xB0),
+// PSW
+       CY  (0xD7),
+       AC  (0xD6),
+       F0  (0xD5),
+       RS1 (0xD4),
+       RS0 (0xD3),
+       OV  (0xD2),
+       P   (0xD0),
+// TCON
+       TF1 (0x8F),
+       TR1 (0x8E),
+       TF0 (0x8D),
+       TR0 (0x8C),
+       IE1 (0x8B),
+       IT1 (0x8A),
+       IE0 (0x89),
+       IT0 (0x88),
+// SCON
+       SM0 (0x9F),
+       SM1 (0x9E),
+       SM2 (0x9D),
+       REN (0x9C),
+       TB8 (0x9B),
+       RB8 (0x9A),
+       TI  (0x99),
+       RI  (0x98);
 
+/*"#../include/c/Registers.h"*/
+// Matt Rienzo, Registers.h 8/28/2018
+#asm
+; Matt Rienzo, Registers.inc 8/25/2018
+
+;-- Alias/enumeration of registers and banks
+a0	equ	0
+a1	equ	1
+a2	equ	2
+a3	equ	3
+a4	equ	4
+a5	equ	5
+a6	equ	6
+a7	equ	7
+b0	equ	8
+b1	equ	9
+b2	equ	10
+b3	equ	11
+b4	equ	12
+b5	equ	13
+b6	equ	14
+b7	equ	15
+c0	equ	16
+c1	equ	17
+c2	equ	18
+c3	equ	19
+c4	equ	20
+c5	equ	21
+c6	equ	22
+c7	equ	23
+
+;-- SFRs
+
+bcc equ 0xf0
+
+#endasm
+
+//#define     OPTIMIZE
+
+#asm
+
+extern      code    __HIL_C_test
+extern      code    __sspush
+extern      code    __sspop
+#endasm
 
 char increment(char i);
 
 char Cmain(char in){
+#asm    
+    mov     a,      #0xe1
+    lcall   __HIL_C_test
+    lcall __sspop pop acc
+#endasm
     in =increment(in);
     return in;
 }

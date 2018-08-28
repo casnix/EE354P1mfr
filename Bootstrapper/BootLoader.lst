@@ -170,39 +170,37 @@ Y:\Development\8051\Bootstrapper\Bootstrapper\BootLoader.asm
      166     148   00000                  	;					(3) jump into the main program
      167     149   00000 120000           		lcall	__HIL_init	; pushes return code onto ss
                          0000000840      
-     168     150   00003 120029           		sspop(c1)
+     168     150   00003 120029           		sspop(acc)
                          0029040040      
-     169     151   00006 D011                     mov     a,      c1
-     170     152   00008 E511             		cjne	a,		#0x00,	__entry_HIL_error
-     171     153   0000A B4001D           
-     172     154   0000D 120000           		lcall	__HAL_init
+     169     151   00006 D0E0             		cjne	a,		#0x00,	__entry_HIL_error
+     170     152   00008 B4001B           
+     171     153   0000B 120000           		lcall	__HAL_init
                          0000020840      
-     173     155   00010 120029           		sspop(c1)
+     172     154   0000E 120029           		sspop(acc)
                          0029040040      
-     174     156   00013 D011                     mov     a,      c1
-     175     157   00015 E511             		cjne	a,		#0x00,	__entry_HAL_error
-     176     158   00017 B40010           
-     177     159   0001A 120000           		lcall	_Cmain
+     173     155   00011 D0E0             		cjne	a,		#0x00,	__entry_HAL_error
+     174     156   00013 B40010           
+     175     157   00016 74E4                     mov     a,      #0xe4
+     176     158   00018 120000           		lcall	_Cmain
                          0000010840      
-     178     160   0001D 120029           		sspop(c1)
+     177     159   0001B 120029           		sspop(acc)
                          0029040040      
-     179     161   00020 D011                     mov     a,      c1
-     180     162   00022 E511             		cjne	a,		#0x00,	__entry_main_error
-     181     163   00024 B40003           
-     182     164   00027 020000           		ljmp	__shutdown
+     178     160   0001E D0E0             		cjne	a,		#0x00,	__entry_main_error
+     179     161   00020 B40003           
+     180     162   00023 020000           		ljmp	__shutdown
                          0000030040      
-     183     165   0002A                  
-     184     166   0002A                  	__entry_HIL_error:	; Turn on ERR LED
-     185     167   0002A                  	__entry_HAL_error:	; Turn on ERR LED and batt_too_low square
-     186     168   0002A                  	__entry_main_error:	; Turn on ERR LED and white square
-     187     169   0002A                  
-     188     170   0002A                  
-     189     171   00000                  rseg	exit
-     190     172   00000                  	__shutdown:
-     191     173   00000                  		; Endless looooooop
-     192     174   00000 0100             		ajmp	__shutdown
+     181     163   00026                  
+     182     164   00026                  	__entry_HIL_error:	; Turn on ERR LED
+     183     165   00026                  	__entry_HAL_error:	; Turn on ERR LED and batt_too_low square
+     184     166   00026                  	__entry_main_error:	; Turn on ERR LED and white square
+     185     167   00026                  
+     186     168   00026                  
+     187     169   00000                  rseg	exit
+     188     170   00000                  	__shutdown:
+     189     171   00000                  		; Endless looooooop
+     190     172   00000 0100             		ajmp	__shutdown
                          0000030040      
-     193     175   00002                  end
+     191     173   00002                  end
 
 
 *** Symbols ***
@@ -218,7 +216,7 @@ s1                   0x0019       25        number     absolute
 c2                   0x0012       18        number     absolute
 b1                   0x0009        9        number     absolute
 a0                   0x0000        0        number     absolute
-__entry_main_error   0x002A       42          code     boot
+__entry_main_error   0x0026       38          code     boot
 ssz                  0x0021       33        number     absolute
 s2                   0x001A       26        number     absolute
 c3                   0x0013       19        number     absolute
@@ -246,9 +244,9 @@ s7                   0x001F       31        number     absolute
 b7                   0x000F       15        number     absolute
 a6                   0x0006        6        number     absolute
 a7                   0x0007        7        number     absolute
-__entry_HIL_error    0x002A       42          code     boot
+__entry_HIL_error    0x0026       38          code     boot
 __setup              0x0000        0          code     setup
-__entry_HAL_error    0x002A       42          code     boot
+__entry_HAL_error    0x0026       38          code     boot
 acc                  0x00E0      224        number     absolute
 __sspush_continue    0x0012       18          code     memory
 bcc                  0x00F0      240        number     absolute

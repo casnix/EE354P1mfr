@@ -90,29 +90,65 @@ iph1    equ 0xf7
 HIL		segment	code
 	
 public	__HIL_init
-public	main
+public	__HIL_C_test
 rseg	HIL
     extern  code    __sspop
     extern  code    __sspush
+; __HIL_init : initializes hardware components, and defines functions/callbacks for hardware
+;   manipulate by the HAL.
+; args: none
+; rets: SS(#retval) -- Immediate byte off short stack to tell __entry whether or not we failed.
 	__HIL_init:
+; 1) Check battery voltage
+        acall   __HIL_enable_ADC
+        anl ien0,#0x7f                               ; Disable interrupts for while we check devices on ADC
+        mov s0,#0x00 push s0 lcall __sspush                      ; Channel byte for ADC/Battery voltage
+        acall   __HIL_select_ADCCh
+        acall   __HIL_enable_ADCCollect     ; Enable ADC collection on the channel for the battery
+        acall   __HIL_check_batt_voltage    ; Check battery voltage
+        lcall __sspop pop acc
+        cjne    a,          #0x00,  HIL_init_fail
+        
+; 2) Turn on accelerometer
+
+
+
+; __HIL_enable_ADC : Turns on and resets ADC
+; args: none
+; rets: none
+    __HIL_enable_ADC:
 ; 1) Turn on ADC.
+        mov     adcf,       #0x00   ; reset
         mov     adcf,       #0x01
         mov     adcon,      #0x20
         mov     adclk,      #0x00
         mov     c7,         adcf
         mov     c6,         adcon
         mov     c5,         adclk
-        
-; Disable interrupts for while we check devices on ADC
-        anl ien0,#0x7f
-; 2) Check battery voltage.  Too low? Turn on red square and battery low LEDs.
-; battery voltage/division will be routed to ADC channel 0
-        anl     adcon,      #0xf8
-        orl     adcon,      #0x00
-        orl     adcon,      #0x20
+        ret
 
+; __HIL_select_ADCCh : Selects the active ADC channel
+; args: SS(#channel)    -- byte on short stack
+; rets: none
+    __HIL_select_ADCCh:
+; battery voltage/division will be routed to ADC channel 0
+        anl     adcon,      #0xf8   ; Reset ADC channel selection
+        orl     adcon,      #0x00   ; Select channel 0
+        orl     adcon,      #0x20   ; Select standard mode
+        ret
+
+; __HIL_enable_ADCCollect : Enables ADC collection on selected channel
+; args: none
+; rets: none
+    __HIL_enable_ADCCollect:
 ; Start the ADC collection
-        orl     adcon,      #0x08
+        orl     adcon,      #0x08   ; Enable ADC collectors
+        ret
+
+; __HIL_check_batt_voltage : Checks the battery voltage
+; args: none
+; rets: SS(#retval)     -- byte 0x00 for success, 0xff for fail
+    __HIL_check_batt_voltage:
         push    acc
     hsWdbADCON:
         mov     a,          adcon
@@ -121,19 +157,26 @@ rseg	HIL
 
 ; Voltage check
 ; will change
+; will change
         push    bcc
         mov     a,          #0xff
         mov     a,          #0x00
         mov     a,          #0xff
-    dbgloop:    
-        clr     c
-        mov     a,          #0x0f
-        subb    a,          #0x0f
-; mov     a,          c
 
+        pop     bcc
+        pop     acc
+        mov s0,#0x00 push s0 lcall __sspush
+        ret
 
-    dbgdo:
-        sjmp    dbgloop
+; __HIL_disable_batterylo : Turns on BATT_LOW led, and red square.
+; args: none
+; rets: SS(#0xff)
+    __HIL_disable_batterylo:
+; Turn on battery low light
+; Turn on red square
+        mov s0,#0xff push s0 lcall __sspush
+        ret
+
 
         
 ; 3) Turn on accelerometer
@@ -145,10 +188,14 @@ rseg	HIL
 ; Handler for battery power measuring
 ; Handler for accelerometer
 ; Handler for vibration motor
-        mov s0,#0x00 push s0 lcall __sspush
-  		ret
-		
-	main:
+	
+	HIL_init_fail:
+        mov s0,#0xff push s0 lcall __sspush
+        ret
+	
+
+    __HIL_C_test:
+        mov s0,#0xe4 push s0 lcall __sspush
 ; Order of operation:
 		ret
 		
