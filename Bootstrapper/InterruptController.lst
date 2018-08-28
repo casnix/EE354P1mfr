@@ -1,0 +1,37 @@
+Y:\Development\8051\Bootstrapper\Bootstrapper\InterruptController.xsf 
+Y:\Development\8051\Bootstrapper\Bootstrapper\InterruptController.inc 
+       1       1   00000                  ; ------------- READS51 generated header --------------
+       2       2   00000                  ; module  : Y:\Development\8051\Bootstrapper\Bootstrapper\InterruptController.inc
+       3       3   00000                  ; created : 11:26:26, Monday, August 27, 2018
+       4       4   00000                  ; -----------------------------------------------------
+       5       5   00000                  
+       6       6   00000                  ; Matt Rienzo, InterruptController.inc
+       7       7   00000                  
+       8       8   00000                  ien0    equ 0xa8
+       9       9   00000                  ien1    equ 0xe8
+      10      10   00000                  ipl0    equ 0xb8
+      11      11   00000                  iph0    equ 0xb7
+      12      12   00000                  ipl1    equ 0xf8
+      13      13   00000                  iph1    equ 0xf7
+      14      14   00000                  
+
+
+*** Symbols ***
+name                    hex      dec          type     segment
+--------------------------------------------------------------
+iph0                 0x00B7      183        number     absolute
+ien0                 0x00A8      168        number     absolute
+iph1                 0x00F7      247        number     absolute
+ien1                 0x00E8      232        number     absolute
+ipl0                 0x00B8      184        number     absolute
+ipl1                 0x00F8      248        number     absolute
+
+
+*** Externals (Imports) ***
+name                    hex      dec          type
+--------------------------------------------------
+
+
+*** Publics (Exports) ***
+name                    hex      dec          type
+--------------------------------------------------

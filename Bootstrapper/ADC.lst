@@ -1,0 +1,35 @@
+Y:\Development\8051\Bootstrapper\Bootstrapper\ADC.xsf 
+Y:\Development\8051\Bootstrapper\Bootstrapper\ADC.inc 
+       1       1   00000                  ; ------------- READS51 generated header --------------
+       2       2   00000                  ; module  : Y:\Development\8051\Bootstrapper\Bootstrapper\ADC.inc
+       3       3   00000                  ; created : 11:09:44, Monday, August 27, 2018
+       4       4   00000                  ; -----------------------------------------------------
+       5       5   00000                  
+       6       6   00000                  ; Matt Rienzo, ADC.inc 8/27/2018
+       7       7   00000                  
+       8       8   00000                  ; Direct memory addressing
+       9       9   00000                  adcon       equ 0xf3
+      10      10   00000                  adcf        equ 0xf6
+      11      11   00000                  adclk       equ 0xf2
+      12      12   00000                  addh        equ 0xf5
+      13      13   00000                  addl        equ 0xf4
+
+
+*** Symbols ***
+name                    hex      dec          type     segment
+--------------------------------------------------------------
+adcf                 0x00F6      246        number     absolute
+addh                 0x00F5      245        number     absolute
+adclk                0x00F2      242        number     absolute
+adcon                0x00F3      243        number     absolute
+addl                 0x00F4      244        number     absolute
+
+
+*** Externals (Imports) ***
+name                    hex      dec          type
+--------------------------------------------------
+
+
+*** Publics (Exports) ***
+name                    hex      dec          type
+--------------------------------------------------

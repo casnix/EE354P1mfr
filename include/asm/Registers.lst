@@ -1,0 +1,78 @@
+Y:\Development\8051\Bootstrapper\include\asm\Registers.xsf 
+Y:\Development\8051\Bootstrapper\include\asm\Registers.inc 
+       1       1   00000                  ; Matt Rienzo, Registers.inc 8/25/2018
+       2       2   00000                  
+       3       3   00000                  ;-- Alias/enumeration of registers and banks
+       4       4   00000                  a0	equ	0
+       5       5   00000                  a1	equ	1
+       6       6   00000                  a2	equ	2
+       7       7   00000                  a3	equ	3
+       8       8   00000                  a4	equ	4
+       9       9   00000                  a5	equ	5
+      10      10   00000                  a6	equ	6
+      11      11   00000                  a7	equ	7
+      12      12   00000                  b0	equ	8
+      13      13   00000                  b1	equ	9
+      14      14   00000                  b2	equ	10
+      15      15   00000                  b3	equ	11
+      16      16   00000                  b4	equ	12
+      17      17   00000                  b5	equ	13
+      18      18   00000                  b6	equ	14
+      19      19   00000                  b7	equ	15
+      20      20   00000                  c0	equ	16
+      21      21   00000                  c1	equ	17
+      22      22   00000                  c2	equ	18
+      23      23   00000                  c3	equ	19
+      24      24   00000                  c4	equ	20
+      25      25   00000                  c5	equ	21
+      26      26   00000                  c6	equ	22
+      27      27   00000                  c7	equ	23
+      28      28   00000                  
+      29      29   00000                  ;-- SFRs
+      30      30   00000                  sp  equ 0x81
+      31      31   00000                  acc equ 0xe0
+      32      32   00000                  bcc equ 0xf0
+      33      33   00000                  psw equ 0xd0
+
+
+*** Symbols ***
+name                    hex      dec          type     segment
+--------------------------------------------------------------
+c0                   0x0010       16        number     absolute
+c1                   0x0011       17        number     absolute
+b0                   0x0008        8        number     absolute
+c2                   0x0012       18        number     absolute
+b1                   0x0009        9        number     absolute
+a0                   0x0000        0        number     absolute
+c3                   0x0013       19        number     absolute
+b2                   0x000A       10        number     absolute
+a1                   0x0001        1        number     absolute
+c4                   0x0014       20        number     absolute
+b3                   0x000B       11        number     absolute
+a2                   0x0002        2        number     absolute
+c5                   0x0015       21        number     absolute
+b4                   0x000C       12        number     absolute
+a3                   0x0003        3        number     absolute
+c6                   0x0016       22        number     absolute
+b5                   0x000D       13        number     absolute
+a4                   0x0004        4        number     absolute
+c7                   0x0017       23        number     absolute
+b6                   0x000E       14        number     absolute
+a5                   0x0005        5        number     absolute
+b7                   0x000F       15        number     absolute
+a6                   0x0006        6        number     absolute
+a7                   0x0007        7        number     absolute
+acc                  0x00E0      224        number     absolute
+bcc                  0x00F0      240        number     absolute
+psw                  0x00D0      208        number     absolute
+sp                   0x0081      129        number     absolute
+
+
+*** Externals (Imports) ***
+name                    hex      dec          type
+--------------------------------------------------
+
+
+*** Publics (Exports) ***
+name                    hex      dec          type
+--------------------------------------------------

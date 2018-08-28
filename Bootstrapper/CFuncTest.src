@@ -1,0 +1,79 @@
+#include <pcx51.inc>
+#include <Rc51Regs.inc>
+C0Seg     segment code
+CodeSeg   segment code
+XDataSeg  segment xdata
+
+; --- external and public functions ---
+public            _increment
+public            _Cmain
+
+; --- external and public variables ---
+
+                                        ; #line 1 // ------------- READS51 generated header -------------- 
+                                        ; #line 2 // module  : Y:\Development\8051\Bootstrapper\Bootstrapper\CFuncTest.c
+                                        ; #line 3 // created : 15:00:18, Sunday, August 26, 2018
+                                        ; #line 4 // ----------------------------------------------------- 
+                                        ; #line 5 
+                                        ; #line 6 // Matt Rienzo, CFuncTest.c 8/25/2018
+                                        ; #line 7 
+                                        ; #line 8 
+                                        ; #line 9 
+                                        ; #line 10 char increment(char i);
+                                        ; #line 11 
+                                        ; #line 12 char Cmain(char in){
+                                        ; -----------------------------------------------
+          rseg    CodeSeg               ; CHGSEG(2)
+_Cmain:                                 ; DECLPUBm(Cmain)
+          pop     b                     ; ENTER
+          pop     acc
+          lcall   __enter
+                                        ; #line 13     in =increment(in);
+                                        ; -----------------------------------------------
+          mov     a, #0xFA              ; GETb1s(-6)
+          mov     b, #0xFF
+          lcall   __getb1s
+          lcall   __push1               ; PUSH1
+          mov     ARGCNT, #0x01         ; ARGCNTn(1)
+          lcall   _increment            ; CALLm(_increment)
+          mov     a, #0xFE              ; ADDSP(-2)
+          mov     b, #0xFF
+          lcall   __addsp
+          mov     a, #0xFA              ; PUTb1s(-6)
+          mov     b, #0xFF
+          lcall   __putb1s
+                                        ; #line 14     return in;
+                                        ; -----------------------------------------------
+          mov     a, #0xFA              ; GETb1s(-6)
+          mov     b, #0xFF
+          lcall   __getb1s
+                                        ; -----------------------------------------------
+          lcall   __return              ; RETURN(0)
+                                        ; #line 15 }
+                                        ; #line 16 
+                                        ; #line 17 char increment(char i){
+                                        ; -----------------------------------------------
+_increment:                             ; DECLPUBm(increment)
+          pop     b                     ; ENTER
+          pop     acc
+          lcall   __enter
+                                        ; #line 18     i++;
+                                        ; -----------------------------------------------
+          mov     a, #0xFA              ; POINT2s(-6)
+          mov     b, #0xFF
+          lcall   __point2s
+          mov     dpl, SRL              ; INCbp
+          mov     dph, SRH
+          movx    a, @dptr
+          add     a, #1
+          movx    @dptr, a
+                                        ; #line 19     return i;
+                                        ; -----------------------------------------------
+          mov     a, #0xFA              ; GETb1s(-6)
+          mov     b, #0xFF
+          lcall   __getb1s
+                                        ; -----------------------------------------------
+          lcall   __return              ; RETURN(0)
+                                        ; #line 20 }
+                                        ; -----------------------------------------------
+          end                           ; ENDSEG(2)

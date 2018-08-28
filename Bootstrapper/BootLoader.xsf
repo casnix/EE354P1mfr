@@ -1,0 +1,193 @@
+; ------------- READS51 generated header -------------- 
+; module  : Y:\Development\8051\Bootstrapper\Bootstrapper\BootLoader.asm
+; created : 17:04:29, Saturday, August 25, 2018
+; ----------------------------------------------------- 
+;-- Matt Rienzo, BootLoader.asm 8/25/2018
+;"#../include/asm/Registers.inc"
+; Matt Rienzo, Registers.inc 8/25/2018
+
+;-- Alias/enumeration of registers and banks
+a0	equ	0
+a1	equ	1
+a2	equ	2
+a3	equ	3
+a4	equ	4
+a5	equ	5
+a6	equ	6
+a7	equ	7
+b0	equ	8
+b1	equ	9
+b2	equ	10
+b3	equ	11
+b4	equ	12
+b5	equ	13
+b6	equ	14
+b7	equ	15
+c0	equ	16
+c1	equ	17
+c2	equ	18
+c3	equ	19
+c4	equ	20
+c5	equ	21
+c6	equ	22
+c7	equ	23
+
+;-- SFRs
+sp  equ 0x81
+acc equ 0xe0
+bcc equ 0xf0
+psw equ 0xd0
+;"#../include/asm/ShortStack.inc"
+; Matt Rienzo, ShortStack.inc 8/25/2018
+
+; The following registers I am reserving for short stack operations
+s0	equ	0x18
+s1	equ	0x19
+s2	equ	0x1a
+s3	equ 0x1b
+s4	equ	0x1c
+s5	equ	0x1d
+s6	equ	0x1e
+s7	equ	0x1f
+
+
+; SHORT STACK -- see the Short Stack section after the END instruction for an explanation
+;  of what this is
+; Short stack address "register" and short stack size "register"
+ss	equ	0x20	; short stack 0 address
+ssz	equ 0x21	; short stack size (index)
+msz	equ	0x22	; short stack max size (to avoid overflow, but with stack wrapping/overwrites)
+
+;#define OPTIMIZE
+
+
+;-- Segment declaration
+setup	segment	code
+boot	segment	code
+exit	segment	code
+memory	segment	code
+
+;-- Segment definition
+    public  __sspush
+    public  __sspop
+rseg	memory
+	__sspush:  ; Takes a byte off the top of the stack and moves it to the short stack
+; Increment our short stack index
+; if([msz]-[ssz] == 0) [ssz] = 0;
+        mov     s7,     ssz
+        mov     a,      s7
+        add     a,      #0x01
+        mov     s6,     msz
+        subb    a,      s6
+        
+        cjne    a,      #0x00,  __sspush_continue
+		
+; Reset our ssz, wrapping our stack
+		mov		ssz,	#0x00
+	
+	__sspush_continue:
+; Set our offset
+; &s7 = ss+[ssz]
+        mov     s7,     #ss
+        mov     a,      s7
+        add     a,      ssz
+        mov     s7,     a
+		
+; Preserve our callback/ret address
+        pop     s7
+        pop     s6
+        
+; Argument
+        pop     s5
+        mov     r0,     a
+        mov     @r0,    s5
+
+        push    s6
+        push    s7
+		ret
+		
+	__sspop:   ; Takes a byte off the top of the short stack and moves it to the stack
+		mov		s7,		#ss
+		mov		s6,		ssz
+        mov     a,      s7
+        add     a,      ssz
+
+; Preserve callback/ret address
+        pop     s1
+        pop     s2
+
+        mov     r0,     a
+        mov     s3,     @r0
+        push    s3 ; Return byte
+		
+; Check if our offset is 0
+
+        mov     a,      ssz
+        cjne    a,      #0x00,  __sspop_continue
+        add     a,      #0x01
+        mov     ssz,    a
+		
+	__sspop_continue:
+        subb    a,      #0x01
+        mov     ssz,    a
+		
+; Callback/ret address
+        push    s2
+        push    s1
+		ret
+		
+    public  __setup		
+rseg	setup
+	__setup:
+;---SHORT STACK
+		mov		ss,		#0x23
+		mov		ssz,	#0x00
+		mov		msz,	#0x20
+; The last slot in the short stack will be #([ss]+[msz])
+		
+;---STACK
+; Set SP to after the last slot in short stack
+		mov		a,		ss
+		add		a,		msz
+		inc		a
+		mov		sp,		a
+		
+; enter our program
+		ljmp	__entry
+		
+		
+rseg	boot
+	extern		code	__HIL_init
+	extern		code	__HAL_init
+	extern		code	_Cmain
+	__entry:
+; Do three things:	(1) tell the Hardware Interaction Layer to initialize
+;					(2) tell the Hardware Abstration Layer to initialize
+;					(3) jump into the main program
+		lcall	__HIL_init	; pushes return code onto ss
+		lcall __sspop pop c1
+        mov     a,      c1
+		cjne	a,		#0x00,	__entry_HIL_error
+		
+		lcall	__HAL_init
+		lcall __sspop pop c1
+        mov     a,      c1
+		cjne	a,		#0x00,	__entry_HAL_error
+		
+		lcall	_Cmain
+		lcall __sspop pop c1
+        mov     a,      c1
+		cjne	a,		#0x00,	__entry_main_error
+		
+		ljmp	__shutdown
+		
+	__entry_HIL_error:	; Turn on ERR LED
+	__entry_HAL_error:	; Turn on ERR LED and batt_too_low square
+	__entry_main_error:	; Turn on ERR LED and white square
+		
+		
+rseg	exit
+	__shutdown:
+; Endless looooooop
+		ajmp	__shutdown
+end

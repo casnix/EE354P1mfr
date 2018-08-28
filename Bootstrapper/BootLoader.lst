@@ -1,0 +1,275 @@
+Y:\Development\8051\Bootstrapper\Bootstrapper\BootLoader.xsf 
+Y:\Development\8051\Bootstrapper\Bootstrapper\BootLoader.asm 
+       1       1   00000                  ; ------------- READS51 generated header --------------
+       2       2   00000                  ; module  : Y:\Development\8051\Bootstrapper\Bootstrapper\BootLoader.asm
+       3       3   00000                  ; created : 17:04:29, Saturday, August 25, 2018
+       4       4   00000                  ; -----------------------------------------------------
+       5       5   00000                  ;-- Matt Rienzo, BootLoader.asm 8/25/2018
+../include/asm/Registers.inc 
+       7       1   00000                  ; Matt Rienzo, Registers.inc 8/25/2018
+       8       2   00000                  
+       9       3   00000                  ;-- Alias/enumeration of registers and banks
+      10       4   00000                  a0	equ	0
+      11       5   00000                  a1	equ	1
+      12       6   00000                  a2	equ	2
+      13       7   00000                  a3	equ	3
+      14       8   00000                  a4	equ	4
+      15       9   00000                  a5	equ	5
+      16      10   00000                  a6	equ	6
+      17      11   00000                  a7	equ	7
+      18      12   00000                  b0	equ	8
+      19      13   00000                  b1	equ	9
+      20      14   00000                  b2	equ	10
+      21      15   00000                  b3	equ	11
+      22      16   00000                  b4	equ	12
+      23      17   00000                  b5	equ	13
+      24      18   00000                  b6	equ	14
+      25      19   00000                  b7	equ	15
+      26      20   00000                  c0	equ	16
+      27      21   00000                  c1	equ	17
+      28      22   00000                  c2	equ	18
+      29      23   00000                  c3	equ	19
+      30      24   00000                  c4	equ	20
+      31      25   00000                  c5	equ	21
+      32      26   00000                  c6	equ	22
+      33      27   00000                  c7	equ	23
+      34      28   00000                  
+      35      29   00000                  ;-- SFRs
+      36      30   00000                  sp  equ 0x81
+      37      31   00000                  acc equ 0xe0
+      38      32   00000                  bcc equ 0xf0
+      39      33   00000                  psw equ 0xd0
+../include/asm/ShortStack.inc 
+      41       1   00000                  ; Matt Rienzo, ShortStack.inc 8/25/2018
+      42       2   00000                  
+      43       3   00000                  ; The following registers I am reserving for short stack operations
+      44       4   00000                  s0	equ	0x18
+      45       5   00000                  s1	equ	0x19
+      46       6   00000                  s2	equ	0x1a
+      47       7   00000                  s3	equ 0x1b
+      48       8   00000                  s4	equ	0x1c
+      49       9   00000                  s5	equ	0x1d
+      50      10   00000                  s6	equ	0x1e
+      51      11   00000                  s7	equ	0x1f
+      52      12   00000                  
+      53      13   00000                  
+      54      14   00000                  ; SHORT STACK -- see the Short Stack section after the END instruction for an explanation
+      55      15   00000                  ;  of what this is
+      56      16   00000                  ; Short stack address "register" and short stack size "register"
+      57      17   00000                  ss	equ	0x20	; short stack 0 address
+      58      18   00000                  ssz	equ 0x21	; short stack size (index)
+      59      19   00000                  msz	equ	0x22	; short stack max size (to avoid overflow, but with stack wrapping/overwrites)
+Y:\Development\8051\Bootstrapper\Bootstrapper\BootLoader.asm 
+      60       8   00000                  
+      61       9   00000                  ;#define OPTIMIZE
+      62      11   00000                  
+      63      19   00000                  
+      64      20   00000                  ;-- Segment declaration
+      65      21   00000                  setup	segment	code
+      66      22   00000                  boot	segment	code
+      67      23   00000                  exit	segment	code
+      68      24   00000                  memory	segment	code
+      69      25   00000                  
+      70      26   00000                  ;-- Segment definition
+      71      27   00000                      public  __sspush
+      72      28   00000                      public  __sspop
+      73      29   00000                  rseg	memory
+      74      30   00000                  	__sspush:  ; Takes a byte off the top of the stack and moves it to the short stack
+      75      31   00000                  		; Increment our short stack index
+      76      32   00000                  		; if([msz]-[ssz] == 0) [ssz] = 0;
+      77      37   00000 85211F                   mov     s7,     ssz
+      78      38   00003 E51F                     mov     a,      s7
+      79      40   00005 2401                     add     a,      #0x01
+      80      42   00007 85221E                   mov     s6,     msz
+      81      43   0000A 951E                     subb    a,      s6
+      82      48   0000C                  
+      83      49   0000C B40003                   cjne    a,      #0x00,  __sspush_continue
+      84      50   0000F                  
+      85      51   0000F                  		; Reset our ssz, wrapping our stack
+      86      52   0000F 752100           		mov		ssz,	#0x00
+      87      53   00012                  
+      88      54   00012                  	__sspush_continue:
+      89      55   00012                  		; Set our offset
+      90      56   00012                  		; &s7 = ss+[ssz]
+      91      61   00012 751F20                   mov     s7,     #ss
+      92      62   00015 E51F                     mov     a,      s7
+      93      64   00017 2521                     add     a,      ssz
+      94      66   00019 F51F                     mov     s7,     a
+      95      68   0001B                  
+      96      69   0001B                          ; Preserve our callback/ret address
+      97      70   0001B D01F                     pop     s7
+      98      71   0001D D01E                     pop     s6
+      99      72   0001F                  
+     100      73   0001F                          ; Argument
+     101      74   0001F D01D                     pop     s5
+     102      75   00021 F8                       mov     r0,     a
+     103      76   00022 A61D                     mov     @r0,    s5
+     104      77   00024                  
+     105      78   00024 C01E                     push    s6
+     106      79   00026 C01F                     push    s7
+     107      80   00028 22               		ret
+     108      81   00029                  
+     109      82   00029                  	__sspop:   ; Takes a byte off the top of the short stack and moves it to the stack
+     110      87   00029 751F20           		mov		s7,		#ss
+     111      88   0002C 85211E           		mov		s6,		ssz
+     112      89   0002F E51F                     mov     a,      s7
+     113      91   00031 2521                     add     a,      ssz
+     114      92   00033                  
+     115      93   00033                          ; Preserve callback/ret address
+     116      94   00033 D019                     pop     s1
+     117      95   00035 D01A                     pop     s2
+     118      96   00037                  
+     119      97   00037 F8                       mov     r0,     a
+     120      98   00038 861B                     mov     s3,     @r0
+     121      99   0003A C01B                     push    s3 ; Return byte
+     122     100   0003C                  
+     123     101   0003C                  		; Check if our offset is 0
+     124     102   0003C                  
+     125     103   0003C E521                     mov     a,      ssz
+     126     104   0003E B40004                   cjne    a,      #0x00,  __sspop_continue
+     127     105   00041 2401                     add     a,      #0x01
+     128     107   00043 F521                     mov     ssz,    a
+     129     109   00045                  
+     130     110   00045                  	__sspop_continue:
+     131     111   00045 9401                     subb    a,      #0x01
+     132     113   00047 F521                     mov     ssz,    a
+     133     115   00049                  
+     134     116   00049                          ; Callback/ret address
+     135     117   00049 C01A                     push    s2
+     136     118   0004B C019                     push    s1
+     137     119   0004D 22               		ret
+     138     120   0004E                  
+     139     121   0004E                      public  __setup
+     140     122   00000                  rseg	setup
+     141     123   00000                  	__setup:
+     142     124   00000                  		;---SHORT STACK
+     143     125   00000 752023           		mov		ss,		#0x23
+     144     126   00003 752100           		mov		ssz,	#0x00
+     145     127   00006 752220           		mov		msz,	#0x20
+     146     128   00009                  		; The last slot in the short stack will be #([ss]+[msz])
+     147     129   00009                  
+     148     130   00009                  		;---STACK
+     149     131   00009                  		; Set SP to after the last slot in short stack
+     150     132   00009 E520             		mov		a,		ss
+     151     133   0000B 2522             		add		a,		msz
+     152     134   0000D 04               		inc		a
+     153     135   0000E F581             		mov		sp,		a
+     154     136   00010                  
+     155     137   00010                  		; enter our program
+     156     138   00010 020000           		ljmp	__entry
+                         0000020040      
+     157     139   00013                  
+     158     140   00013                  
+     159     141   00000                  rseg	boot
+     160     142   00000                  	extern		code	__HIL_init
+     161     143   00000                  	extern		code	__HAL_init
+     162     144   00000                  	extern		code	_Cmain
+     163     145   00000                  	__entry:
+     164     146   00000                  	; Do three things:	(1) tell the Hardware Interaction Layer to initialize
+     165     147   00000                  	;					(2) tell the Hardware Abstration Layer to initialize
+     166     148   00000                  	;					(3) jump into the main program
+     167     149   00000 120000           		lcall	__HIL_init	; pushes return code onto ss
+                         0000000840      
+     168     150   00003 120029           		sspop(c1)
+                         0029040040      
+     169     151   00006 D011                     mov     a,      c1
+     170     152   00008 E511             		cjne	a,		#0x00,	__entry_HIL_error
+     171     153   0000A B4001D           
+     172     154   0000D 120000           		lcall	__HAL_init
+                         0000020840      
+     173     155   00010 120029           		sspop(c1)
+                         0029040040      
+     174     156   00013 D011                     mov     a,      c1
+     175     157   00015 E511             		cjne	a,		#0x00,	__entry_HAL_error
+     176     158   00017 B40010           
+     177     159   0001A 120000           		lcall	_Cmain
+                         0000010840      
+     178     160   0001D 120029           		sspop(c1)
+                         0029040040      
+     179     161   00020 D011                     mov     a,      c1
+     180     162   00022 E511             		cjne	a,		#0x00,	__entry_main_error
+     181     163   00024 B40003           
+     182     164   00027 020000           		ljmp	__shutdown
+                         0000030040      
+     183     165   0002A                  
+     184     166   0002A                  	__entry_HIL_error:	; Turn on ERR LED
+     185     167   0002A                  	__entry_HAL_error:	; Turn on ERR LED and batt_too_low square
+     186     168   0002A                  	__entry_main_error:	; Turn on ERR LED and white square
+     187     169   0002A                  
+     188     170   0002A                  
+     189     171   00000                  rseg	exit
+     190     172   00000                  	__shutdown:
+     191     173   00000                  		; Endless looooooop
+     192     174   00000 0100             		ajmp	__shutdown
+                         0000030040      
+     193     175   00002                  end
+
+
+*** Symbols ***
+name                    hex      dec          type     segment
+--------------------------------------------------------------
+__entry              0x0000        0          code     boot
+ss                   0x0020       32        number     absolute
+c0                   0x0010       16        number     absolute
+s0                   0x0018       24        number     absolute
+c1                   0x0011       17        number     absolute
+b0                   0x0008        8        number     absolute
+s1                   0x0019       25        number     absolute
+c2                   0x0012       18        number     absolute
+b1                   0x0009        9        number     absolute
+a0                   0x0000        0        number     absolute
+__entry_main_error   0x002A       42          code     boot
+ssz                  0x0021       33        number     absolute
+s2                   0x001A       26        number     absolute
+c3                   0x0013       19        number     absolute
+b2                   0x000A       10        number     absolute
+a1                   0x0001        1        number     absolute
+s3                   0x001B       27        number     absolute
+c4                   0x0014       20        number     absolute
+b3                   0x000B       11        number     absolute
+a2                   0x0002        2        number     absolute
+__sspop_continue     0x0045       69          code     memory
+s4                   0x001C       28        number     absolute
+c5                   0x0015       21        number     absolute
+b4                   0x000C       12        number     absolute
+a3                   0x0003        3        number     absolute
+s5                   0x001D       29        number     absolute
+c6                   0x0016       22        number     absolute
+b5                   0x000D       13        number     absolute
+a4                   0x0004        4        number     absolute
+s6                   0x001E       30        number     absolute
+c7                   0x0017       23        number     absolute
+b6                   0x000E       14        number     absolute
+a5                   0x0005        5        number     absolute
+__sspush             0x0000        0          code     memory
+s7                   0x001F       31        number     absolute
+b7                   0x000F       15        number     absolute
+a6                   0x0006        6        number     absolute
+a7                   0x0007        7        number     absolute
+__entry_HIL_error    0x002A       42          code     boot
+__setup              0x0000        0          code     setup
+__entry_HAL_error    0x002A       42          code     boot
+acc                  0x00E0      224        number     absolute
+__sspush_continue    0x0012       18          code     memory
+bcc                  0x00F0      240        number     absolute
+msz                  0x0022       34        number     absolute
+psw                  0x00D0      208        number     absolute
+sp                   0x0081      129        number     absolute
+__shutdown           0x0000        0          code     exit
+__sspop              0x0029       41          code     memory
+
+
+*** Externals (Imports) ***
+name                    hex      dec          type
+--------------------------------------------------
+__HIL_init           0x0000        0          code 
+_Cmain               0x0000        0          code 
+__HAL_init           0x0000        0          code 
+
+
+*** Publics (Exports) ***
+name                    hex      dec          type
+--------------------------------------------------
+__sspush             0x0000        0          code 
+__setup              0x0000        0          code 
+__sspop              0x0029       41          code 

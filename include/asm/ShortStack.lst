@@ -1,0 +1,47 @@
+Y:\Development\8051\Bootstrapper\include\asm\ShortStack.xsf 
+Y:\Development\8051\Bootstrapper\include\asm\ShortStack.inc 
+       1       1   00000                  ; Matt Rienzo, ShortStack.inc 8/25/2018
+       2       2   00000                  
+       3       3   00000                  ; The following registers I am reserving for short stack operations
+       4       4   00000                  s0	equ	0x18
+       5       5   00000                  s1	equ	0x19
+       6       6   00000                  s2	equ	0x1a
+       7       7   00000                  s3	equ 0x1b
+       8       8   00000                  s4	equ	0x1c
+       9       9   00000                  s5	equ	0x1d
+      10      10   00000                  s6	equ	0x1e
+      11      11   00000                  s7	equ	0x1f
+      12      12   00000                  
+      13      13   00000                  
+      14      14   00000                  ; SHORT STACK -- see the Short Stack section after the END instruction for an explanation
+      15      15   00000                  ;  of what this is
+      16      16   00000                  ; Short stack address "register" and short stack size "register"
+      17      17   00000                  ss	equ	0x20	; short stack 0 address
+      18      18   00000                  ssz	equ 0x21	; short stack size (index)
+      19      19   00000                  msz	equ	0x22	; short stack max size (to avoid overflow, but with stack wrapping/overwrites)
+
+
+*** Symbols ***
+name                    hex      dec          type     segment
+--------------------------------------------------------------
+ss                   0x0020       32        number     absolute
+s0                   0x0018       24        number     absolute
+s1                   0x0019       25        number     absolute
+ssz                  0x0021       33        number     absolute
+s2                   0x001A       26        number     absolute
+s3                   0x001B       27        number     absolute
+s4                   0x001C       28        number     absolute
+s5                   0x001D       29        number     absolute
+s6                   0x001E       30        number     absolute
+s7                   0x001F       31        number     absolute
+msz                  0x0022       34        number     absolute
+
+
+*** Externals (Imports) ***
+name                    hex      dec          type
+--------------------------------------------------
+
+
+*** Publics (Exports) ***
+name                    hex      dec          type
+--------------------------------------------------

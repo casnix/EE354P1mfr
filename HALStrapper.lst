@@ -1,0 +1,139 @@
+Y:\Development\8051\Bootstrapper\HALStrapper.xsf 
+Y:\Development\8051\Bootstrapper\HALStrapper.asm 
+       1       1   00000                  ; Matt Rienzo, HALStrapper.asm 8/27/2018
+       2       2   00000                  
+../include/asm/Registers.inc 
+       4       1   00000                  ; Matt Rienzo, Registers.inc 8/25/2018
+       5       2   00000                  
+       6       3   00000                  ;-- Alias/enumeration of registers and banks
+       7       4   00000                  a0	equ	0
+       8       5   00000                  a1	equ	1
+       9       6   00000                  a2	equ	2
+      10       7   00000                  a3	equ	3
+      11       8   00000                  a4	equ	4
+      12       9   00000                  a5	equ	5
+      13      10   00000                  a6	equ	6
+      14      11   00000                  a7	equ	7
+      15      12   00000                  b0	equ	8
+      16      13   00000                  b1	equ	9
+      17      14   00000                  b2	equ	10
+      18      15   00000                  b3	equ	11
+      19      16   00000                  b4	equ	12
+      20      17   00000                  b5	equ	13
+      21      18   00000                  b6	equ	14
+      22      19   00000                  b7	equ	15
+      23      20   00000                  c0	equ	16
+      24      21   00000                  c1	equ	17
+      25      22   00000                  c2	equ	18
+      26      23   00000                  c3	equ	19
+      27      24   00000                  c4	equ	20
+      28      25   00000                  c5	equ	21
+      29      26   00000                  c6	equ	22
+      30      27   00000                  c7	equ	23
+      31      28   00000                  
+      32      29   00000                  ;-- SFRs
+      33      30   00000                  sp  equ 0x81
+      34      31   00000                  acc equ 0xe0
+      35      32   00000                  bcc equ 0xf0
+      36      33   00000                  psw equ 0xd0
+../include/asm/ShortStack.inc 
+      38       1   00000                  ; Matt Rienzo, ShortStack.inc 8/25/2018
+      39       2   00000                  
+      40       3   00000                  ; The following registers I am reserving for short stack operations
+      41       4   00000                  s0	equ	0x18
+      42       5   00000                  s1	equ	0x19
+      43       6   00000                  s2	equ	0x1a
+      44       7   00000                  s3	equ 0x1b
+      45       8   00000                  s4	equ	0x1c
+      46       9   00000                  s5	equ	0x1d
+      47      10   00000                  s6	equ	0x1e
+      48      11   00000                  s7	equ	0x1f
+      49      12   00000                  
+      50      13   00000                  
+      51      14   00000                  ; SHORT STACK -- see the Short Stack section after the END instruction for an explanation
+      52      15   00000                  ;  of what this is
+      53      16   00000                  ; Short stack address "register" and short stack size "register"
+      54      17   00000                  ss	equ	0x20	; short stack 0 address
+      55      18   00000                  ssz	equ 0x21	; short stack size (index)
+      56      19   00000                  msz	equ	0x22	; short stack max size (to avoid overflow, but with stack wrapping/overwrites)
+Y:\Development\8051\Bootstrapper\HALStrapper.asm 
+      57       5   00000                  
+      58      13   00000                  
+      59      14   00000                  ;#define OPTIMIZE
+      60      16   00000                  
+      61      17   00000                  HAL     segment     code
+      62      18   00000                  
+      63      19   00000                      public  __HAL_init
+      64      20   00000                  rseg    HAL
+      65      21   00000                      extern  code    __sspush
+      66      22   00000                      extern  code    __sspop
+      67      23   00000                      __HAL_init:
+      68      24   00000                          ; 1) Setup array in memory for the 128 LED array.
+      69      25   00000                          ; 2) Setup handlers in ISR for the power/reset button
+      70      26   00000                          ; 3) Setup callback function for main loop/accelerometer
+      71      27   00000                          ; 4) return success
+      72      28   00000                  
+      73      29   00000 751800                   sspushl(0x00)
+      74      30   00003 C018                     ret
+      75      31   00005 120000           end
+                         0000000840      
+      76      31   00008 22               end
+      77      31   00009                  end
+
+
+*** Symbols ***
+name                    hex      dec          type     segment
+--------------------------------------------------------------
+ss                   0x0020       32        number     absolute
+c0                   0x0010       16        number     absolute
+s0                   0x0018       24        number     absolute
+c1                   0x0011       17        number     absolute
+b0                   0x0008        8        number     absolute
+s1                   0x0019       25        number     absolute
+c2                   0x0012       18        number     absolute
+b1                   0x0009        9        number     absolute
+a0                   0x0000        0        number     absolute
+ssz                  0x0021       33        number     absolute
+s2                   0x001A       26        number     absolute
+c3                   0x0013       19        number     absolute
+b2                   0x000A       10        number     absolute
+a1                   0x0001        1        number     absolute
+s3                   0x001B       27        number     absolute
+c4                   0x0014       20        number     absolute
+b3                   0x000B       11        number     absolute
+a2                   0x0002        2        number     absolute
+s4                   0x001C       28        number     absolute
+c5                   0x0015       21        number     absolute
+b4                   0x000C       12        number     absolute
+a3                   0x0003        3        number     absolute
+s5                   0x001D       29        number     absolute
+c6                   0x0016       22        number     absolute
+b5                   0x000D       13        number     absolute
+a4                   0x0004        4        number     absolute
+s6                   0x001E       30        number     absolute
+c7                   0x0017       23        number     absolute
+b6                   0x000E       14        number     absolute
+a5                   0x0005        5        number     absolute
+s7                   0x001F       31        number     absolute
+b7                   0x000F       15        number     absolute
+a6                   0x0006        6        number     absolute
+a7                   0x0007        7        number     absolute
+acc                  0x00E0      224        number     absolute
+bcc                  0x00F0      240        number     absolute
+msz                  0x0022       34        number     absolute
+psw                  0x00D0      208        number     absolute
+sp                   0x0081      129        number     absolute
+__HAL_init           0x0000        0          code     HAL
+
+
+*** Externals (Imports) ***
+name                    hex      dec          type
+--------------------------------------------------
+__sspush             0x0000        0          code 
+__sspop              0x0000        0          code 
+
+
+*** Publics (Exports) ***
+name                    hex      dec          type
+--------------------------------------------------
+__HAL_init           0x0000        0          code 
