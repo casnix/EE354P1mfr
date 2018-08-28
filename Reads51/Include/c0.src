@@ -1,0 +1,54 @@
+; Modified, Matt Rienzo, c0.src 8/26/2018
+; Place this file in the Includes directory of your Reads51 Installation (C:\Program Files (x86)\Rigel\Reads51\Include\c0.src)
+;   allow this to replace the stock c0.src.  If you aren't using a custom assembly entry function that needs to go at 0x0000 in code memory,
+;   comment out the lines that define MODIFIED_C0, ENTRYMODE_ASM, ENTRYFUNC, and ENTRYMODE_C
+
+#include <Rc51Regs.inc>
+C0Seg     segment code
+CodeSeg   segment code
+DataSeg   segment data
+
+#define     MODIFIED_C0
+#define     ENTRYMODE_ASM
+;#define     ENTRYMODE_C
+#define     ENTRYFUNC       __setup
+
+#ifndef     MODIFIED_C0
+; --- external and public functions ---
+extern    code    _main
+
+;		  rseg    C0Seg
+          cseg    at 0
+          ljmp    __startup
+          end
+
+          rseg    CodeSeg
+          org     20h
+__startup:
+          mov     sp, #1Fh
+          ljmp    _main
+          end
+#endif
+
+#ifdef  ENTRYMODE_ASM
+extern  code    ENTRYFUNC
+cseg    at      0x0000
+    ljmp        ENTRYFUNC
+    end
+#endif
+
+#ifdef  ENTRYMODE_C
+extern  code    ENTRYFUNC
+cseg    at      0x0000
+    ljmp    __startup
+    end
+
+rseg    CodeSeg
+    org     0x20
+    __startup:
+        mov     sp,     0x1f
+        ljmp    ENTRYFUNC
+        end
+
+#endif
+
