@@ -130,7 +130,7 @@ Y:\Development\8051\Bootstrapper\HILStrapper.asm
      127      60   00030 74FF                     mov     a,          #0xff
      128      61   00032                      dbgloop:
      129      62   00032 C3                       clr     c
-     130      63   00033 E50F                     mov     a,          0x0f
+     130      63   00033 740F                     mov     a,          #0x0f
      131      64   00035 940F                     subb    a,          #MINIMUM_BATT_VOLTAGEh
      132      65   00037                         ; mov     a,          c
      133      66   00037                  

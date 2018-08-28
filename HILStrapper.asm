@@ -23,8 +23,31 @@ public	main
 rseg	HIL
     extern  code    __sspop
     extern  code    __sspush
+    ; __HIL_init : initializes hardware components, and defines functions/callbacks for hardware
+    ;   manipulate by the HAL.
+    ; args: none
+    ; rets: SS(#retval) -- Immediate byte off short stack to tell __entry whether or not we failed.
 	__HIL_init:
+        ; 1) Check battery voltage
+        acall   __HIL_enable_ADC
+        lowEA                               ; Disable interrupts for while we check devices on ADC
+        sspushl(#0x00)                      ; Channel byte for ADC/Battery voltage
+        acall   __HIL_select_ADCCh
+        acall   __HIL_enable_ADCCollect     ; Enable ADC collection on the channel for the battery
+        acall   __HIL_check_batt_voltage    ; Check battery voltage
+        sspop(acc)
+        cjne    a,          #0x00,  HIL_init_fail
+        
+        ; 2) Turn on accelerometer
+
+
+
+    ; __HIL_enable_ADC : Turns on and resets ADC
+    ; args: none
+    ; rets: none
+    __HIL_enable_ADC:
         ; 1) Turn on ADC.
+        mov     adcf,       #0x00   ; reset
         mov     adcf,       #0x01
         mov     adcon,      #0x20
         mov     adclk,      #0x00
@@ -33,17 +56,30 @@ rseg	HIL
         mov     c6,         adcon
         mov     c5,         adclk
 #endif
-        
-        ; Disable interrupts for while we check devices on ADC
-        lowEA
-        ; 2) Check battery voltage.  Too low? Turn on red square and battery low LEDs.
-        ; battery voltage/division will be routed to ADC channel 0
-        anl     adcon,      #0xf8
-        orl     adcon,      #0x00
-        orl     adcon,      #0x20
+        ret
 
+    ; __HIL_select_ADCCh : Selects the active ADC channel
+    ; args: SS(#channel)    -- byte on short stack
+    ; rets: none
+    __HIL_select_ADCCh:
+        ; battery voltage/division will be routed to ADC channel 0
+        anl     adcon,      #0xf8   ; Reset ADC channel selection
+        orl     adcon,      #0x00   ; Select channel 0
+        orl     adcon,      #0x20   ; Select standard mode
+        ret
+
+    ; __HIL_enable_ADCCollect : Enables ADC collection on selected channel
+    ; args: none
+    ; rets: none
+    __HIL_enable_ADCCollect:
         ; Start the ADC collection
-        orl     adcon,      #0x08
+        orl     adcon,      #0x08   ; Enable ADC collectors
+        ret
+
+    ; __HIL_check_batt_voltage : Checks the battery voltage
+    ; args: none
+    ; rets: SS(#retval)     -- byte 0x00 for success, 0xff for fail
+    __HIL_check_batt_voltage:
         push    acc
     hsWdbADCON:
         mov     a,          adcon
@@ -52,22 +88,45 @@ rseg	HIL
 
         ; Voltage check
 #define     MINIMUM_BATT_VOLTAGEh   0x0f    ; will change
-#define     MINIMUM_BATT_VOLTAGEl   0xFF
+#define     MINIMUM_BATT_VOLTAGEl   0xFF    ; will change
         push    bcc
 #ifdef      DEBUG
         mov     a,          #0xff
         mov     a,          #0x00
         mov     a,          #0xff
-    dbgloop:    
-        clr     c
-        mov     a,          0x0f
-        subb    a,          #MINIMUM_BATT_VOLTAGEh
-       ; mov     a,          c
-
-
-    dbgdo:
-        sjmp    dbgloop
 #endif
+#ifdef      OPTIMIZE        ; We don't want to have a looping simulation because there's not an ADC in the simulator
+        ; For #n > a, subb a, #n sets the carry flag
+        ; For #n < a, subb a, #n clears the carry flag
+        ; For #n == a, subb a, #n clears the carry flag
+
+        ; For HIL, we only check if the battery is too low to operate and then we shut down
+        mov     a,          #MINIMUM_BATT_VOLTAGEh      ; Check the upper 8 MSB
+        cjne    a,          addh,   hsWdbBATT
+        sjmp    __HIL_disable_batterylo                 ; addh == MINIMUM_BATT_VOLTAGEh, so we're on the line
+    hsWdbBATT:
+        clr     c
+        subb    a,          addh                        ; Try to set C
+        mov     a,          psw
+        anl     a,          0x80                        ; Check if the carry bit is set
+        cjne    a,          0x80,   __HIL_disable_batterylo
+        ; If we get here we're fine.
+        clr     c
+#endif        
+        pop     bcc
+        pop     acc
+        sspushl(#0x00)
+        ret
+
+    ; __HIL_disable_batterylo : Turns on BATT_LOW led, and red square.
+    ; args: none
+    ; rets: SS(#0xff)
+    __HIL_disable_batterylo:
+        ; Turn on battery low light
+        ; Turn on red square
+        sspushl(#0xff)
+        ret
+
 
         
         ; 3) Turn on accelerometer

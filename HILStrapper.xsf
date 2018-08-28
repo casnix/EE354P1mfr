@@ -127,7 +127,7 @@ rseg	HIL
         mov     a,          #0xff
     dbgloop:    
         clr     c
-        mov     a,          0x0f
+        mov     a,          #0x0f
         subb    a,          #0x0f
 ; mov     a,          c
 
