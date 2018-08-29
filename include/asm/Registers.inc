@@ -28,6 +28,6 @@ c7	equ	23
 
 ;-- SFRs
 ;sp  equ 0x81
-acc equ 0xe0
+;acc equ 0xe0
 bcc equ 0xf0
 ;psw equ 0xd0

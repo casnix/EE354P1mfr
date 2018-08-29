@@ -1,17 +1,10 @@
 ; Matt Rienzo, HILStrapper.inc 8/25/2018
 
-#include "../include/asm/Registers.inc"
-#include "../include/asm/ShortStack.inc"
-#include <ADC.inc>
-#include <InterruptController.inc>
-
-#define sspush(x)   push    x   \
-    lcall   __sspush
-#define sspop(x)    lcall   __sspop \
-    pop     x
-#define sspushl(N)  mov     s0,     #N  \
-    push    s0      \
-    lcall   __sspush
+#include "./include/asm/Registers.inc"
+#include "./include/asm/ShortStack.inc"
+#include "./include/asm/ADC.inc"
+#include "./include/asm/InterruptController.inc"
+#include "./include/asm/MacroLang.inc"
 
 ;#define OPTIMIZE
 #define DEBUG
@@ -23,8 +16,8 @@ public	__HIL_init
 public	__HIL_C_test
 #endif
 rseg	HIL
-    extern  code    __sspop
-    extern  code    __sspush
+    extrn  code    (__sspop)
+    extrn  code    (__sspush)
     ; __HIL_init : initializes hardware components, and defines functions/callbacks for hardware
     ;   manipulate by the HAL.
     ; args: none
@@ -33,11 +26,11 @@ rseg	HIL
         ; 1) Check battery voltage
         acall   __HIL_enable_ADC
         lowEA                               ; Disable interrupts for while we check devices on ADC
-        sspushl(0x00)                      ; Channel byte for ADC/Battery voltage
+        sspushl	#0x00                      ; Channel byte for ADC/Battery voltage
         acall   __HIL_select_ADCCh
         acall   __HIL_enable_ADCCollect     ; Enable ADC collection on the channel for the battery
         acall   __HIL_check_batt_voltage    ; Check battery voltage
-        sspop(acc)
+        sspop	acc
         cjne    a,          #0x00,  HIL_init_fail
         
         ; 2) Turn on accelerometer
@@ -97,7 +90,8 @@ rseg	HIL
         mov     a,          #0x00
         mov     a,          #0xff
 #endif
-#ifdef      OPTIMIZE        ; We don't want to have a looping simulation because there's not an ADC in the simulator
+#ifdef      OPTIMIZE        
+		; We don't want to have a looping simulation because there's not an ADC in the simulator
         ; For #n > a, subb a, #n sets the carry flag
         ; For #n < a, subb a, #n clears the carry flag
         ; For #n == a, subb a, #n clears the carry flag
@@ -117,7 +111,7 @@ rseg	HIL
 #endif        
         pop     bcc
         pop     acc
-        sspushl(0x00)
+        sspushl	#0x00
         ret
 
     ; __HIL_disable_batterylo : Turns on BATT_LOW led, and red square.
@@ -126,7 +120,7 @@ rseg	HIL
     __HIL_disable_batterylo:
         ; Turn on battery low light
         ; Turn on red square
-        sspushl(0xff)
+        sspushl	#0xff
         ret
 
 
@@ -142,12 +136,12 @@ rseg	HIL
         ; Handler for vibration motor
 	
 	HIL_init_fail:
-        sspushl(0xff)
+        sspushl	#0xff
         ret
 	
 #ifdef      DEBUG        
-    __HIL_C_test:
-        sspushl(0xe4)
+__HIL_C_test:
+        mov		a7,		#0xe4
 		; Order of operation:
 		ret
 #endif

@@ -1,0 +1,162 @@
+A51 MACRO ASSEMBLER  HALSTRAPPER                                                          08/29/2018 16:45:30 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\HALStrapper.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE HALStrapper.asm SET(SMALL) DEBUG PRINT(.\Listings\HALStrapper.lst) OBJE
+                      CT(.\Objects\HALStrapper.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ; Matt Rienzo, HALStrapper.asm 8/27/2018
+                       2     
+                       3     ;#include "./include/asm/Registers.inc"
+                +1     4     ; Matt Rienzo, Registers.inc 8/25/2018
+                +1     5     
+                +1     6     ;-- Alias/enumeration of registers and banks
+  0000          +1     7     a0      equ     0
+  0001          +1     8     a1      equ     1
+  0002          +1     9     a2      equ     2
+  0003          +1    10     a3      equ     3
+  0004          +1    11     a4      equ     4
+  0005          +1    12     a5      equ     5
+  0006          +1    13     a6      equ     6
+  0007          +1    14     a7      equ     7
+  0008          +1    15     b0      equ     8
+  0009          +1    16     b1      equ     9
+  000A          +1    17     b2      equ     10
+  000B          +1    18     b3      equ     11
+  000C          +1    19     b4      equ     12
+  000D          +1    20     b5      equ     13
+  000E          +1    21     b6      equ     14
+  000F          +1    22     b7      equ     15
+  0010          +1    23     c0      equ     16
+  0011          +1    24     c1      equ     17
+  0012          +1    25     c2      equ     18
+  0013          +1    26     c3      equ     19
+  0014          +1    27     c4      equ     20
+  0015          +1    28     c5      equ     21
+  0016          +1    29     c6      equ     22
+  0017          +1    30     c7      equ     23
+                +1    31     
+                +1    32     ;-- SFRs
+                +1    33     ;sp  equ 0x81
+                +1    34     ;acc equ 0xe0
+  00F0          +1    35     bcc equ 0xf0
+                +1    36     ;psw equ 0xd0
+                      37     
+                      38     ;#include "./include/asm/ShortStack.inc"
+                +1    39     ; Matt Rienzo, ShortStack.inc 8/25/2018
+                +1    40     
+                +1    41     ; The following registers I am reserving for short stack operations
+  0018          +1    42     s0      equ     0x18
+  0019          +1    43     s1      equ     0x19
+  001A          +1    44     s2      equ     0x1a
+  001B          +1    45     s3      equ 0x1b
+  001C          +1    46     s4      equ     0x1c
+  001D          +1    47     s5      equ     0x1d
+  001E          +1    48     s6      equ     0x1e
+  001F          +1    49     s7      equ     0x1f
+                +1    50     
+                +1    51     
+                +1    52     ; SHORT STACK -- see the Short Stack section after the END instruction for an explanation
+                +1    53     ;  of what this is
+                +1    54     ; Short stack address "register" and short stack size "register"
+  0020          +1    55     ss      equ     0x20    ; short stack 0 address
+  0021          +1    56     ssz     equ 0x21        ; short stack size (index)
+  0022          +1    57     msz     equ     0x22    ; short stack max size (to avoid overflow, but with stack wrapping/
+A51 MACRO ASSEMBLER  HALSTRAPPER                                                          08/29/2018 16:45:30 PAGE     2
+
+                             overwrites)
+                      58     
+                      59     ;#include "./include/asm/MacroLang.inc"
+                +1    60     ; Matt Rienzo, MacroLang.inc 8/25/2018
+                +1    61     sspush          macro   x
+                +1    62             push    x
+                +1    63             lcall   __sspush
+                +1    64     endm
+                +1    65     
+                +1    66     sspop           macro   x
+                +1    67             lcall   __sspop
+                +1    68             pop             x
+                +1    69     endm
+                +1    70     
+                +1    71     sspushl         macro   N
+                +1    72             mov             s0,             N
+                +1    73             push    s0
+                +1    74             lcall   __sspush
+                +1    75     endm
+                      76     
+                      77     
+                      78     ;#define OPTIMIZE
+                      79     
+                      80     
+                      81     HAL     segment     code
+                      82     
+                      83         public  __HAL_init
+----                  84     rseg    HAL
+                      85         extrn  code    (__sspush)
+                      86         extrn  code    (__sspop)
+0000                  87         __HAL_init:
+                      88             ; 1) Setup array in memory for the 128 LED array.
+                      89             ; 2) Setup handlers in ISR for the power/reset button
+                      90             ; 3) Setup callback function for main loop/accelerometer
+                      91             ; 4) return success
+                      92             
+                      93             sspushl #0x00
+0008 22               97             ret
+                      98     end
+A51 MACRO ASSEMBLER  HALSTRAPPER                                                          08/29/2018 16:45:30 PAGE     3
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+A0 . . . . . . . .  N NUMB   0000H   A   
+A1 . . . . . . . .  N NUMB   0001H   A   
+A2 . . . . . . . .  N NUMB   0002H   A   
+A3 . . . . . . . .  N NUMB   0003H   A   
+A4 . . . . . . . .  N NUMB   0004H   A   
+A5 . . . . . . . .  N NUMB   0005H   A   
+A6 . . . . . . . .  N NUMB   0006H   A   
+A7 . . . . . . . .  N NUMB   0007H   A   
+B0 . . . . . . . .  N NUMB   0008H   A   
+B1 . . . . . . . .  N NUMB   0009H   A   
+B2 . . . . . . . .  N NUMB   000AH   A   
+B3 . . . . . . . .  N NUMB   000BH   A   
+B4 . . . . . . . .  N NUMB   000CH   A   
+B5 . . . . . . . .  N NUMB   000DH   A   
+B6 . . . . . . . .  N NUMB   000EH   A   
+B7 . . . . . . . .  N NUMB   000FH   A   
+BCC. . . . . . . .  N NUMB   00F0H   A   
+C0 . . . . . . . .  N NUMB   0010H   A   
+C1 . . . . . . . .  N NUMB   0011H   A   
+C2 . . . . . . . .  N NUMB   0012H   A   
+C3 . . . . . . . .  N NUMB   0013H   A   
+C4 . . . . . . . .  N NUMB   0014H   A   
+C5 . . . . . . . .  N NUMB   0015H   A   
+C6 . . . . . . . .  N NUMB   0016H   A   
+C7 . . . . . . . .  N NUMB   0017H   A   
+HAL. . . . . . . .  C SEG    0009H       REL=UNIT
+MSZ. . . . . . . .  N NUMB   0022H   A   
+S0 . . . . . . . .  N NUMB   0018H   A   
+S1 . . . . . . . .  N NUMB   0019H   A   
+S2 . . . . . . . .  N NUMB   001AH   A   
+S3 . . . . . . . .  N NUMB   001BH   A   
+S4 . . . . . . . .  N NUMB   001CH   A   
+S5 . . . . . . . .  N NUMB   001DH   A   
+S6 . . . . . . . .  N NUMB   001EH   A   
+S7 . . . . . . . .  N NUMB   001FH   A   
+SS . . . . . . . .  N NUMB   0020H   A   
+SSZ. . . . . . . .  N NUMB   0021H   A   
+__HAL_INIT . . . .  C ADDR   0000H   R   SEG=HAL
+__SSPOP. . . . . .  C ADDR   -----       EXT
+__SSPUSH . . . . .  C ADDR   -----       EXT
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

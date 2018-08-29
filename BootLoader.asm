@@ -3,19 +3,12 @@
 ; created : 17:04:29, Saturday, August 25, 2018
 ; ----------------------------------------------------- 
 ;-- Matt Rienzo, BootLoader.asm 8/25/2018
-#include "../include/asm/Registers.inc"
-#include "../include/asm/ShortStack.inc"
+#include "./include/asm/Registers.inc"
+#include "./include/asm/ShortStack.inc"
+#include "./include/asm/MacroLang.inc"
 
 ;#define OPTIMIZE
 #define DEBUG
-
-#define sspush(x)   push    x   \
-    lcall   __sspush
-#define sspop(x)    lcall   __sspop \
-    pop     x
-#define sspushl(N)  mov     s0,     #N  \
-    push    s0      \
-    lcall   __sspush
 
 ;-- Segment declaration
 setup	segment	code
@@ -139,24 +132,24 @@ rseg	setup
 		
 		
 rseg	boot
-	extern		code	__HIL_init
-	extern		code	__HAL_init
-	extern		code	_Cmain
+	extrn		code	(__HIL_init)
+	extrn		code	(__HAL_init)
+	extrn		code	(_Cmain)
 	__entry:
 	; Do three things:	(1) tell the Hardware Interaction Layer to initialize
 	;					(2) tell the Hardware Abstration Layer to initialize
 	;					(3) jump into the main program
 		lcall	__HIL_init	; pushes return code onto ss
-		sspop(acc)
+		sspop	acc
 		cjne	a,		#0x00,	__entry_HIL_error
 		
 		lcall	__HAL_init
-		sspop(acc)
+		sspop	acc
 		cjne	a,		#0x00,	__entry_HAL_error
 		
         mov     a,      #0xe4
 		lcall	_Cmain
-		sspop(acc)
+		sspop	acc
 		cjne	a,		#0x00,	__entry_main_error
 		
 		ljmp	__shutdown

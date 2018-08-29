@@ -1,0 +1,6 @@
+".\Objects\CFuncTest.obj",
+".\Objects\BootLoader.obj",
+".\Objects\HALStrapper.obj",
+".\Objects\HILStrapper.obj" 
+TO ".\Objects\xBootStrapper" 
+PRINT(".\Listings\xBootStrapper.m51") RAMSIZE(256) 

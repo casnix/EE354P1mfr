@@ -1,0 +1,326 @@
+A51 MACRO ASSEMBLER  BOOTLOADER                                                           08/29/2018 16:45:30 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\BootLoader.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE BootLoader.asm SET(SMALL) DEBUG PRINT(.\Listings\BootLoader.lst) OBJECT
+                      (.\Objects\BootLoader.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ; ------------- READS51 generated header -------------- 
+                       2     ; module  : Y:\Development\8051\Bootstrapper\Bootstrapper\BootLoader.asm
+                       3     ; created : 17:04:29, Saturday, August 25, 2018
+                       4     ; ----------------------------------------------------- 
+                       5     ;-- Matt Rienzo, BootLoader.asm 8/25/2018
+                       6     ;#include "./include/asm/Registers.inc"
+                +1     7     ; Matt Rienzo, Registers.inc 8/25/2018
+                +1     8     
+                +1     9     ;-- Alias/enumeration of registers and banks
+  0000          +1    10     a0      equ     0
+  0001          +1    11     a1      equ     1
+  0002          +1    12     a2      equ     2
+  0003          +1    13     a3      equ     3
+  0004          +1    14     a4      equ     4
+  0005          +1    15     a5      equ     5
+  0006          +1    16     a6      equ     6
+  0007          +1    17     a7      equ     7
+  0008          +1    18     b0      equ     8
+  0009          +1    19     b1      equ     9
+  000A          +1    20     b2      equ     10
+  000B          +1    21     b3      equ     11
+  000C          +1    22     b4      equ     12
+  000D          +1    23     b5      equ     13
+  000E          +1    24     b6      equ     14
+  000F          +1    25     b7      equ     15
+  0010          +1    26     c0      equ     16
+  0011          +1    27     c1      equ     17
+  0012          +1    28     c2      equ     18
+  0013          +1    29     c3      equ     19
+  0014          +1    30     c4      equ     20
+  0015          +1    31     c5      equ     21
+  0016          +1    32     c6      equ     22
+  0017          +1    33     c7      equ     23
+                +1    34     
+                +1    35     ;-- SFRs
+                +1    36     ;sp  equ 0x81
+                +1    37     ;acc equ 0xe0
+  00F0          +1    38     bcc equ 0xf0
+                +1    39     ;psw equ 0xd0
+                      40     
+                      41     ;#include "./include/asm/ShortStack.inc"
+                +1    42     ; Matt Rienzo, ShortStack.inc 8/25/2018
+                +1    43     
+                +1    44     ; The following registers I am reserving for short stack operations
+  0018          +1    45     s0      equ     0x18
+  0019          +1    46     s1      equ     0x19
+  001A          +1    47     s2      equ     0x1a
+  001B          +1    48     s3      equ 0x1b
+  001C          +1    49     s4      equ     0x1c
+  001D          +1    50     s5      equ     0x1d
+  001E          +1    51     s6      equ     0x1e
+  001F          +1    52     s7      equ     0x1f
+                +1    53     
+                +1    54     
+                +1    55     ; SHORT STACK -- see the Short Stack section after the END instruction for an explanation
+                +1    56     ;  of what this is
+                +1    57     ; Short stack address "register" and short stack size "register"
+A51 MACRO ASSEMBLER  BOOTLOADER                                                           08/29/2018 16:45:30 PAGE     2
+
+  0020          +1    58     ss      equ     0x20    ; short stack 0 address
+  0021          +1    59     ssz     equ 0x21        ; short stack size (index)
+  0022          +1    60     msz     equ     0x22    ; short stack max size (to avoid overflow, but with stack wrapping/
+                             overwrites)
+                      61     
+                      62     ;#include "./include/asm/MacroLang.inc"
+                +1    63     ; Matt Rienzo, MacroLang.inc 8/25/2018
+                +1    64     sspush          macro   x
+                +1    65             push    x
+                +1    66             lcall   __sspush
+                +1    67     endm
+                +1    68     
+                +1    69     sspop           macro   x
+                +1    70             lcall   __sspop
+                +1    71             pop             x
+                +1    72     endm
+                +1    73     
+                +1    74     sspushl         macro   N
+                +1    75             mov             s0,             N
+                +1    76             push    s0
+                +1    77             lcall   __sspush
+                +1    78     endm
+                      79     
+                      80     
+                      81     ;#define OPTIMIZE
+                      82     
+                      83     
+                      84     ;-- Segment declaration
+                      85     setup   segment code
+                      86     boot    segment code
+                      87     exit    segment code
+                      88     memory  segment code
+                      89     
+                      90     ;-- Segment definition
+                      91         public  __sspush
+                      92         public  __sspop
+----                  93     rseg    memory
+0000                  94             __sspush:  ; Takes a byte off the top of the stack and moves it to the short stack
+                      95                     ; Increment our short stack index
+                      96                     ; if([msz]-[ssz] == 0) [ssz] = 0;
+                      97     
+                                     
+                             
+                     100     
+0000 85211F          101             mov     s7,     ssz
+0003 E51F            102             mov     a,      s7
+                     103     
+0005 2401            104             add     a,      #0x01
+                     105     
+0007 85221E          106             mov     s6,     msz
+000A 951E            107             subb    a,      s6
+                     108     
+                     109     
+                                     
+                             
+                     112             
+000C B40003          113             cjne    a,      #0x00,  __sspush_continue
+                     114                     
+                     115                     ; Reset our ssz, wrapping our stack
+000F 752100          116                     mov             ssz,    #0x00
+                     117             
+0012                 118             __sspush_continue:
+                     119                     ; Set our offset
+                     120                     ; &s7 = ss+[ssz]
+                     121     
+                                     
+A51 MACRO ASSEMBLER  BOOTLOADER                                                           08/29/2018 16:45:30 PAGE     3
+
+                             
+                     124     
+0012 751F20          125             mov     s7,     #ss
+0015 E51F            126             mov     a,      s7
+                     127     
+0017 2521            128             add     a,      ssz
+                     129     
+0019 F51F            130             mov     s7,     a
+                     131     
+                     132                     
+                     133             ; Preserve our callback/ret address
+001B D01F            134             pop     s7
+001D D01E            135             pop     s6
+                     136             
+                     137             ; Argument
+001F D01D            138             pop     s5
+0021 F8              139             mov     r0,     a
+0022 A61D            140             mov     @r0,    s5
+                     141     
+0024 C01E            142             push    s6
+0026 C01F            143             push    s7
+0028 22              144                     ret
+                     145                     
+0029                 146             __sspop:   ; Takes a byte off the top of the short stack and moves it to the stack
+                     147     
+                                     
+                             
+                     150     
+0029 751F20          151                     mov             s7,             #ss
+002C 85211E          152                     mov             s6,             ssz
+002F E51F            153             mov     a,      s7
+                     154     
+0031 2521            155             add     a,      ssz
+                     156     
+                     157             ; Preserve callback/ret address
+0033 D019            158             pop     s1
+0035 D01A            159             pop     s2
+                     160     
+0037 F8              161             mov     r0,     a
+0038 861B            162             mov     s3,     @r0
+003A C01B            163             push    s3 ; Return byte
+                     164                     
+                     165                     ; Check if our offset is 0
+                     166     
+003C E521            167             mov     a,      ssz
+003E B40004          168             cjne    a,      #0x00,  __sspop_continue
+0041 2401            169             add     a,      #0x01
+                     170     
+0043 F521            171             mov     ssz,    a
+                     172     
+                     173                     
+0045                 174             __sspop_continue:
+0045 9401            175             subb    a,      #0x01
+                     176     
+0047 F521            177             mov     ssz,    a
+                     178     
+                     179                     
+                     180             ; Callback/ret address
+0049 C01A            181             push    s2
+004B C019            182             push    s1
+004D 22              183                     ret
+                     184                     
+                     185         public  __setup             
+----                 186     rseg    setup
+0000                 187             __setup:
+                     188                     ;---SHORT STACK
+A51 MACRO ASSEMBLER  BOOTLOADER                                                           08/29/2018 16:45:30 PAGE     4
+
+0000 752023          189                     mov             ss,             #0x23
+0003 752100          190                     mov             ssz,    #0x00
+0006 752220          191                     mov             msz,    #0x20
+                     192                     ; The last slot in the short stack will be #([ss]+[msz])
+                     193                     
+                     194                     ;---STACK
+                     195                     ; Set SP to after the last slot in short stack
+0009 E520            196                     mov             a,              ss
+000B 2522            197                     add             a,              msz
+000D 04              198                     inc             a
+000E F581            199                     mov             sp,             a
+                     200                     
+                     201                     ; enter our program
+0010 020000   F      202                     ljmp    __entry
+                     203                     
+                     204                     
+----                 205     rseg    boot
+                     206             extrn           code    (__HIL_init)
+                     207             extrn           code    (__HAL_init)
+                     208             extrn           code    (_Cmain)
+0000                 209             __entry:
+                     210             ; Do three things:      (1) tell the Hardware Interaction Layer to initialize
+                     211             ;                                       (2) tell the Hardware Abstration Layer to i
+                             nitialize
+                     212             ;                                       (3) jump into the main program
+0000 120000   F      213                     lcall   __HIL_init      ; pushes return code onto ss
+                     214                     sspop   acc
+0008 B4001B          217                     cjne    a,              #0x00,  __entry_HIL_error
+                     218                     
+000B 120000   F      219                     lcall   __HAL_init
+                     220                     sspop   acc
+0013 B40010          223                     cjne    a,              #0x00,  __entry_HAL_error
+                     224                     
+0016 74E4            225             mov     a,      #0xe4
+0018 120000   F      226                     lcall   _Cmain
+                     227                     sspop   acc
+0020 B40003          230                     cjne    a,              #0x00,  __entry_main_error
+                     231                     
+0023 020000   F      232                     ljmp    __shutdown
+                     233                     
+0026                 234             __entry_HIL_error:      ; Turn on ERR LED
+0026                 235             __entry_HAL_error:      ; Turn on ERR LED and batt_too_low square
+0026                 236             __entry_main_error:     ; Turn on ERR LED and white square
+                     237                     
+                     238                     
+----                 239     rseg    exit
+0000                 240             __shutdown:
+                     241                     ; Endless looooooop
+0000 0100     F      242                     ajmp    __shutdown
+                     243     end
+A51 MACRO ASSEMBLER  BOOTLOADER                                                           08/29/2018 16:45:30 PAGE     5
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+A0 . . . . . . . .  N NUMB   0000H   A   
+A1 . . . . . . . .  N NUMB   0001H   A   
+A2 . . . . . . . .  N NUMB   0002H   A   
+A3 . . . . . . . .  N NUMB   0003H   A   
+A4 . . . . . . . .  N NUMB   0004H   A   
+A5 . . . . . . . .  N NUMB   0005H   A   
+A6 . . . . . . . .  N NUMB   0006H   A   
+A7 . . . . . . . .  N NUMB   0007H   A   
+ACC. . . . . . . .  D ADDR   00E0H   A   
+B0 . . . . . . . .  N NUMB   0008H   A   
+B1 . . . . . . . .  N NUMB   0009H   A   
+B2 . . . . . . . .  N NUMB   000AH   A   
+B3 . . . . . . . .  N NUMB   000BH   A   
+B4 . . . . . . . .  N NUMB   000CH   A   
+B5 . . . . . . . .  N NUMB   000DH   A   
+B6 . . . . . . . .  N NUMB   000EH   A   
+B7 . . . . . . . .  N NUMB   000FH   A   
+BCC. . . . . . . .  N NUMB   00F0H   A   
+BOOT . . . . . . .  C SEG    0026H       REL=UNIT
+C0 . . . . . . . .  N NUMB   0010H   A   
+C1 . . . . . . . .  N NUMB   0011H   A   
+C2 . . . . . . . .  N NUMB   0012H   A   
+C3 . . . . . . . .  N NUMB   0013H   A   
+C4 . . . . . . . .  N NUMB   0014H   A   
+C5 . . . . . . . .  N NUMB   0015H   A   
+C6 . . . . . . . .  N NUMB   0016H   A   
+C7 . . . . . . . .  N NUMB   0017H   A   
+EXIT . . . . . . .  C SEG    0002H       REL=UNIT
+MEMORY . . . . . .  C SEG    004EH       REL=UNIT
+MSZ. . . . . . . .  N NUMB   0022H   A   
+S0 . . . . . . . .  N NUMB   0018H   A   
+S1 . . . . . . . .  N NUMB   0019H   A   
+S2 . . . . . . . .  N NUMB   001AH   A   
+S3 . . . . . . . .  N NUMB   001BH   A   
+S4 . . . . . . . .  N NUMB   001CH   A   
+S5 . . . . . . . .  N NUMB   001DH   A   
+S6 . . . . . . . .  N NUMB   001EH   A   
+S7 . . . . . . . .  N NUMB   001FH   A   
+SETUP. . . . . . .  C SEG    0013H       REL=UNIT
+SP . . . . . . . .  D ADDR   0081H   A   
+SS . . . . . . . .  N NUMB   0020H   A   
+SSZ. . . . . . . .  N NUMB   0021H   A   
+_CMAIN . . . . . .  C ADDR   -----       EXT
+__ENTRY. . . . . .  C ADDR   0000H   R   SEG=BOOT
+__ENTRY_HAL_ERROR.  C ADDR   0026H   R   SEG=BOOT
+__ENTRY_HIL_ERROR.  C ADDR   0026H   R   SEG=BOOT
+__ENTRY_MAIN_ERROR  C ADDR   0026H   R   SEG=BOOT
+__HAL_INIT . . . .  C ADDR   -----       EXT
+__HIL_INIT . . . .  C ADDR   -----       EXT
+__SETUP. . . . . .  C ADDR   0000H   R   SEG=SETUP
+__SHUTDOWN . . . .  C ADDR   0000H   R   SEG=EXIT
+__SSPOP. . . . . .  C ADDR   0029H   R   SEG=MEMORY
+__SSPOP_CONTINUE .  C ADDR   0045H   R   SEG=MEMORY
+__SSPUSH . . . . .  C ADDR   0000H   R   SEG=MEMORY
+__SSPUSH_CONTINUE.  C ADDR   0012H   R   SEG=MEMORY
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
+A51 MACRO ASSEMBLER  BOOTLOADER                                                           08/29/2018 16:45:30 PAGE     6
+

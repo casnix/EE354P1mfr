@@ -1,0 +1,361 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    08/29/2018  16:45:30  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\CFuncTest.obj, .\Objects\BootLoader.obj, .\Objects\HALStrapper.obj, .\Objects\HILS
+>> trapper.obj TO .\Objects\xBootStrapper PRINT (.\Listings\xBootStrapper.m51) RAMSIZE (256)
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\CFuncTest.obj (CFUNCTEST)
+  .\Objects\BootLoader.obj (BOOTLOADER)
+  .\Objects\HALStrapper.obj (HALSTRAPPER)
+  .\Objects\HILStrapper.obj (HILSTRAPPER)
+
+
+LINK MAP OF MODULE:  .\Objects\xBootStrapper (CFUNCTEST)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0001H     UNIT         ?DT?_CMAIN?CFUNCTEST
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+                    0000H     0800H                  *** GAP ***
+            CODE    0800H     0073H     UNIT         HIL
+            CODE    0873H     004EH     UNIT         MEMORY
+            CODE    08C1H     0026H     UNIT         BOOT
+            CODE    08E7H     0013H     UNIT         SETUP
+            CODE    08FAH     0011H     UNIT         ?PR?_CMAIN?CFUNCTEST
+            CODE    090BH     0009H     UNIT         HAL
+            CODE    0914H     0002H     UNIT         ?PR?_TEST?CFUNCTEST
+            CODE    0916H     0002H     UNIT         ?PR?_INCREMENT?CFUNCTEST
+            CODE    0918H     0002H     UNIT         EXIT
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (CFUNCTEST)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        CFUNCTEST
+  C:0914H         SEGMENT       ?PR?_TEST?CFUNCTEST
+  C:08FAH         SEGMENT       ?PR?_CMAIN?CFUNCTEST
+  D:0008H         SEGMENT       ?DT?_CMAIN?CFUNCTEST
+  C:0916H         SEGMENT       ?PR?_INCREMENT?CFUNCTEST
+  C:08FAH         PUBLIC        _CMAIN
+  C:0916H         PUBLIC        _INCREMENT
+  C:0914H         PUBLIC        _TEST
+  D:0008H         SYMBOL        ?_CMAIN?BYTE
+  N:0000H         SYMBOL        CFUNCTEST
+  D:0008H         SYMBOL        QI?142
+  C:0914H         LINE#         45
+  C:0915H         LINE#         50
+  C:08FAH         LINE#         62
+  C:08FCH         LINE#         63
+  C:08FFH         LINE#         65
+  C:0901H         LINE#         68
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  08/29/2018  16:45:30  PAGE 2
+
+
+  C:0902H         LINE#         69
+  C:0903H         LINE#         70
+  C:0906H         LINE#         71
+  C:0908H         LINE#         74
+  C:090AH         LINE#         77
+  C:0916H         LINE#         90
+  C:0917H         LINE#         95
+  -------         ENDMOD        CFUNCTEST
+
+  -------         MODULE        BOOTLOADER
+  C:08E7H         SEGMENT       SETUP
+  C:08C1H         SEGMENT       BOOT
+  C:0918H         SEGMENT       EXIT
+  C:0873H         SEGMENT       MEMORY
+  C:08E7H         PUBLIC        __SETUP
+  C:089CH         PUBLIC        __SSPOP
+  C:0873H         PUBLIC        __SSPUSH
+  N:0000H         SYMBOL        A0
+  N:0001H         SYMBOL        A1
+  N:0002H         SYMBOL        A2
+  N:0003H         SYMBOL        A3
+  N:0004H         SYMBOL        A4
+  N:0005H         SYMBOL        A5
+  N:0006H         SYMBOL        A6
+  N:0007H         SYMBOL        A7
+  D:00E0H         SYMBOL        ACC
+  N:0008H         SYMBOL        B0
+  N:0009H         SYMBOL        B1
+  N:000AH         SYMBOL        B2
+  N:000BH         SYMBOL        B3
+  N:000CH         SYMBOL        B4
+  N:000DH         SYMBOL        B5
+  N:000EH         SYMBOL        B6
+  N:000FH         SYMBOL        B7
+  N:00F0H         SYMBOL        BCC
+  N:0010H         SYMBOL        C0
+  N:0011H         SYMBOL        C1
+  N:0012H         SYMBOL        C2
+  N:0013H         SYMBOL        C3
+  N:0014H         SYMBOL        C4
+  N:0015H         SYMBOL        C5
+  N:0016H         SYMBOL        C6
+  N:0017H         SYMBOL        C7
+  N:0022H         SYMBOL        MSZ
+  N:0018H         SYMBOL        S0
+  N:0019H         SYMBOL        S1
+  N:001AH         SYMBOL        S2
+  N:001BH         SYMBOL        S3
+  N:001CH         SYMBOL        S4
+  N:001DH         SYMBOL        S5
+  N:001EH         SYMBOL        S6
+  N:001FH         SYMBOL        S7
+  D:0081H         SYMBOL        SP
+  N:0020H         SYMBOL        SS
+  N:0021H         SYMBOL        SSZ
+  C:08C1H         SYMBOL        __ENTRY
+  C:08E7H         SYMBOL        __ENTRY_HAL_ERROR
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  08/29/2018  16:45:30  PAGE 3
+
+
+  C:08E7H         SYMBOL        __ENTRY_HIL_ERROR
+  C:08E7H         SYMBOL        __ENTRY_MAIN_ERROR
+  C:0918H         SYMBOL        __SHUTDOWN
+  C:08B8H         SYMBOL        __SSPOP_CONTINUE
+  C:0885H         SYMBOL        __SSPUSH_CONTINUE
+  C:0873H         LINE#         30
+  C:0876H         LINE#         31
+  C:0878H         LINE#         33
+  C:087AH         LINE#         35
+  C:087DH         LINE#         36
+  C:087FH         LINE#         42
+  C:0882H         LINE#         45
+  C:0885H         LINE#         54
+  C:0888H         LINE#         55
+  C:088AH         LINE#         57
+  C:088CH         LINE#         59
+  C:088EH         LINE#         63
+  C:0890H         LINE#         64
+  C:0892H         LINE#         67
+  C:0894H         LINE#         68
+  C:0895H         LINE#         69
+  C:0897H         LINE#         71
+  C:0899H         LINE#         72
+  C:089BH         LINE#         73
+  C:089CH         LINE#         80
+  C:089FH         LINE#         81
+  C:08A2H         LINE#         82
+  C:08A4H         LINE#         84
+  C:08A6H         LINE#         87
+  C:08A8H         LINE#         88
+  C:08AAH         LINE#         90
+  C:08ABH         LINE#         91
+  C:08ADH         LINE#         92
+  C:08AFH         LINE#         96
+  C:08B1H         LINE#         97
+  C:08B4H         LINE#         98
+  C:08B6H         LINE#         100
+  C:08B8H         LINE#         104
+  C:08BAH         LINE#         106
+  C:08BCH         LINE#         110
+  C:08BEH         LINE#         111
+  C:08C0H         LINE#         112
+  C:08E7H         LINE#         118
+  C:08EAH         LINE#         119
+  C:08EDH         LINE#         120
+  C:08F0H         LINE#         125
+  C:08F2H         LINE#         126
+  C:08F4H         LINE#         127
+  C:08F5H         LINE#         128
+  C:08F7H         LINE#         131
+  C:08C1H         LINE#         142
+  C:08C4H         LINE#         143
+  C:08C7H         LINE#         143
+  C:08C9H         LINE#         144
+  C:08CCH         LINE#         146
+  C:08CFH         LINE#         147
+  C:08D2H         LINE#         147
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  08/29/2018  16:45:30  PAGE 4
+
+
+  C:08D4H         LINE#         148
+  C:08D7H         LINE#         150
+  C:08D9H         LINE#         151
+  C:08DCH         LINE#         152
+  C:08DFH         LINE#         152
+  C:08E1H         LINE#         153
+  C:08E4H         LINE#         155
+  C:0918H         LINE#         165
+  -------         ENDMOD        BOOTLOADER
+
+  -------         MODULE        HALSTRAPPER
+  C:090BH         SEGMENT       HAL
+  C:090BH         PUBLIC        __HAL_INIT
+  N:0000H         SYMBOL        A0
+  N:0001H         SYMBOL        A1
+  N:0002H         SYMBOL        A2
+  N:0003H         SYMBOL        A3
+  N:0004H         SYMBOL        A4
+  N:0005H         SYMBOL        A5
+  N:0006H         SYMBOL        A6
+  N:0007H         SYMBOL        A7
+  N:0008H         SYMBOL        B0
+  N:0009H         SYMBOL        B1
+  N:000AH         SYMBOL        B2
+  N:000BH         SYMBOL        B3
+  N:000CH         SYMBOL        B4
+  N:000DH         SYMBOL        B5
+  N:000EH         SYMBOL        B6
+  N:000FH         SYMBOL        B7
+  N:00F0H         SYMBOL        BCC
+  N:0010H         SYMBOL        C0
+  N:0011H         SYMBOL        C1
+  N:0012H         SYMBOL        C2
+  N:0013H         SYMBOL        C3
+  N:0014H         SYMBOL        C4
+  N:0015H         SYMBOL        C5
+  N:0016H         SYMBOL        C6
+  N:0017H         SYMBOL        C7
+  N:0022H         SYMBOL        MSZ
+  N:0018H         SYMBOL        S0
+  N:0019H         SYMBOL        S1
+  N:001AH         SYMBOL        S2
+  N:001BH         SYMBOL        S3
+  N:001CH         SYMBOL        S4
+  N:001DH         SYMBOL        S5
+  N:001EH         SYMBOL        S6
+  N:001FH         SYMBOL        S7
+  N:0020H         SYMBOL        SS
+  N:0021H         SYMBOL        SSZ
+  C:090BH         LINE#         22
+  C:090EH         LINE#         22
+  C:0910H         LINE#         22
+  C:0913H         LINE#         23
+  -------         ENDMOD        HALSTRAPPER
+
+  -------         MODULE        HILSTRAPPER
+  C:0800H         SEGMENT       HIL
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  08/29/2018  16:45:30  PAGE 5
+
+
+  C:086FH         PUBLIC        __HIL_C_TEST
+  C:0800H         PUBLIC        __HIL_INIT
+  N:0000H         SYMBOL        A0
+  N:0001H         SYMBOL        A1
+  N:0002H         SYMBOL        A2
+  N:0003H         SYMBOL        A3
+  N:0004H         SYMBOL        A4
+  N:0005H         SYMBOL        A5
+  N:0006H         SYMBOL        A6
+  N:0007H         SYMBOL        A7
+  D:00E0H         SYMBOL        ACC
+  N:00F6H         SYMBOL        ADCF
+  N:00F2H         SYMBOL        ADCLK
+  N:00F3H         SYMBOL        ADCON
+  N:00F5H         SYMBOL        ADDH
+  N:00F4H         SYMBOL        ADDL
+  N:0008H         SYMBOL        B0
+  N:0009H         SYMBOL        B1
+  N:000AH         SYMBOL        B2
+  N:000BH         SYMBOL        B3
+  N:000CH         SYMBOL        B4
+  N:000DH         SYMBOL        B5
+  N:000EH         SYMBOL        B6
+  N:000FH         SYMBOL        B7
+  N:00F0H         SYMBOL        BCC
+  N:0010H         SYMBOL        C0
+  N:0011H         SYMBOL        C1
+  N:0012H         SYMBOL        C2
+  N:0013H         SYMBOL        C3
+  N:0014H         SYMBOL        C4
+  N:0015H         SYMBOL        C5
+  N:0016H         SYMBOL        C6
+  N:0017H         SYMBOL        C7
+  C:0866H         SYMBOL        HIL_INIT_FAIL
+  C:0841H         SYMBOL        HSWDBADCON
+  N:00A8H         SYMBOL        IEN0
+  N:00E8H         SYMBOL        IEN1
+  N:00B7H         SYMBOL        IPH0
+  N:00F7H         SYMBOL        IPH1
+  N:00B8H         SYMBOL        IPL0
+  N:00F8H         SYMBOL        IPL1
+  N:0022H         SYMBOL        MSZ
+  N:0018H         SYMBOL        S0
+  N:0019H         SYMBOL        S1
+  N:001AH         SYMBOL        S2
+  N:001BH         SYMBOL        S3
+  N:001CH         SYMBOL        S4
+  N:001DH         SYMBOL        S5
+  N:001EH         SYMBOL        S6
+  N:001FH         SYMBOL        S7
+  N:0020H         SYMBOL        SS
+  N:0021H         SYMBOL        SSZ
+  C:083FH         SYMBOL        __HIL_CHECK_BATT_VOLTAGE
+  C:085DH         SYMBOL        __HIL_DISABLE_BATTERYLO
+  C:081BH         SYMBOL        __HIL_ENABLE_ADC
+  C:083BH         SYMBOL        __HIL_ENABLE_ADCCOLLECT
+  C:0831H         SYMBOL        __HIL_SELECT_ADCCH
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  08/29/2018  16:45:30  PAGE 6
+
+
+  C:0800H         LINE#         27
+  C:0802H         LINE#         28
+  C:0805H         LINE#         29
+  C:0808H         LINE#         29
+  C:080AH         LINE#         29
+  C:080DH         LINE#         30
+  C:080FH         LINE#         31
+  C:0811H         LINE#         32
+  C:0813H         LINE#         33
+  C:0816H         LINE#         33
+  C:0818H         LINE#         34
+  C:081BH         LINE#         45
+  C:081EH         LINE#         46
+  C:0821H         LINE#         47
+  C:0824H         LINE#         48
+  C:0827H         LINE#         50
+  C:082AH         LINE#         51
+  C:082DH         LINE#         52
+  C:0830H         LINE#         54
+  C:0831H         LINE#         61
+  C:0834H         LINE#         62
+  C:0837H         LINE#         63
+  C:083AH         LINE#         64
+  C:083BH         LINE#         71
+  C:083EH         LINE#         72
+  C:083FH         LINE#         78
+  C:0841H         LINE#         80
+  C:0843H         LINE#         81
+  C:0845H         LINE#         82
+  C:0848H         LINE#         87
+  C:084AH         LINE#         89
+  C:084CH         LINE#         90
+  C:084EH         LINE#         91
+  C:0850H         LINE#         108
+  C:0852H         LINE#         113
+  C:0854H         LINE#         114
+  C:0857H         LINE#         114
+  C:0859H         LINE#         114
+  C:085CH         LINE#         115
+  C:085DH         LINE#         123
+  C:0860H         LINE#         123
+  C:0862H         LINE#         123
+  C:0865H         LINE#         124
+  C:0866H         LINE#         139
+  C:0869H         LINE#         139
+  C:086BH         LINE#         139
+  C:086EH         LINE#         140
+  C:086FH         LINE#         144
+  C:0872H         LINE#         146
+  -------         ENDMOD        HILSTRAPPER
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 011AH BYTE (13%) *
+******************************************************************************
+
+Program Size: data=9.0 xdata=0 code=282
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -12,5 +12,10 @@ iph0    equ 0xb7
 ipl1    equ 0xf8
 iph1    equ 0xf7
 
-#define raisEA  orl     ien0,   #0x80
-#define lowEA   anl     ien0,   #0x7f
+raisEA		macro
+	orl		ien0,	#0x80
+endm
+
+lowEA		macro
+	anl	ien0,	#0x7f
+endm

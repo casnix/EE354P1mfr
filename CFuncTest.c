@@ -4,35 +4,24 @@
 // ----------------------------------------------------- 
 
 // Matt Rienzo, CFuncTest.c 8/25/2018
-#include <sfr51.h>
-#include "../include/c/Registers.h"
+// Last modified 8/29/2018
+//#include <sfr51.h>
+//#include "./include/c/Registers.h"
 
 //#define     OPTIMIZE
 #define     DEBUG
 
-#asm
-#define sspush(x)   push    x   \
-    lcall   __sspush
-#define sspop(x)    lcall   __sspop \
-    pop     x
-#define sspushl(N)  mov     s0,     #N  \
-    push    s0      \
-    lcall   __sspush
-
-extern      code    __HIL_C_test
-extern      code    __sspush
-extern      code    __sspop
-#endasm
-
+extern unsigned char _HIL_C_test(unsigned char);
 char increment(char i);
 
-char Cmain(char in){
-#asm    
-    mov     a,      #0xe1
-    lcall   __HIL_C_test
-    sspop(acc)
-#endasm
-    in =increment(in);
+unsigned char test(char q){
+	q--;
+	return q;
+}
+
+char _Cmain(){
+		unsigned char in = _HIL_C_test(0xff);
+		unsigned char qi = test(0x00);
     return in;
 }
 

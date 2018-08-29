@@ -1,0 +1,55 @@
+C51 COMPILER V9.59.0.0   CFUNCTEST                                                         08/29/2018 16:45:29 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE CFUNCTEST
+NO OBJECT MODULE REQUESTED
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE CFuncTest.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings
+                    -\CFuncTest.lst) TABS(2) SRC(.\Objects\CFuncTest.SRC)
+
+line level    source
+
+   1          // ------------- READS51 generated header -------------- 
+   2          // module  : Y:\Development\8051\Bootstrapper\Bootstrapper\CFuncTest.c
+   3          // created : 15:00:18, Sunday, August 26, 2018
+   4          // ----------------------------------------------------- 
+   5          
+   6          // Matt Rienzo, CFuncTest.c 8/25/2018
+   7          // Last modified 8/29/2018
+   8          //#include <sfr51.h>
+   9          //#include "./include/c/Registers.h"
+  10          
+  11          //#define     OPTIMIZE
+  12          #define     DEBUG
+  13          
+  14          extern unsigned char _HIL_C_test(unsigned char);
+  15          char increment(char i);
+  16          
+  17          unsigned char test(char q){
+  18   1        q--;
+  19   1        return q;
+  20   1      }
+  21          
+  22          char _Cmain(){
+  23   1          unsigned char in = _HIL_C_test(0xff);
+  24   1          unsigned char qi = test(0x00);
+  25   1          return in;
+  26   1      }
+  27          
+  28          char increment(char i){
+  29   1          i++;
+  30   1          return i;
+  31   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     21    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
