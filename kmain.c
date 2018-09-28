@@ -4,5 +4,5 @@
 #include "./include/c/Registers.h"
 #include "./include/c/ShortStack.h"
 
-public void Cmain(void);
+void Cmain(void);
 

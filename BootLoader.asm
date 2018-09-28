@@ -122,7 +122,7 @@ rseg	setup
 		;---SHORT STACK
 		mov		ss,		#0x23
 		mov		ssz,	#0x00
-		mov		msz,	#0x20
+		mov		msz,	#0x0B	; 11 bytes longs
 		; The last slot in the short stack will be #([ss]+[msz])
 		
 		;---STACK

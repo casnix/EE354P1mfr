@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  BOOTLOADER                                                           09/28/2018 11:30:12 PAGE     1
+A51 MACRO ASSEMBLER  BOOTLOADER                                                           09/28/2018 14:28:46 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -65,7 +65,7 @@ LOC  OBJ            LINE     SOURCE
                 +1    55     ; SHORT STACK -- see the Short Stack section after the END instruction for an explanation
                 +1    56     ;  of what this is
                 +1    57     ; Short stack address "register" and short stack size "register"
-A51 MACRO ASSEMBLER  BOOTLOADER                                                           09/28/2018 11:30:12 PAGE     2
+A51 MACRO ASSEMBLER  BOOTLOADER                                                           09/28/2018 14:28:46 PAGE     2
 
   0020          +1    58     ss      equ     0x20    ; short stack 0 address
   0021          +1    59     ssz     equ 0x21        ; short stack size (index)
@@ -133,7 +133,7 @@ LOC  OBJ            LINE     SOURCE
 0009 752100          120                     mov             ssz,    #0x00
                      121             
 000C                 122             __sspush_continue:
-A51 MACRO ASSEMBLER  BOOTLOADER                                                           09/28/2018 11:30:12 PAGE     3
+A51 MACRO ASSEMBLER  BOOTLOADER                                                           09/28/2018 14:28:46 PAGE     3
 
                      123                     ; Set our offset
                      124                     ; &s7 = ss+[ssz]
@@ -201,7 +201,7 @@ LOC  OBJ            LINE     SOURCE
 0038 22              186                     ret
                      187     
                      188     
-A51 MACRO ASSEMBLER  BOOTLOADER                                                           09/28/2018 11:30:12 PAGE     4
+A51 MACRO ASSEMBLER  BOOTLOADER                                                           09/28/2018 14:28:46 PAGE     4
 
                      189     
                      190         public  __setup             
@@ -231,27 +231,27 @@ LOC  OBJ            LINE     SOURCE
                      214             ;                                       (2) tell the Hardware Abstration Layer to i
                              nitialize
                      215             ;                                       (3) jump into the main program
-0000 120000   F      216                     lcall   __HIL_init      ; pushes return code onto ss
+0000 1100     F      216                     acall   __HIL_init      ; pushes return code onto ss
                      217                     sspop   acc
-0008 B4001B          220                     cjne    a,              #0x00,  __entry_HIL_error
+0007 B40019          220                     cjne    a,              #0x00,  __entry_HIL_error
                      221                     
-000B 120000   F      222                     lcall   __HAL_init
+000A 1100     F      222                     acall   __HAL_init
                      223                     sspop   acc
-0013 B40013          226                     cjne    a,              #0x00,  __entry_HAL_error
+0011 B40012          226                     cjne    a,              #0x00,  __entry_HAL_error
                      227                     
-0016 74E4            228             mov     a,      #0xe4
-0018 120000   F      229                     lcall   _Cmain
+0014 74E4            228             mov     a,      #0xe4
+0016 1100     F      229                     acall   _Cmain
                      230                     sspop   acc
-0020 B40009          233                     cjne    a,              #0x00,  __entry_main_error
+001D B40009          233                     cjne    a,              #0x00,  __entry_main_error
                      234                     
-0023 020000   F      235                     ljmp    __shutdown
+0020 020000   F      235                     ljmp    __shutdown
                      236                     
-0026                 237             __entry_HIL_error:      ; Turn on ERR LED
-0026 020000   F      238                     ljmp    __shutdown
-0029                 239             __entry_HAL_error:      ; Turn on ERR LED and batt_too_low square
-0029 020000   F      240                     ljmp    __shutdown
-002C                 241             __entry_main_error:     ; Turn on ERR LED and white square
-002C 020000   F      242                     ljmp    __shutdown
+0023                 237             __entry_HIL_error:      ; Turn on ERR LED
+0023 020000   F      238                     ljmp    __shutdown
+0026                 239             __entry_HAL_error:      ; Turn on ERR LED and batt_too_low square
+0026 020000   F      240                     ljmp    __shutdown
+0029                 241             __entry_main_error:     ; Turn on ERR LED and white square
+0029 020000   F      242                     ljmp    __shutdown
                      243                     
                      244                     
 ----                 245     rseg    exit
@@ -259,7 +259,7 @@ LOC  OBJ            LINE     SOURCE
                      247                     ; Endless looooooop
 0000 0100     F      248                     ajmp    __shutdown
                      249     end
-A51 MACRO ASSEMBLER  BOOTLOADER                                                           09/28/2018 11:30:12 PAGE     5
+A51 MACRO ASSEMBLER  BOOTLOADER                                                           09/28/2018 14:28:46 PAGE     5
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -285,7 +285,7 @@ B5 . . . . . . . .  N NUMB   000DH   A
 B6 . . . . . . . .  N NUMB   000EH   A   
 B7 . . . . . . . .  N NUMB   000FH   A   
 BCC. . . . . . . .  N NUMB   00F0H   A   
-BOOT . . . . . . .  C SEG    002FH       REL=UNIT
+BOOT . . . . . . .  C SEG    002CH       REL=UNIT
 C0 . . . . . . . .  N NUMB   0010H   A   
 C1 . . . . . . . .  N NUMB   0011H   A   
 C2 . . . . . . . .  N NUMB   0012H   A   
@@ -311,9 +311,9 @@ SS . . . . . . . .  N NUMB   0020H   A
 SSZ. . . . . . . .  N NUMB   0021H   A   
 _CMAIN . . . . . .  C ADDR   -----       EXT
 __ENTRY. . . . . .  C ADDR   0000H   R   SEG=BOOT
-__ENTRY_HAL_ERROR.  C ADDR   0029H   R   SEG=BOOT
-__ENTRY_HIL_ERROR.  C ADDR   0026H   R   SEG=BOOT
-__ENTRY_MAIN_ERROR  C ADDR   002CH   R   SEG=BOOT
+__ENTRY_HAL_ERROR.  C ADDR   0026H   R   SEG=BOOT
+__ENTRY_HIL_ERROR.  C ADDR   0023H   R   SEG=BOOT
+__ENTRY_MAIN_ERROR  C ADDR   0029H   R   SEG=BOOT
 __HAL_INIT . . . .  C ADDR   -----       EXT
 __HIL_INIT . . . .  C ADDR   -----       EXT
 __SETUP. . . . . .  C ADDR   0000H   R   SEG=SETUP
@@ -328,5 +328,5 @@ REGISTER BANK(S) USED: 0
 
 
 ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
-A51 MACRO ASSEMBLER  BOOTLOADER                                                           09/28/2018 11:30:12 PAGE     6
+A51 MACRO ASSEMBLER  BOOTLOADER                                                           09/28/2018 14:28:46 PAGE     6
 

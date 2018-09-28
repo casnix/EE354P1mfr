@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    09/28/2018  11:48:29  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    09/28/2018  14:29:29  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
@@ -32,13 +32,13 @@ LINK MAP OF MODULE:  .\Objects\xBootStrapper (CFUNCTEST)
                     0003H     07FDH                  *** GAP ***
             CODE    0800H     00BCH     UNIT         HIL
             CODE    08BCH     0039H     UNIT         MEMORY
-            CODE    08F5H     002FH     UNIT         BOOT
-            CODE    0924H     000FH     UNIT         SETUP
-            CODE    0933H     000CH     UNIT         ?PR?DBUG_CMAIN?CFUNCTEST
-            CODE    093FH     0009H     UNIT         HAL
-            CODE    0948H     0002H     UNIT         ?PR?_TEST?CFUNCTEST
-            CODE    094AH     0002H     UNIT         ?PR?_INCREMENT?CFUNCTEST
-            CODE    094CH     0002H     UNIT         EXIT
+            CODE    08F5H     002CH     UNIT         BOOT
+            CODE    0921H     000FH     UNIT         SETUP
+            CODE    0930H     000CH     UNIT         ?PR?DBUG_CMAIN?CFUNCTEST
+            CODE    093CH     0009H     UNIT         HAL
+            CODE    0945H     0002H     UNIT         ?PR?_TEST?CFUNCTEST
+            CODE    0947H     0002H     UNIT         ?PR?_INCREMENT?CFUNCTEST
+            CODE    0949H     0002H     UNIT         EXIT
 
 
 
@@ -59,40 +59,40 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (CFUNCTEST)
 
   VALUE           TYPE          NAME
   ----------------------------------
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  11:48:29  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  14:29:29  PAGE 2
 
 
 
   -------         MODULE        CFUNCTEST
-  C:0948H         SEGMENT       ?PR?_TEST?CFUNCTEST
-  C:0933H         SEGMENT       ?PR?DBUG_CMAIN?CFUNCTEST
+  C:0945H         SEGMENT       ?PR?_TEST?CFUNCTEST
+  C:0930H         SEGMENT       ?PR?DBUG_CMAIN?CFUNCTEST
   D:0008H         SEGMENT       ?DT?DBUG_CMAIN?CFUNCTEST
-  C:094AH         SEGMENT       ?PR?_INCREMENT?CFUNCTEST
-  C:0933H         PUBLIC        DBUG_CMAIN
-  C:094AH         PUBLIC        _INCREMENT
-  C:0948H         PUBLIC        _TEST
+  C:0947H         SEGMENT       ?PR?_INCREMENT?CFUNCTEST
+  C:0930H         PUBLIC        DBUG_CMAIN
+  C:0947H         PUBLIC        _INCREMENT
+  C:0945H         PUBLIC        _TEST
   D:0008H         SYMBOL        ?DBUG_CMAIN?BYTE
   N:0000H         SYMBOL        CFUNCTEST
   D:0008H         SYMBOL        QI?142
-  C:0948H         LINE#         46
-  C:0949H         LINE#         51
-  C:0933H         LINE#         68
-  C:0935H         LINE#         72
-  C:0936H         LINE#         73
-  C:0937H         LINE#         74
-  C:093AH         LINE#         75
-  C:093CH         LINE#         78
-  C:093EH         LINE#         81
-  C:094AH         LINE#         94
-  C:094BH         LINE#         99
+  C:0945H         LINE#         46
+  C:0946H         LINE#         51
+  C:0930H         LINE#         68
+  C:0932H         LINE#         72
+  C:0933H         LINE#         73
+  C:0934H         LINE#         74
+  C:0937H         LINE#         75
+  C:0939H         LINE#         78
+  C:093BH         LINE#         81
+  C:0947H         LINE#         94
+  C:0948H         LINE#         99
   -------         ENDMOD        CFUNCTEST
 
   -------         MODULE        BOOTLOADER
-  C:0924H         SEGMENT       SETUP
+  C:0921H         SEGMENT       SETUP
   C:08F5H         SEGMENT       BOOT
-  C:094CH         SEGMENT       EXIT
+  C:0949H         SEGMENT       EXIT
   C:08BCH         SEGMENT       MEMORY
-  C:0924H         PUBLIC        __SETUP
+  C:0921H         PUBLIC        __SETUP
   C:08DAH         PUBLIC        __SSPOP
   C:08BCH         PUBLIC        __SSPUSH
   N:0000H         SYMBOL        A0
@@ -119,7 +119,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (CFUNCTEST)
   N:0013H         SYMBOL        C3
   N:0014H         SYMBOL        C4
   N:0015H         SYMBOL        C5
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  11:48:29  PAGE 3
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  14:29:29  PAGE 3
 
 
   N:0016H         SYMBOL        C6
@@ -137,10 +137,10 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (CFUNCTEST)
   N:0020H         SYMBOL        SS
   N:0021H         SYMBOL        SSZ
   C:08F5H         SYMBOL        __ENTRY
-  C:091EH         SYMBOL        __ENTRY_HAL_ERROR
-  C:091BH         SYMBOL        __ENTRY_HIL_ERROR
-  C:0921H         SYMBOL        __ENTRY_MAIN_ERROR
-  C:094CH         SYMBOL        __SHUTDOWN
+  C:091BH         SYMBOL        __ENTRY_HAL_ERROR
+  C:0918H         SYMBOL        __ENTRY_HIL_ERROR
+  C:091EH         SYMBOL        __ENTRY_MAIN_ERROR
+  C:0949H         SYMBOL        __SHUTDOWN
   C:08EEH         SYMBOL        __SSPOP_CONTINUE
   C:08C8H         SYMBOL        __SSPUSH_CONTINUE
   C:0000H         LINE#         20
@@ -173,37 +173,37 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (CFUNCTEST)
   C:08F0H         LINE#         113
   C:08F2H         LINE#         114
   C:08F4H         LINE#         115
-  C:0924H         LINE#         123
-  C:0927H         LINE#         124
-  C:092AH         LINE#         125
-  C:092DH         LINE#         130
-  C:0930H         LINE#         133
+  C:0921H         LINE#         123
+  C:0924H         LINE#         124
+  C:0927H         LINE#         125
+  C:092AH         LINE#         130
+  C:092DH         LINE#         133
   C:08F5H         LINE#         145
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  11:48:29  PAGE 4
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  14:29:29  PAGE 4
 
 
-  C:08F8H         LINE#         146
-  C:08FBH         LINE#         146
-  C:08FDH         LINE#         147
-  C:0900H         LINE#         149
-  C:0903H         LINE#         150
-  C:0906H         LINE#         150
-  C:0908H         LINE#         151
-  C:090BH         LINE#         153
-  C:090DH         LINE#         154
+  C:08F7H         LINE#         146
+  C:08FAH         LINE#         146
+  C:08FCH         LINE#         147
+  C:08FFH         LINE#         149
+  C:0901H         LINE#         150
+  C:0904H         LINE#         150
+  C:0906H         LINE#         151
+  C:0909H         LINE#         153
+  C:090BH         LINE#         154
+  C:090DH         LINE#         155
   C:0910H         LINE#         155
-  C:0913H         LINE#         155
-  C:0915H         LINE#         156
-  C:0918H         LINE#         158
-  C:091BH         LINE#         161
-  C:091EH         LINE#         163
-  C:0921H         LINE#         165
-  C:094CH         LINE#         171
+  C:0912H         LINE#         156
+  C:0915H         LINE#         158
+  C:0918H         LINE#         161
+  C:091BH         LINE#         163
+  C:091EH         LINE#         165
+  C:0949H         LINE#         171
   -------         ENDMOD        BOOTLOADER
 
   -------         MODULE        HALSTRAPPER
-  C:093FH         SEGMENT       HAL
-  C:093FH         PUBLIC        __HAL_INIT
+  C:093CH         SEGMENT       HAL
+  C:093CH         PUBLIC        __HAL_INIT
   N:0000H         SYMBOL        A0
   N:0001H         SYMBOL        A1
   N:0002H         SYMBOL        A2
@@ -239,14 +239,14 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (CFUNCTEST)
   N:001EH         SYMBOL        S6
   N:001FH         SYMBOL        S7
   N:0020H         SYMBOL        SS
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  11:48:29  PAGE 5
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  14:29:29  PAGE 5
 
 
   N:0021H         SYMBOL        SSZ
+  C:093CH         LINE#         22
   C:093FH         LINE#         22
-  C:0942H         LINE#         22
-  C:0944H         LINE#         22
-  C:0947H         LINE#         23
+  C:0941H         LINE#         22
+  C:0944H         LINE#         23
   -------         ENDMOD        HALSTRAPPER
 
   -------         MODULE        HILSTRAPPER
@@ -299,7 +299,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (CFUNCTEST)
   N:001AH         SYMBOL        S2
   N:001BH         SYMBOL        S3
   N:001CH         SYMBOL        S4
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  11:48:29  PAGE 6
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  14:29:29  PAGE 6
 
 
   N:001DH         SYMBOL        S5
@@ -359,7 +359,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (CFUNCTEST)
   C:0863H         LINE#         123
   C:0865H         LINE#         124
   C:0867H         LINE#         125
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  11:48:29  PAGE 7
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  14:29:29  PAGE 7
 
 
   C:086AH         LINE#         125
@@ -414,14 +414,14 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (CFUNCTEST)
 *** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
     SYMBOL:  _CMAIN
     MODULE:  .\Objects\BootLoader.obj (BOOTLOADER)
-    ADDRESS: 090EH
+    ADDRESS: 090BH
 
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0151H BYTE (16%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 014EH BYTE (16%) *
 ******************************************************************************
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  11:48:29  PAGE 8
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  14:29:29  PAGE 8
 
 
 
-Program Size: data=9.0 xdata=0 code=337
+Program Size: data=9.0 xdata=0 code=334
 LINK/LOCATE RUN COMPLETE.  5 WARNING(S),  0 ERROR(S)

@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  CFUNCTEST                                                            09/28/2018 11:48:29 PAGE     1
+A51 MACRO ASSEMBLER  CFUNCTEST                                                            09/28/2018 14:29:29 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -65,7 +65,7 @@ LOC  OBJ            LINE     SOURCE
                       55     ; char dbug_Cmain(){
                       56     
 ----                  57             RSEG  ?PR?dbug_Cmain?CFUNCTEST
-A51 MACRO ASSEMBLER  CFUNCTEST                                                            09/28/2018 11:48:29 PAGE     2
+A51 MACRO ASSEMBLER  CFUNCTEST                                                            09/28/2018 14:29:29 PAGE     2
 
 0000                  58     dbug_Cmain:
                       59             USING   0
@@ -112,7 +112,7 @@ LOC  OBJ            LINE     SOURCE
                      100     ; END OF _increment
                      101     
                      102             END
-A51 MACRO ASSEMBLER  CFUNCTEST                                                            09/28/2018 11:48:29 PAGE     3
+A51 MACRO ASSEMBLER  CFUNCTEST                                                            09/28/2018 14:29:29 PAGE     3
 
 SYMBOL TABLE LISTING
 ------ ----- -------
