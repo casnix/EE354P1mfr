@@ -6,8 +6,9 @@
 #include "./include/asm/InterruptController.inc"
 #include "./include/asm/MacroLang.inc"
 
-;#define OPTIMIZE
-#define DEBUG
+#define OPTIMIZE
+;#define DEBUG
+#define	DEBUGGER
 
 HIL		segment	code
 	
@@ -24,6 +25,16 @@ rseg	HIL
     ; rets: SS(#retval) -- Immediate byte off short stack to tell __entry whether or not we failed.
 	__HIL_init:
         ; 1) Check battery voltage
+#ifdef		DEBUGGER
+		push	acc
+		mov		a,		#0xEE
+		mov		a,		#0x00
+		mov		a,		#0xEE
+		mov		a,		#0x00
+		mov		a,		#0xEE
+		mov		a,		#0x00
+		pop		acc
+#endif
         acall   __HIL_enable_ADC
         lowEA                               ; Disable interrupts for while we check devices on ADC
         sspushl	#0x00                      ; Channel byte for ADC/Battery voltage
@@ -118,6 +129,19 @@ rseg	HIL
     ; args: none
     ; rets: SS(#0xff)
     __HIL_disable_batterylo:
+#ifdef		DEBUGGER
+		; Spell out `BATTERY LO' in hex for the debugger
+		mov		s7,			#0xBA
+		mov		s6,			#0x11
+		mov		s5,			#0xE5
+		mov		s4,			#0x70
+		mov		s3,			#0x00
+		mov		s2,			#0x10
+#endif
+
+		; Move RETADDR to top of stack again
+		pop		bcc
+		pop		acc
         ; Turn on battery low light
         ; Turn on red square
         sspushl	#0xff
@@ -136,7 +160,27 @@ rseg	HIL
         ; Handler for vibration motor
 	
 	HIL_init_fail:
+#ifdef		DEBUGGER
+		; Spell out `INIT FAIL' in hex for the debugger
+		mov		s7,			#0x14
+		mov		s6,			#0x17
+		mov		s5,			#0x00
+		mov		s4,			#0xFA
+		mov		s3,			#0x11
+		mov		s2,			#0x00
+#endif
+
         sspushl	#0xff
+#ifdef		DEBUGGER
+		; Spell out `RETURN' in hex for the debugger
+		mov		s7,			#0x2E
+		mov		s6,			#0x73
+		mov		s5,			#0x27
+		mov		s4,			#0xEE
+		mov		s3,			#0xEE
+		mov		s2,			#0xEE
+#endif
+		
         ret
 	
 #ifdef      DEBUG        

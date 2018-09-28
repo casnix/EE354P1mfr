@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  HILSTRAPPER                                                          08/29/2018 16:45:30 PAGE     1
+A51 MACRO ASSEMBLER  HILSTRAPPER                                                          08/30/2018 13:23:08 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -65,7 +65,7 @@ LOC  OBJ            LINE     SOURCE
   0020          +1    55     ss      equ     0x20    ; short stack 0 address
   0021          +1    56     ssz     equ 0x21        ; short stack size (index)
   0022          +1    57     msz     equ     0x22    ; short stack max size (to avoid overflow, but with stack wrapping/
-A51 MACRO ASSEMBLER  HILSTRAPPER                                                          08/29/2018 16:45:30 PAGE     2
+A51 MACRO ASSEMBLER  HILSTRAPPER                                                          08/30/2018 13:23:08 PAGE     2
 
                              overwrites)
                       58     
@@ -126,159 +126,205 @@ LOC  OBJ            LINE     SOURCE
                 +1   113     endm
                      114     
                      115     
-                     116     ;#define OPTIMIZE
-                     117     
+                     116     
+                     117     ;#define DEBUG
                      118     
-                     119     HIL             segment code
-                     120             
-                     121     public  __HIL_init
-                     122     
-A51 MACRO ASSEMBLER  HILSTRAPPER                                                          08/29/2018 16:45:30 PAGE     3
+                     119     
+                     120     HIL             segment code
+                     121             
+                     122     public  __HIL_init
+A51 MACRO ASSEMBLER  HILSTRAPPER                                                          08/30/2018 13:23:08 PAGE     3
 
-                     123     public  __HIL_C_test
-                     124     
-----                 125     rseg    HIL
-                     126         extrn  code    (__sspop)
-                     127         extrn  code    (__sspush)
-                     128         ; __HIL_init : initializes hardware components, and defines functions/callbacks for har
+                     123     
+                             
+                             
+----                 126     rseg    HIL
+                     127         extrn  code    (__sspop)
+                     128         extrn  code    (__sspush)
+                     129         ; __HIL_init : initializes hardware components, and defines functions/callbacks for har
                              dware
-                     129         ;   manipulate by the HAL.
-                     130         ; args: none
-                     131         ; rets: SS(#retval) -- Immediate byte off short stack to tell __entry whether or not we
+                     130         ;   manipulate by the HAL.
+                     131         ; args: none
+                     132         ; rets: SS(#retval) -- Immediate byte off short stack to tell __entry whether or not we
                               failed.
-0000                 132             __HIL_init:
-                     133             ; 1) Check battery voltage
-0000 1100     F      134             acall   __HIL_enable_ADC
-                     135             lowEA                               ; Disable interrupts for while we check devices
+0000                 133             __HIL_init:
+                     134             ; 1) Check battery voltage
+                     135     
+0000 C0E0            136                     push    acc
+0002 74EE            137                     mov             a,              #0xEE
+0004 7400            138                     mov             a,              #0x00
+0006 74EE            139                     mov             a,              #0xEE
+0008 7400            140                     mov             a,              #0x00
+000A 74EE            141                     mov             a,              #0xEE
+000C 7400            142                     mov             a,              #0x00
+000E D0E0            143                     pop             acc
+                     144     
+0010 1100     F      145             acall   __HIL_enable_ADC
+                     146             lowEA                               ; Disable interrupts for while we check devices
                               on ADC
-                     137             sspushl #0x00                      ; Channel byte for ADC/Battery voltage
-000D 1100     F      141             acall   __HIL_select_ADCCh
-000F 1100     F      142             acall   __HIL_enable_ADCCollect     ; Enable ADC collection on the channel for the 
+                     148             sspushl #0x00                      ; Channel byte for ADC/Battery voltage
+001D 1100     F      152             acall   __HIL_select_ADCCh
+001F 1100     F      153             acall   __HIL_enable_ADCCollect     ; Enable ADC collection on the channel for the 
                              battery
-0011 1100     F      143             acall   __HIL_check_batt_voltage    ; Check battery voltage
-                     144             sspop   acc
-0018 B4004B          147             cjne    a,          #0x00,  HIL_init_fail
-                     148             
-                     149             ; 2) Turn on accelerometer
-                     150     
-                     151     
-                     152     
-                     153         ; __HIL_enable_ADC : Turns on and resets ADC
-                     154         ; args: none
-                     155         ; rets: none
-001B                 156         __HIL_enable_ADC:
-                     157             ; 1) Turn on ADC.
-001B 75F600          158             mov     adcf,       #0x00   ; reset
-001E 75F601          159             mov     adcf,       #0x01
-0021 75F320          160             mov     adcon,      #0x20
-0024 75F200          161             mov     adclk,      #0x00
+0021 1100     F      154             acall   __HIL_check_batt_voltage    ; Check battery voltage
+                     155             sspop   acc
+0028 B40064          158             cjne    a,          #0x00,  HIL_init_fail
+                     159             
+                     160             ; 2) Turn on accelerometer
+                     161     
                      162     
-0027 85F617          163             mov     c7,         adcf
-002A 85F316          164             mov     c6,         adcon
-002D 85F215          165             mov     c5,         adclk
-                     166     
-0030 22              167             ret
-                     168     
-                     169         ; __HIL_select_ADCCh : Selects the active ADC channel
-                     170         ; args: SS(#channel)    -- byte on short stack
-                     171         ; rets: none
-0031                 172         __HIL_select_ADCCh:
-                     173             ; battery voltage/division will be routed to ADC channel 0
-0031 53F3F8          174             anl     adcon,      #0xf8   ; Reset ADC channel selection
-0034 43F300          175             orl     adcon,      #0x00   ; Select channel 0
-0037 43F320          176             orl     adcon,      #0x20   ; Select standard mode
-003A 22              177             ret
-                     178     
-                     179         ; __HIL_enable_ADCCollect : Enables ADC collection on selected channel
-                     180         ; args: none
-                     181         ; rets: none
-003B                 182         __HIL_enable_ADCCollect:
-                     183             ; Start the ADC collection
-003B 43F308          184             orl     adcon,      #0x08   ; Enable ADC collectors
-003E 22              185             ret
-                     186     
-                     187         ; __HIL_check_batt_voltage : Checks the battery voltage
-                     188         ; args: none
-                     189         ; rets: SS(#retval)     -- byte 0x00 for success, 0xff for fail
-003F                 190         __HIL_check_batt_voltage:
-A51 MACRO ASSEMBLER  HILSTRAPPER                                                          08/29/2018 16:45:30 PAGE     4
+                     163     
+                     164         ; __HIL_enable_ADC : Turns on and resets ADC
+                     165         ; args: none
+                     166         ; rets: none
+002B                 167         __HIL_enable_ADC:
+                     168             ; 1) Turn on ADC.
+002B 75F600          169             mov     adcf,       #0x00   ; reset
+002E 75F601          170             mov     adcf,       #0x01
+0031 75F320          171             mov     adcon,      #0x20
+0034 75F200          172             mov     adclk,      #0x00
+                     173     
+                                     
+                                     
+                                     
+                             
+0037 22              178             ret
+                     179     
+                     180         ; __HIL_select_ADCCh : Selects the active ADC channel
+                     181         ; args: SS(#channel)    -- byte on short stack
+                     182         ; rets: none
+0038                 183         __HIL_select_ADCCh:
+                     184             ; battery voltage/division will be routed to ADC channel 0
+0038 53F3F8          185             anl     adcon,      #0xf8   ; Reset ADC channel selection
+003B 43F300          186             orl     adcon,      #0x00   ; Select channel 0
+003E 43F320          187             orl     adcon,      #0x20   ; Select standard mode
+0041 22              188             ret
+                     189     
+                     190         ; __HIL_enable_ADCCollect : Enables ADC collection on selected channel
+A51 MACRO ASSEMBLER  HILSTRAPPER                                                          08/30/2018 13:23:08 PAGE     4
 
-003F C0E0            191             push    acc
-0041                 192         hsWdbADCON:
-0041 E5F3            193             mov     a,          adcon
-0043 5510            194             anl     a,          0x10
-0045 B510F9          195             cjne    a,          0x10,   hsWdbADCON
-                     196     
-                     197             ; Voltage check
-                     198     
-                     199     
-0048 C0F0            200             push    bcc
-                     201     
-004A 74FF            202             mov     a,          #0xff
-004C 7400            203             mov     a,          #0x00
-004E 74FF            204             mov     a,          #0xff
-                     205     
-                             
-                                             
+                     191         ; args: none
+                     192         ; rets: none
+0042                 193         __HIL_enable_ADCCollect:
+                     194             ; Start the ADC collection
+0042 43F308          195             orl     adcon,      #0x08   ; Enable ADC collectors
+0045 22              196             ret
+                     197     
+                     198         ; __HIL_check_batt_voltage : Checks the battery voltage
+                     199         ; args: none
+                     200         ; rets: SS(#retval)     -- byte 0x00 for success, 0xff for fail
+0046                 201         __HIL_check_batt_voltage:
+0046 C0E0            202             push    acc
+0048                 203         hsWdbADCON:
+0048 E5F3            204             mov     a,          adcon
+004A 5510            205             anl     a,          0x10
+004C B510F9          206             cjne    a,          0x10,   hsWdbADCON
+                     207     
+                     208             ; Voltage check
+                     209     
+                     210     
+004F C0F0            211             push    bcc
+                     212     
                                      
                                      
                                      
                              
-                                     
-                                     
-                                     
-                                     
-                                 
-                                     
-                                     
-                                     
-                                     
-                                     
-                                     
-                                     
-                             
-0050 D0F0            225             pop     bcc
-0052 D0E0            226             pop     acc
-                     227             sspushl #0x00
-005C 22              231             ret
-                     232     
-                     233         ; __HIL_disable_batterylo : Turns on BATT_LOW led, and red square.
-                     234         ; args: none
-                     235         ; rets: SS(#0xff)
-005D                 236         __HIL_disable_batterylo:
-                     237             ; Turn on battery low light
-                     238             ; Turn on red square
-                     239             sspushl #0xff
-0065 22              243             ret
-                     244     
-                     245     
-                     246             
-                     247             ; 3) Turn on accelerometer
-                     248             ; 4) Switch interrupts?
-                     249             ; 5) Return success
-                     250             ; Handler for turning on LEDs
-                     251             ; Handler for LED array
-                     252             ; Handler for power touch button
-                     253             ; Handler for battery power measuring
-                     254             ; Handler for accelerometer
-                     255             ; Handler for vibration motor
-                     256             
-0066                 257             HIL_init_fail:
-                     258             sspushl #0xff
-006E 22              262             ret
-                     263             
-                     264     
-006F                 265     __HIL_C_test:
-A51 MACRO ASSEMBLER  HILSTRAPPER                                                          08/29/2018 16:45:30 PAGE     5
+                     217     
+                     218                     ; We don't want to have a looping simulation because there's not an ADC in 
+                             the simulator
+                     219             ; For #n > a, subb a, #n sets the carry flag
+                     220             ; For #n < a, subb a, #n clears the carry flag
+                     221             ; For #n == a, subb a, #n clears the carry flag
+                     222     
+                     223             ; For HIL, we only check if the battery is too low to operate and then we shut down
+0051 740F            224             mov     a,          #0x0f ; will change      ; Check the upper 8 MSB
+0053 B5F502          225             cjne    a,          addh,   hsWdbBATT
+0056 8018            226             sjmp    __HIL_disable_batterylo                 ; addh == MINIMUM_BATT_VOLTAGEh, so
+                              we're on the line
+0058                 227         hsWdbBATT:
+0058 C3              228             clr     c
+0059 95F5            229             subb    a,          addh                        ; Try to set C
+005B E5D0            230             mov     a,          psw
+005D 5580            231             anl     a,          0x80                        ; Check if the carry bit is set
+005F B5800E          232             cjne    a,          0x80,   __HIL_disable_batterylo
+                     233             ; If we get here we're fine.
+0062 C3              234             clr     c
+                     235     
+0063 D0F0            236             pop     bcc
+0065 D0E0            237             pop     acc
+                     238             sspushl #0x00
+006F 22              242             ret
+                     243     
+                     244         ; __HIL_disable_batterylo : Turns on BATT_LOW led, and red square.
+                     245         ; args: none
+                     246         ; rets: SS(#0xff)
+0070                 247         __HIL_disable_batterylo:
+                     248     
+                     249                     ; Spell out `BATTERY LO' in hex for the debugger
+0070 751FBA          250                     mov             s7,                     #0xBA
+0073 751E11          251                     mov             s6,                     #0x11
+0076 751DE5          252                     mov             s5,                     #0xE5
+0079 751C70          253                     mov             s4,                     #0x70
+007C 751B00          254                     mov             s3,                     #0x00
+007F 751A10          255                     mov             s2,                     #0x10
+                     256     
+                     257     
+A51 MACRO ASSEMBLER  HILSTRAPPER                                                          08/30/2018 13:23:08 PAGE     5
 
-006F 7507E4          266             mov             a7,             #0xe4
-                     267                     ; Order of operation:
-0072 22              268                     ret
+                     258                     ; Move RETADDR to top of stack again
+0082 D0F0            259                     pop             bcc
+0084 D0E0            260                     pop             acc
+                     261             ; Turn on battery low light
+                     262             ; Turn on red square
+                     263             sspushl #0xff
+008E 22              267             ret
+                     268     
                      269     
-                     270                     
-                     271                     
-                     272     end
-A51 MACRO ASSEMBLER  HILSTRAPPER                                                          08/29/2018 16:45:30 PAGE     6
+                     270             
+                     271             ; 3) Turn on accelerometer
+                     272             ; 4) Switch interrupts?
+                     273             ; 5) Return success
+                     274             ; Handler for turning on LEDs
+                     275             ; Handler for LED array
+                     276             ; Handler for power touch button
+                     277             ; Handler for battery power measuring
+                     278             ; Handler for accelerometer
+                     279             ; Handler for vibration motor
+                     280             
+008F                 281             HIL_init_fail:
+                     282     
+                     283                     ; Spell out `INIT FAIL' in hex for the debugger
+008F 751F14          284                     mov             s7,                     #0x14
+0092 751E17          285                     mov             s6,                     #0x17
+0095 751D00          286                     mov             s5,                     #0x00
+0098 751CFA          287                     mov             s4,                     #0xFA
+009B 751B11          288                     mov             s3,                     #0x11
+009E 751A00          289                     mov             s2,                     #0x00
+                     290     
+                     291     
+                     292             sspushl #0xff
+                     296     
+                     297                     ; Spell out `RETURN' in hex for the debugger
+00A9 751F2E          298                     mov             s7,                     #0x2E
+00AC 751E73          299                     mov             s6,                     #0x73
+00AF 751D27          300                     mov             s5,                     #0x27
+00B2 751CEE          301                     mov             s4,                     #0xEE
+00B5 751BEE          302                     mov             s3,                     #0xEE
+00B8 751AEE          303                     mov             s2,                     #0xEE
+                     304     
+                     305                     
+00BB 22              306             ret
+                     307             
+                             
+                             
+                                     
+                                             
+                                             
+                             
+                     314                     
+                     315                     
+                     316     end
+A51 MACRO ASSEMBLER  HILSTRAPPER                                                          08/30/2018 13:23:08 PAGE     6
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -317,9 +363,10 @@ C4 . . . . . . . . . . .  N NUMB   0014H   A
 C5 . . . . . . . . . . .  N NUMB   0015H   A   
 C6 . . . . . . . . . . .  N NUMB   0016H   A   
 C7 . . . . . . . . . . .  N NUMB   0017H   A   
-HIL. . . . . . . . . . .  C SEG    0073H       REL=UNIT
-HIL_INIT_FAIL. . . . . .  C ADDR   0066H   R   SEG=HIL
-HSWDBADCON . . . . . . .  C ADDR   0041H   R   SEG=HIL
+HIL. . . . . . . . . . .  C SEG    00BCH       REL=UNIT
+HIL_INIT_FAIL. . . . . .  C ADDR   008FH   R   SEG=HIL
+HSWDBADCON . . . . . . .  C ADDR   0048H   R   SEG=HIL
+HSWDBBATT. . . . . . . .  C ADDR   0058H   R   SEG=HIL
 IEN0 . . . . . . . . . .  N NUMB   00A8H   A   
 IEN1 . . . . . . . . . .  N NUMB   00E8H   A   
 IPH0 . . . . . . . . . .  N NUMB   00B7H   A   
@@ -327,6 +374,7 @@ IPH1 . . . . . . . . . .  N NUMB   00F7H   A
 IPL0 . . . . . . . . . .  N NUMB   00B8H   A   
 IPL1 . . . . . . . . . .  N NUMB   00F8H   A   
 MSZ. . . . . . . . . . .  N NUMB   0022H   A   
+PSW. . . . . . . . . . .  D ADDR   00D0H   A   
 S0 . . . . . . . . . . .  N NUMB   0018H   A   
 S1 . . . . . . . . . . .  N NUMB   0019H   A   
 S2 . . . . . . . . . . .  N NUMB   001AH   A   
@@ -337,17 +385,16 @@ S6 . . . . . . . . . . .  N NUMB   001EH   A
 S7 . . . . . . . . . . .  N NUMB   001FH   A   
 SS . . . . . . . . . . .  N NUMB   0020H   A   
 SSZ. . . . . . . . . . .  N NUMB   0021H   A   
-__HIL_CHECK_BATT_VOLTAGE  C ADDR   003FH   R   SEG=HIL
-__HIL_C_TEST . . . . . .  C ADDR   006FH   R   SEG=HIL
-__HIL_DISABLE_BATTERYLO.  C ADDR   005DH   R   SEG=HIL
-__HIL_ENABLE_ADC . . . .  C ADDR   001BH   R   SEG=HIL
-__HIL_ENABLE_ADCCOLLECT.  C ADDR   003BH   R   SEG=HIL
+__HIL_CHECK_BATT_VOLTAGE  C ADDR   0046H   R   SEG=HIL
+__HIL_DISABLE_BATTERYLO.  C ADDR   0070H   R   SEG=HIL
+__HIL_ENABLE_ADC . . . .  C ADDR   002BH   R   SEG=HIL
+__HIL_ENABLE_ADCCOLLECT.  C ADDR   0042H   R   SEG=HIL
 __HIL_INIT . . . . . . .  C ADDR   0000H   R   SEG=HIL
-__HIL_SELECT_ADCCH . . .  C ADDR   0031H   R   SEG=HIL
+__HIL_SELECT_ADCCH . . .  C ADDR   0038H   R   SEG=HIL
 __SSPOP. . . . . . . . .  C ADDR   -----       EXT
-__SSPUSH . . . . . . . .  C ADDR   -----       EXT
-A51 MACRO ASSEMBLER  HILSTRAPPER                                                          08/29/2018 16:45:30 PAGE     7
+A51 MACRO ASSEMBLER  HILSTRAPPER                                                          08/30/2018 13:23:08 PAGE     7
 
+__SSPUSH . . . . . . . .  C ADDR   -----       EXT
 
 
 REGISTER BANK(S) USED: 0 

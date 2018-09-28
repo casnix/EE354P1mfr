@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   CFUNCTEST                                                         08/29/2018 16:45:29 PAGE 1   
+C51 COMPILER V9.59.0.0   CFUNCTEST                                                         09/28/2018 11:48:29 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE CFUNCTEST
@@ -14,35 +14,42 @@ line level    source
    4          // ----------------------------------------------------- 
    5          
    6          // Matt Rienzo, CFuncTest.c 8/25/2018
-   7          // Last modified 8/29/2018
+   7          // Last modified 9/28/2018
    8          //#include <sfr51.h>
    9          //#include "./include/c/Registers.h"
   10          
-  11          //#define     OPTIMIZE
-  12          #define     DEBUG
+  11          #define     OPTIMIZE
+  12          //#define     DEBUG
   13          
-  14          extern unsigned char _HIL_C_test(unsigned char);
-  15          char increment(char i);
-  16          
-  17          unsigned char test(char q){
-  18   1        q--;
-  19   1        return q;
-  20   1      }
-  21          
-  22          char _Cmain(){
-  23   1          unsigned char in = _HIL_C_test(0xff);
-  24   1          unsigned char qi = test(0x00);
-  25   1          return in;
-  26   1      }
-  27          
-  28          char increment(char i){
-  29   1          i++;
-  30   1          return i;
-  31   1      }
+  14          #ifdef    DEBUG
+              extern unsigned char _HIL_C_test(unsigned char);
+              #endif
+  17          char increment(char i);
+  18          
+  19          unsigned char test(char q){
+  20   1        q--;
+  21   1        return q;
+  22   1      }
+  23          
+  24          char dbug_Cmain(){
+  25   1      #ifdef    DEBUG
+                  unsigned char in = _HIL_C_test(0xff);
+              #endif
+  28   1      #ifdef    OPTIMIZE
+  29   1          unsigned char in = 0xff;
+  30   1      #endif
+  31   1          unsigned char qi = test(0x00);
+  32   1          return in;
+  33   1      }
+  34          
+  35          char increment(char i){
+  36   1          i++;
+  37   1          return i;
+  38   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     21    ----
+   CODE SIZE        =     16    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

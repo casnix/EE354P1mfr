@@ -4,14 +4,16 @@
 // ----------------------------------------------------- 
 
 // Matt Rienzo, CFuncTest.c 8/25/2018
-// Last modified 8/29/2018
+// Last modified 9/28/2018
 //#include <sfr51.h>
 //#include "./include/c/Registers.h"
 
-//#define     OPTIMIZE
-#define     DEBUG
+#define     OPTIMIZE
+//#define     DEBUG
 
+#ifdef		DEBUG
 extern unsigned char _HIL_C_test(unsigned char);
+#endif
 char increment(char i);
 
 unsigned char test(char q){
@@ -19,8 +21,13 @@ unsigned char test(char q){
 	return q;
 }
 
-char _Cmain(){
+char dbug_Cmain(){
+#ifdef		DEBUG
 		unsigned char in = _HIL_C_test(0xff);
+#endif
+#ifdef		OPTIMIZE
+		unsigned char in = 0xff;
+#endif
 		unsigned char qi = test(0x00);
     return in;
 }

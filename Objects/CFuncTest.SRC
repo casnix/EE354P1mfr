@@ -6,16 +6,15 @@
 NAME	CFUNCTEST
 
 ?PR?_test?CFUNCTEST  SEGMENT CODE 
-?PR?_Cmain?CFUNCTEST SEGMENT CODE 
-?DT?_Cmain?CFUNCTEST SEGMENT DATA OVERLAYABLE 
+?PR?dbug_Cmain?CFUNCTEST                 SEGMENT CODE 
+?DT?dbug_Cmain?CFUNCTEST                 SEGMENT DATA OVERLAYABLE 
 ?PR?_increment?CFUNCTEST                 SEGMENT CODE 
-	EXTRN	CODE (__HIL_C_test)
 	PUBLIC	_increment
-	PUBLIC	_Cmain
+	PUBLIC	dbug_Cmain
 	PUBLIC	_test
 
-	RSEG  ?DT?_Cmain?CFUNCTEST
-?_Cmain?BYTE:
+	RSEG  ?DT?dbug_Cmain?CFUNCTEST
+?dbug_Cmain?BYTE:
          qi?142:   DS   1
 ; // ------------- READS51 generated header -------------- 
 ; // module  : Y:\Development\8051\Bootstrapper\Bootstrapper\CFuncTest.c
@@ -23,14 +22,16 @@ NAME	CFUNCTEST
 ; // ----------------------------------------------------- 
 ; 
 ; // Matt Rienzo, CFuncTest.c 8/25/2018
-; // Last modified 8/29/2018
+; // Last modified 9/28/2018
 ; //#include <sfr51.h>
 ; //#include "./include/c/Registers.h"
 ; 
-; //#define     OPTIMIZE
-; #define     DEBUG
+; #define     OPTIMIZE
+; //#define     DEBUG
 ; 
+; #ifdef		DEBUG
 ; extern unsigned char _HIL_C_test(unsigned char);
+; #endif
 ; char increment(char i);
 ; 
 ; unsigned char test(char q){
@@ -38,44 +39,47 @@ NAME	CFUNCTEST
 	RSEG  ?PR?_test?CFUNCTEST
 _test:
 	USING	0
-			; SOURCE LINE # 17
+			; SOURCE LINE # 19
 ;---- Variable 'q?040' assigned to Register 'R7' ----
 ; 	q--;
-			; SOURCE LINE # 18
+			; SOURCE LINE # 20
 	DEC  	R7
 ; 	return q;
-			; SOURCE LINE # 19
+			; SOURCE LINE # 21
 ; }
-			; SOURCE LINE # 20
+			; SOURCE LINE # 22
 	RET  	
 ; END OF _test
 
 ; 
-; char _Cmain(){
+; char dbug_Cmain(){
 
-	RSEG  ?PR?_Cmain?CFUNCTEST
-_Cmain:
+	RSEG  ?PR?dbug_Cmain?CFUNCTEST
+dbug_Cmain:
 	USING	0
-			; SOURCE LINE # 22
-; 		unsigned char in = _HIL_C_test(0xff);
-			; SOURCE LINE # 23
-	MOV  	R7,#0FFH
-	LCALL	__HIL_C_test
-;---- Variable 'in?141' assigned to Register 'R6' ----
-	MOV  	R6,AR7
-; 		unsigned char qi = test(0x00);
 			; SOURCE LINE # 24
+; #ifdef		DEBUG
+; 		unsigned char in = _HIL_C_test(0xff);
+; #endif
+; #ifdef		OPTIMIZE
+; 		unsigned char in = 0xff;
+			; SOURCE LINE # 29
+;---- Variable 'in?141' assigned to Register 'R6' ----
+	MOV  	R6,#0FFH
+; #endif
+; 		unsigned char qi = test(0x00);
+			; SOURCE LINE # 31
 	CLR  	A
 	MOV  	R7,A
 	LCALL	_test
 	MOV  	qi?142,R7
 ;     return in;
-			; SOURCE LINE # 25
-	MOV  	R7,AR6
+			; SOURCE LINE # 32
+	MOV  	R7,#0FFH
 ; }
-			; SOURCE LINE # 26
+			; SOURCE LINE # 33
 	RET  	
-; END OF _Cmain
+; END OF dbug_Cmain
 
 ; 
 ; char increment(char i){
@@ -83,15 +87,15 @@ _Cmain:
 	RSEG  ?PR?_increment?CFUNCTEST
 _increment:
 	USING	0
-			; SOURCE LINE # 28
+			; SOURCE LINE # 35
 ;---- Variable 'i?243' assigned to Register 'R7' ----
 ;     i++;
-			; SOURCE LINE # 29
+			; SOURCE LINE # 36
 	INC  	R7
 ;     return i;
-			; SOURCE LINE # 30
+			; SOURCE LINE # 37
 ; }
-			; SOURCE LINE # 31
+			; SOURCE LINE # 38
 	RET  	
 ; END OF _increment
 

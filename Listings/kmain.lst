@@ -1,0 +1,29 @@
+C51 COMPILER V9.59.0.0   KMAIN                                                             09/28/2018 11:48:29 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE KMAIN
+OBJECT MODULE PLACED IN .\Objects\kmain.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE kmain.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\kma
+                    -in.lst) TABS(2) OBJECT(.\Objects\kmain.obj)
+
+line level    source
+
+   1          // Matt Rienzo, kmain.c 9/28/2018
+   2          // Last modified 9/18/2018
+   3          
+   4          #include "./include/c/Registers.h"
+   5          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

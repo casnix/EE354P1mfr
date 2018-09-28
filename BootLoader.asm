@@ -7,14 +7,19 @@
 #include "./include/asm/ShortStack.inc"
 #include "./include/asm/MacroLang.inc"
 
-;#define OPTIMIZE
-#define DEBUG
+#define OPTIMIZE
+;#define DEBUG
 
 ;-- Segment declaration
 setup	segment	code
 boot	segment	code
 exit	segment	code
 memory	segment	code
+	
+org		0x0000
+	ljmp		__setup
+
+
 
 ;-- Segment definition
     public  __sspush
@@ -38,7 +43,6 @@ rseg	memory
 #ifdef      OPTIMIZE
         subb    a,      msz
 #endif
-        
         cjne    a,      #0x00,  __sspush_continue
 		
 		; Reset our ssz, wrapping our stack
@@ -58,7 +62,6 @@ rseg	memory
 #ifdef      DEBUG
         mov     s7,     a
 #endif
-		
         ; Preserve our callback/ret address
         pop     s7
         pop     s6
@@ -110,7 +113,9 @@ rseg	memory
         push    s2
         push    s1
 		ret
-		
+
+
+
     public  __setup		
 rseg	setup
 	__setup:
@@ -121,15 +126,13 @@ rseg	setup
 		; The last slot in the short stack will be #([ss]+[msz])
 		
 		;---STACK
-		; Set SP to after the last slot in short stack
-		mov		a,		ss
-		add		a,		msz
-		inc		a
-		mov		sp,		a
+		; Set SP to 0x30
+		mov		sp,		#0x30
 		
 		; enter our program
 		ljmp	__entry
-		
+	
+	
 		
 rseg	boot
 	extrn		code	(__HIL_init)
@@ -139,24 +142,27 @@ rseg	boot
 	; Do three things:	(1) tell the Hardware Interaction Layer to initialize
 	;					(2) tell the Hardware Abstration Layer to initialize
 	;					(3) jump into the main program
-		lcall	__HIL_init	; pushes return code onto ss
+		acall	__HIL_init	; pushes return code onto ss
 		sspop	acc
 		cjne	a,		#0x00,	__entry_HIL_error
 		
-		lcall	__HAL_init
+		acall	__HAL_init
 		sspop	acc
 		cjne	a,		#0x00,	__entry_HAL_error
 		
         mov     a,      #0xe4
-		lcall	_Cmain
+		acall	_Cmain
 		sspop	acc
 		cjne	a,		#0x00,	__entry_main_error
 		
 		ljmp	__shutdown
 		
 	__entry_HIL_error:	; Turn on ERR LED
+		ljmp	__shutdown
 	__entry_HAL_error:	; Turn on ERR LED and batt_too_low square
+		ljmp	__shutdown
 	__entry_main_error:	; Turn on ERR LED and white square
+		ljmp	__shutdown
 		
 		
 rseg	exit

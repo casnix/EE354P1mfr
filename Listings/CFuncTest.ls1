@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  CFUNCTEST                                                            08/29/2018 16:45:29 PAGE     1
+A51 MACRO ASSEMBLER  CFUNCTEST                                                            09/28/2018 11:48:29 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -16,99 +16,103 @@ LOC  OBJ            LINE     SOURCE
                        6     NAME    CFUNCTEST
                        7     
                        8     ?PR?_test?CFUNCTEST  SEGMENT CODE 
-                       9     ?PR?_Cmain?CFUNCTEST SEGMENT CODE 
-                      10     ?DT?_Cmain?CFUNCTEST SEGMENT DATA OVERLAYABLE 
+                       9     ?PR?dbug_Cmain?CFUNCTEST                 SEGMENT CODE 
+                      10     ?DT?dbug_Cmain?CFUNCTEST                 SEGMENT DATA OVERLAYABLE 
                       11     ?PR?_increment?CFUNCTEST                 SEGMENT CODE 
-                      12             EXTRN   CODE (__HIL_C_test)
-                      13             PUBLIC  _increment
-                      14             PUBLIC  _Cmain
-                      15             PUBLIC  _test
-                      16     
-----                  17             RSEG  ?DT?_Cmain?CFUNCTEST
-0000                  18     ?_Cmain?BYTE:
-0000                  19              qi?142:   DS   1
-                      20     ; // ------------- READS51 generated header -------------- 
-                      21     ; // module  : Y:\Development\8051\Bootstrapper\Bootstrapper\CFuncTest.c
-                      22     ; // created : 15:00:18, Sunday, August 26, 2018
-                      23     ; // ----------------------------------------------------- 
-                      24     ; 
-                      25     ; // Matt Rienzo, CFuncTest.c 8/25/2018
-                      26     ; // Last modified 8/29/2018
-                      27     ; //#include <sfr51.h>
-                      28     ; //#include "./include/c/Registers.h"
-                      29     ; 
-                      30     ; //#define     OPTIMIZE
-                      31     ; #define     DEBUG
-                      32     ; 
+                      12             PUBLIC  _increment
+                      13             PUBLIC  dbug_Cmain
+                      14             PUBLIC  _test
+                      15     
+----                  16             RSEG  ?DT?dbug_Cmain?CFUNCTEST
+0000                  17     ?dbug_Cmain?BYTE:
+0000                  18              qi?142:   DS   1
+                      19     ; // ------------- READS51 generated header -------------- 
+                      20     ; // module  : Y:\Development\8051\Bootstrapper\Bootstrapper\CFuncTest.c
+                      21     ; // created : 15:00:18, Sunday, August 26, 2018
+                      22     ; // ----------------------------------------------------- 
+                      23     ; 
+                      24     ; // Matt Rienzo, CFuncTest.c 8/25/2018
+                      25     ; // Last modified 9/28/2018
+                      26     ; //#include <sfr51.h>
+                      27     ; //#include "./include/c/Registers.h"
+                      28     ; 
+                      29     ; #define     OPTIMIZE
+                      30     ; //#define     DEBUG
+                      31     ; 
+                      32     ; #ifdef                DEBUG
                       33     ; extern unsigned char _HIL_C_test(unsigned char);
-                      34     ; char increment(char i);
-                      35     ; 
-                      36     ; unsigned char test(char q){
-                      37     
-----                  38             RSEG  ?PR?_test?CFUNCTEST
-0000                  39     _test:
-                      40             USING   0
-                      41                             ; SOURCE LINE # 17
-                      42     ;---- Variable 'q?040' assigned to Register 'R7' ----
-                      43     ;       q--;
-                      44                             ; SOURCE LINE # 18
-0000 1F               45             DEC     R7
-                      46     ;       return q;
-                      47                             ; SOURCE LINE # 19
-                      48     ; }
-                      49                             ; SOURCE LINE # 20
-0001 22               50             RET     
-                      51     ; END OF _test
-                      52     
-                      53     ; 
-                      54     ; char _Cmain(){
-                      55     
-----                  56             RSEG  ?PR?_Cmain?CFUNCTEST
-0000                  57     _Cmain:
-A51 MACRO ASSEMBLER  CFUNCTEST                                                            08/29/2018 16:45:29 PAGE     2
+                      34     ; #endif
+                      35     ; char increment(char i);
+                      36     ; 
+                      37     ; unsigned char test(char q){
+                      38     
+----                  39             RSEG  ?PR?_test?CFUNCTEST
+0000                  40     _test:
+                      41             USING   0
+                      42                             ; SOURCE LINE # 19
+                      43     ;---- Variable 'q?040' assigned to Register 'R7' ----
+                      44     ;       q--;
+                      45                             ; SOURCE LINE # 20
+0000 1F               46             DEC     R7
+                      47     ;       return q;
+                      48                             ; SOURCE LINE # 21
+                      49     ; }
+                      50                             ; SOURCE LINE # 22
+0001 22               51             RET     
+                      52     ; END OF _test
+                      53     
+                      54     ; 
+                      55     ; char dbug_Cmain(){
+                      56     
+----                  57             RSEG  ?PR?dbug_Cmain?CFUNCTEST
+A51 MACRO ASSEMBLER  CFUNCTEST                                                            09/28/2018 11:48:29 PAGE     2
 
-                      58             USING   0
-                      59                             ; SOURCE LINE # 22
-                      60     ;               unsigned char in = _HIL_C_test(0xff);
-                      61                             ; SOURCE LINE # 23
-0000 7FFF             62             MOV     R7,#0FFH
-0002 120000   F       63             LCALL   __HIL_C_test
-                      64     ;---- Variable 'in?141' assigned to Register 'R6' ----
-0005 AE07             65             MOV     R6,AR7
-                      66     ;               unsigned char qi = test(0x00);
-                      67                             ; SOURCE LINE # 24
-0007 E4               68             CLR     A
-0008 FF               69             MOV     R7,A
-0009 120000   F       70             LCALL   _test
-000C 8F00     F       71             MOV     qi?142,R7
-                      72     ;     return in;
-                      73                             ; SOURCE LINE # 25
-000E AF06             74             MOV     R7,AR6
-                      75     ; }
-                      76                             ; SOURCE LINE # 26
-0010 22               77             RET     
-                      78     ; END OF _Cmain
-                      79     
-                      80     ; 
-                      81     ; char increment(char i){
-                      82     
-----                  83             RSEG  ?PR?_increment?CFUNCTEST
-0000                  84     _increment:
-                      85             USING   0
-                      86                             ; SOURCE LINE # 28
-                      87     ;---- Variable 'i?243' assigned to Register 'R7' ----
-                      88     ;     i++;
-                      89                             ; SOURCE LINE # 29
-0000 0F               90             INC     R7
-                      91     ;     return i;
-                      92                             ; SOURCE LINE # 30
-                      93     ; }
-                      94                             ; SOURCE LINE # 31
-0001 22               95             RET     
-                      96     ; END OF _increment
-                      97     
-                      98             END
-A51 MACRO ASSEMBLER  CFUNCTEST                                                            08/29/2018 16:45:29 PAGE     3
+0000                  58     dbug_Cmain:
+                      59             USING   0
+                      60                             ; SOURCE LINE # 24
+                      61     ; #ifdef                DEBUG
+                      62     ;               unsigned char in = _HIL_C_test(0xff);
+                      63     ; #endif
+                      64     ; #ifdef                OPTIMIZE
+                      65     ;               unsigned char in = 0xff;
+                      66                             ; SOURCE LINE # 29
+                      67     ;---- Variable 'in?141' assigned to Register 'R6' ----
+0000 7EFF             68             MOV     R6,#0FFH
+                      69     ; #endif
+                      70     ;               unsigned char qi = test(0x00);
+                      71                             ; SOURCE LINE # 31
+0002 E4               72             CLR     A
+0003 FF               73             MOV     R7,A
+0004 120000   F       74             LCALL   _test
+0007 8F00     F       75             MOV     qi?142,R7
+                      76     ;     return in;
+                      77                             ; SOURCE LINE # 32
+0009 7FFF             78             MOV     R7,#0FFH
+                      79     ; }
+                      80                             ; SOURCE LINE # 33
+000B 22               81             RET     
+                      82     ; END OF dbug_Cmain
+                      83     
+                      84     ; 
+                      85     ; char increment(char i){
+                      86     
+----                  87             RSEG  ?PR?_increment?CFUNCTEST
+0000                  88     _increment:
+                      89             USING   0
+                      90                             ; SOURCE LINE # 35
+                      91     ;---- Variable 'i?243' assigned to Register 'R7' ----
+                      92     ;     i++;
+                      93                             ; SOURCE LINE # 36
+0000 0F               94             INC     R7
+                      95     ;     return i;
+                      96                             ; SOURCE LINE # 37
+                      97     ; }
+                      98                             ; SOURCE LINE # 38
+0001 22               99             RET     
+                     100     ; END OF _increment
+                     101     
+                     102             END
+A51 MACRO ASSEMBLER  CFUNCTEST                                                            09/28/2018 11:48:29 PAGE     3
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -116,19 +120,16 @@ SYMBOL TABLE LISTING
 
 N A M E                   T Y P E  V A L U E   ATTRIBUTES
 
-?DT?_CMAIN?CFUNCTEST . .  D SEG    0001H       REL=UNIT
-?PR?_CMAIN?CFUNCTEST . .  C SEG    0011H       REL=UNIT
+?DBUG_CMAIN?BYTE . . . .  D ADDR   0000H   R   SEG=?DT?DBUG_CMAIN?CFUNCTEST
+?DT?DBUG_CMAIN?CFUNCTEST  D SEG    0001H       REL=UNIT
+?PR?DBUG_CMAIN?CFUNCTEST  C SEG    000CH       REL=UNIT
 ?PR?_INCREMENT?CFUNCTEST  C SEG    0002H       REL=UNIT
 ?PR?_TEST?CFUNCTEST. . .  C SEG    0002H       REL=UNIT
-?_CMAIN?BYTE . . . . . .  D ADDR   0000H   R   SEG=?DT?_CMAIN?CFUNCTEST
-AR6. . . . . . . . . . .  D ADDR   0006H   A   
-AR7. . . . . . . . . . .  D ADDR   0007H   A   
 CFUNCTEST. . . . . . . .  N NUMB   -----       
-QI?142 . . . . . . . . .  D ADDR   0000H   R   SEG=?DT?_CMAIN?CFUNCTEST
-_CMAIN . . . . . . . . .  C ADDR   0000H   R   SEG=?PR?_CMAIN?CFUNCTEST
+DBUG_CMAIN . . . . . . .  C ADDR   0000H   R   SEG=?PR?DBUG_CMAIN?CFUNCTEST
+QI?142 . . . . . . . . .  D ADDR   0000H   R   SEG=?DT?DBUG_CMAIN?CFUNCTEST
 _INCREMENT . . . . . . .  C ADDR   0000H   R   SEG=?PR?_INCREMENT?CFUNCTEST
 _TEST. . . . . . . . . .  C ADDR   0000H   R   SEG=?PR?_TEST?CFUNCTEST
-__HIL_C_TEST . . . . . .  C ADDR   -----       EXT
 
 
 REGISTER BANK(S) USED: 0 
