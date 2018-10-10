@@ -55,54 +55,54 @@
 
 //-----register pointers
 // Thread available registers
-char* a0 = (char*)aa0;
-char* a1 = (char*)aa1;
-char* a2 = (char*)aa2;
-char* a3 = (char*)aa3;
-char* a4 = (char*)aa4;
-char* a5 = (char*)aa5;
-char* a6 = (char*)aa6;
-char* a7 = (char*)aa7;
+extern unsigned char* a0;
+extern unsigned char* a1;
+extern unsigned char* a2;
+extern unsigned char* a3;
+extern unsigned char* a4;
+extern unsigned char* a5;
+extern unsigned char* a6;
+extern unsigned char* a7;
 
 // Thread descriptor registers
-char* t0 = (char*)ab0;
-char* t1 = (char*)ab1;
-char* t2 = (char*)ab2;
-char* t3 = (char*)ab3;
-char* t4 = (char*)ab4;
-char* t5 = (char*)ab5;
-char* t6 = (char*)ab6;
-char* t7 = (char*)ab7;
+extern unsigned char* t0;
+extern unsigned char* t1;
+extern unsigned char* t2;
+extern unsigned char* t3;
+extern unsigned char* t4;
+extern unsigned char* t5;
+extern unsigned char* t6;
+extern unsigned char* t7;
 
 // R51 (Rienzo's 8051) asynchronous software thread engine state registers
-char* ra0 = (char*)ac0;
-char* ra1 = (char*)ac1;
-char* bte = (char*)ac2;
-char* btm = (char*)ac3;
-char* rsrv0 = (char*)ac4;
-char* ltl = (char*)ac5;
-char* bts = (char*)ac6;
-char* ntsd = (char*)ac7;
-char* ntsm = (char*)as0;
-char* nic = (char*)as1;
-char* rs0 = (char*)as2;
-char* rs1 = (char*)as3;
-char* rs2 = (char*)as4;
-char* rs3 = (char*)as5;
-char* rs4 = (char*)as6;
-char* rs5 = (char*)as7;
+extern unsigned char* ra0;
+extern unsigned char* ra1;
+extern unsigned char* bte;
+extern unsigned char* btm;
+extern unsigned char* rsrv0;
+extern unsigned char* ltl;
+extern unsigned char* bts;
+extern unsigned char* ntsd;
+extern unsigned char* ntsm;
+extern unsigned char* nic;
+extern unsigned char* rs0;
+extern unsigned char* rs1;
+extern unsigned char* rs2;
+extern unsigned char* rs3;
+extern unsigned char* rs4;
+extern unsigned char* rs5;
 
 // SFRs
-char* acc = (char*)aacc;
-char* psw = (char*)apsw;
-char* bcc = (char*)abcc;
+extern unsigned char* acc;
+extern unsigned char* psw;
+extern unsigned char* bcc;
 
 // Short stack regs
-char* ss = (char*)ass;
-char* ssz = (char*)assz;
-char* msz = (char*)amsz;
+extern unsigned char* ss;
+extern unsigned char* ssz;
+extern unsigned char* msz;
 
 // Stack pointer
-char* sp = (char*)asp;
+extern unsigned char* sp;
 
 #endif // __REGISTERS_H__

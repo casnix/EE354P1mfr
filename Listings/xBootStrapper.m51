@@ -1,23 +1,27 @@
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    09/28/2018  14:29:29  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    10/10/2018  14:44:03  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
-C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\CFuncTest.obj, .\Objects\BootLoader.obj, .\Objects\HALStrapper.obj, .\Objects\HILS
->> trapper.obj, .\Objects\kmain.obj TO .\Objects\xBootStrapper PRINT (.\Listings\xBootStrapper.m51) RAMSIZE (256)
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\BootLoader.obj, .\Objects\HALStrapper.obj, .\Objects\HILStrapper.obj, .\Objects\km
+>> ain.obj, .\Objects\kthreads.obj, .\Objects\Registers.obj TO .\Objects\xBootStrapper PRINT (.\Listings\xBootStrapper.m
+>> 51) RAMSIZE (256)
 
 
 MEMORY MODEL: SMALL
 
 
 INPUT MODULES INCLUDED:
-  .\Objects\CFuncTest.obj (CFUNCTEST)
   .\Objects\BootLoader.obj (BOOTLOADER)
   .\Objects\HALStrapper.obj (HALSTRAPPER)
   .\Objects\HILStrapper.obj (HILSTRAPPER)
   .\Objects\kmain.obj (KMAIN)
+  .\Objects\kthreads.obj (KTHREADS)
+  .\Objects\Registers.obj (REGISTERS)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
 
 
-LINK MAP OF MODULE:  .\Objects\xBootStrapper (CFUNCTEST)
+LINK MAP OF MODULE:  .\Objects\xBootStrapper (BOOTLOADER)
 
 
             TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
@@ -25,76 +29,68 @@ LINK MAP OF MODULE:  .\Objects\xBootStrapper (CFUNCTEST)
 
             * * * * * * *   D A T A   M E M O R Y   * * * * * * *
             REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
-            DATA    0008H     0001H     UNIT         ?DT?DBUG_CMAIN?CFUNCTEST
+            DATA    0008H     0075H     UNIT         ?DT?REGISTERS
+            IDATA   007DH     0001H     UNIT         ?STACK
 
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
             CODE    0000H     0003H     ABSOLUTE     
-                    0003H     07FDH                  *** GAP ***
-            CODE    0800H     00BCH     UNIT         HIL
-            CODE    08BCH     0039H     UNIT         MEMORY
-            CODE    08F5H     002CH     UNIT         BOOT
-            CODE    0921H     000FH     UNIT         SETUP
-            CODE    0930H     000CH     UNIT         ?PR?DBUG_CMAIN?CFUNCTEST
-            CODE    093CH     0009H     UNIT         HAL
-            CODE    0945H     0002H     UNIT         ?PR?_TEST?CFUNCTEST
-            CODE    0947H     0002H     UNIT         ?PR?_INCREMENT?CFUNCTEST
-            CODE    0949H     0002H     UNIT         EXIT
+            CODE    0003H     0003H     ABSOLUTE     
+                    0006H     07FAH                  *** GAP ***
+            CODE    0800H     00C4H     UNIT         ?C_INITSEG
+            CODE    08C4H     00BCH     UNIT         HIL
+            CODE    0980H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0A0CH     003FH     UNIT         MEMORY
+            CODE    0A4BH     002DH     UNIT         BOOT
+            CODE    0A78H     0015H     UNIT         ?PR?KTHREADS_ISR?KTHREADS
+            CODE    0A8DH     000FH     UNIT         SETUP
+            CODE    0A9CH     000AH     UNIT         ?PR?_KMAIN?KMAIN
+            CODE    0AA6H     0009H     UNIT         HAL
+            CODE    0AAFH     0006H     UNIT         ?PR?MAIN?KMAIN
+            CODE    0AB5H     0006H     UNIT         ?PR?DUMMYCODEPATH?KMAIN
+            CODE    0ABBH     0003H     UNIT         ?PR?ENABLE_THREADS?KTHREADS
+            CODE    0ABEH     0003H     UNIT         ?PR?KTHREADS_COMPILE_INIT?KTHREADS
+            CODE    0AC1H     0002H     UNIT         EXIT
 
 
 
-OVERLAY MAP OF MODULE:   .\Objects\xBootStrapper (CFUNCTEST)
+OVERLAY MAP OF MODULE:   .\Objects\xBootStrapper (BOOTLOADER)
 
 
 SEGMENT
   +--> CALLED SEGMENT
 ---------------------
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/10/2018  14:44:03  PAGE 2
 
 
-UNRESOLVED EXTERNAL SYMBOLS:
-   _CMAIN
+?C_C51STARTUP
+  +--> ?PR?MAIN?KMAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?KMAIN
+  +--> ?PR?DUMMYCODEPATH?KMAIN
+
+?PR?DUMMYCODEPATH?KMAIN
+  +--> ?PR?_KMAIN?KMAIN
+  +--> ?PR?KTHREADS_COMPILE_INIT?KTHREADS
+
+?PR?KTHREADS_COMPILE_INIT?KTHREADS
+  +--> ?PR?ENABLE_THREADS?KTHREADS
 
 
 
-SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (CFUNCTEST)
+SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (BOOTLOADER)
 
   VALUE           TYPE          NAME
   ----------------------------------
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  14:29:29  PAGE 2
-
-
-
-  -------         MODULE        CFUNCTEST
-  C:0945H         SEGMENT       ?PR?_TEST?CFUNCTEST
-  C:0930H         SEGMENT       ?PR?DBUG_CMAIN?CFUNCTEST
-  D:0008H         SEGMENT       ?DT?DBUG_CMAIN?CFUNCTEST
-  C:0947H         SEGMENT       ?PR?_INCREMENT?CFUNCTEST
-  C:0930H         PUBLIC        DBUG_CMAIN
-  C:0947H         PUBLIC        _INCREMENT
-  C:0945H         PUBLIC        _TEST
-  D:0008H         SYMBOL        ?DBUG_CMAIN?BYTE
-  N:0000H         SYMBOL        CFUNCTEST
-  D:0008H         SYMBOL        QI?142
-  C:0945H         LINE#         46
-  C:0946H         LINE#         51
-  C:0930H         LINE#         68
-  C:0932H         LINE#         72
-  C:0933H         LINE#         73
-  C:0934H         LINE#         74
-  C:0937H         LINE#         75
-  C:0939H         LINE#         78
-  C:093BH         LINE#         81
-  C:0947H         LINE#         94
-  C:0948H         LINE#         99
-  -------         ENDMOD        CFUNCTEST
 
   -------         MODULE        BOOTLOADER
-  C:0921H         SEGMENT       SETUP
-  C:08F5H         SEGMENT       BOOT
-  C:0949H         SEGMENT       EXIT
-  C:08BCH         SEGMENT       MEMORY
-  C:0921H         PUBLIC        __SETUP
-  C:08DAH         PUBLIC        __SSPOP
-  C:08BCH         PUBLIC        __SSPUSH
+  C:0A8DH         SEGMENT       SETUP
+  C:0A4BH         SEGMENT       BOOT
+  C:0AC1H         SEGMENT       EXIT
+  C:0A0CH         SEGMENT       MEMORY
+  C:0A8DH         PUBLIC        __SETUP
+  C:0A30H         PUBLIC        __SSPOP
+  C:0A0CH         PUBLIC        __SSPUSH
   N:0000H         SYMBOL        A0
   N:0001H         SYMBOL        A1
   N:0002H         SYMBOL        A2
@@ -119,13 +115,13 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (CFUNCTEST)
   N:0013H         SYMBOL        C3
   N:0014H         SYMBOL        C4
   N:0015H         SYMBOL        C5
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  14:29:29  PAGE 3
-
-
   N:0016H         SYMBOL        C6
   N:0017H         SYMBOL        C7
   N:0022H         SYMBOL        MSZ
   N:0018H         SYMBOL        S0
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/10/2018  14:44:03  PAGE 3
+
+
   N:0019H         SYMBOL        S1
   N:001AH         SYMBOL        S2
   N:001BH         SYMBOL        S3
@@ -136,74 +132,76 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (CFUNCTEST)
   D:0081H         SYMBOL        SP
   N:0020H         SYMBOL        SS
   N:0021H         SYMBOL        SSZ
-  C:08F5H         SYMBOL        __ENTRY
-  C:091BH         SYMBOL        __ENTRY_HAL_ERROR
-  C:0918H         SYMBOL        __ENTRY_HIL_ERROR
-  C:091EH         SYMBOL        __ENTRY_MAIN_ERROR
-  C:0949H         SYMBOL        __SHUTDOWN
-  C:08EEH         SYMBOL        __SSPOP_CONTINUE
-  C:08C8H         SYMBOL        __SSPUSH_CONTINUE
-  C:0000H         LINE#         20
-  C:08BCH         LINE#         32
-  C:08BEH         LINE#         34
-  C:08C0H         LINE#         44
-  C:08C2H         LINE#         46
-  C:08C5H         LINE#         49
-  C:08C8H         LINE#         55
-  C:08CAH         LINE#         57
-  C:08CCH         LINE#         66
-  C:08CEH         LINE#         67
-  C:08D0H         LINE#         70
-  C:08D2H         LINE#         71
-  C:08D3H         LINE#         72
-  C:08D5H         LINE#         74
-  C:08D7H         LINE#         75
-  C:08D9H         LINE#         76
-  C:08DAH         LINE#         80
-  C:08DCH         LINE#         83
-  C:08DEH         LINE#         90
-  C:08E0H         LINE#         91
-  C:08E2H         LINE#         93
-  C:08E3H         LINE#         94
-  C:08E5H         LINE#         95
-  C:08E7H         LINE#         99
-  C:08E9H         LINE#         100
-  C:08ECH         LINE#         101
-  C:08EEH         LINE#         107
-  C:08F0H         LINE#         113
-  C:08F2H         LINE#         114
-  C:08F4H         LINE#         115
-  C:0921H         LINE#         123
-  C:0924H         LINE#         124
-  C:0927H         LINE#         125
-  C:092AH         LINE#         130
-  C:092DH         LINE#         133
-  C:08F5H         LINE#         145
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  14:29:29  PAGE 4
+  C:0A4BH         SYMBOL        __ENTRY
+  C:0A72H         SYMBOL        __ENTRY_HAL_ERROR
+  C:0A6FH         SYMBOL        __ENTRY_HIL_ERROR
+  C:0A75H         SYMBOL        __ENTRY_MAIN_ERROR
+  C:0AC1H         SYMBOL        __SHUTDOWN
+  C:0A44H         SYMBOL        __SSPOP_CONTINUE
+  C:0A1EH         SYMBOL        __SSPUSH_CONTINUE
+  C:0A0CH         LINE#         29
+  C:0A0EH         LINE#         31
+  C:0A10H         LINE#         36
+  C:0A12H         LINE#         37
+  C:0A14H         LINE#         38
+  C:0A16H         LINE#         45
+  C:0A18H         LINE#         47
+  C:0A1BH         LINE#         50
+  C:0A1EH         LINE#         56
+  C:0A20H         LINE#         58
+  C:0A22H         LINE#         67
+  C:0A24H         LINE#         68
+  C:0A26H         LINE#         71
+  C:0A28H         LINE#         72
+  C:0A29H         LINE#         73
+  C:0A2BH         LINE#         75
+  C:0A2DH         LINE#         76
+  C:0A2FH         LINE#         77
+  C:0A30H         LINE#         81
+  C:0A32H         LINE#         84
+  C:0A34H         LINE#         91
+  C:0A36H         LINE#         92
+  C:0A38H         LINE#         94
+  C:0A39H         LINE#         95
+  C:0A3BH         LINE#         96
+  C:0A3DH         LINE#         100
+  C:0A3FH         LINE#         101
+  C:0A42H         LINE#         102
+  C:0A44H         LINE#         108
+  C:0A46H         LINE#         114
+  C:0A48H         LINE#         115
+  C:0A4AH         LINE#         116
+  C:0A8DH         LINE#         124
+  C:0A90H         LINE#         125
+  C:0A93H         LINE#         126
+  C:0A96H         LINE#         131
+  C:0A99H         LINE#         134
+  C:0A4BH         LINE#         146
+  C:0A4DH         LINE#         147
+  C:0A50H         LINE#         147
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/10/2018  14:44:03  PAGE 4
 
 
-  C:08F7H         LINE#         146
-  C:08FAH         LINE#         146
-  C:08FCH         LINE#         147
-  C:08FFH         LINE#         149
-  C:0901H         LINE#         150
-  C:0904H         LINE#         150
-  C:0906H         LINE#         151
-  C:0909H         LINE#         153
-  C:090BH         LINE#         154
-  C:090DH         LINE#         155
-  C:0910H         LINE#         155
-  C:0912H         LINE#         156
-  C:0915H         LINE#         158
-  C:0918H         LINE#         161
-  C:091BH         LINE#         163
-  C:091EH         LINE#         165
-  C:0949H         LINE#         171
+  C:0A52H         LINE#         148
+  C:0A55H         LINE#         150
+  C:0A58H         LINE#         151
+  C:0A5BH         LINE#         151
+  C:0A5DH         LINE#         152
+  C:0A60H         LINE#         154
+  C:0A62H         LINE#         155
+  C:0A64H         LINE#         156
+  C:0A67H         LINE#         156
+  C:0A69H         LINE#         157
+  C:0A6CH         LINE#         159
+  C:0A6FH         LINE#         162
+  C:0A72H         LINE#         164
+  C:0A75H         LINE#         166
+  C:0AC1H         LINE#         172
   -------         ENDMOD        BOOTLOADER
 
   -------         MODULE        HALSTRAPPER
-  C:093CH         SEGMENT       HAL
-  C:093CH         PUBLIC        __HAL_INIT
+  C:0AA6H         SEGMENT       HAL
+  C:0AA6H         PUBLIC        __HAL_INIT
   N:0000H         SYMBOL        A0
   N:0001H         SYMBOL        A1
   N:0002H         SYMBOL        A2
@@ -239,19 +237,19 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (CFUNCTEST)
   N:001EH         SYMBOL        S6
   N:001FH         SYMBOL        S7
   N:0020H         SYMBOL        SS
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  14:29:29  PAGE 5
-
-
   N:0021H         SYMBOL        SSZ
-  C:093CH         LINE#         22
-  C:093FH         LINE#         22
-  C:0941H         LINE#         22
-  C:0944H         LINE#         23
+  C:0AA6H         LINE#         22
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/10/2018  14:44:03  PAGE 5
+
+
+  C:0AA9H         LINE#         22
+  C:0AABH         LINE#         22
+  C:0AAEH         LINE#         23
   -------         ENDMOD        HALSTRAPPER
 
   -------         MODULE        HILSTRAPPER
-  C:0800H         SEGMENT       HIL
-  C:0800H         PUBLIC        __HIL_INIT
+  C:08C4H         SEGMENT       HIL
+  C:08C4H         PUBLIC        __HIL_INIT
   N:0000H         SYMBOL        A0
   N:0001H         SYMBOL        A1
   N:0002H         SYMBOL        A2
@@ -283,9 +281,9 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (CFUNCTEST)
   N:0015H         SYMBOL        C5
   N:0016H         SYMBOL        C6
   N:0017H         SYMBOL        C7
-  C:088FH         SYMBOL        HIL_INIT_FAIL
-  C:0848H         SYMBOL        HSWDBADCON
-  C:0858H         SYMBOL        HSWDBBATT
+  C:0953H         SYMBOL        HIL_INIT_FAIL
+  C:090CH         SYMBOL        HSWDBADCON
+  C:091CH         SYMBOL        HSWDBBATT
   N:00A8H         SYMBOL        IEN0
   N:00E8H         SYMBOL        IEN1
   N:00B7H         SYMBOL        IPH0
@@ -299,129 +297,201 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (CFUNCTEST)
   N:001AH         SYMBOL        S2
   N:001BH         SYMBOL        S3
   N:001CH         SYMBOL        S4
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  14:29:29  PAGE 6
-
-
   N:001DH         SYMBOL        S5
   N:001EH         SYMBOL        S6
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/10/2018  14:44:03  PAGE 6
+
+
   N:001FH         SYMBOL        S7
   N:0020H         SYMBOL        SS
   N:0021H         SYMBOL        SSZ
-  C:0846H         SYMBOL        __HIL_CHECK_BATT_VOLTAGE
-  C:0870H         SYMBOL        __HIL_DISABLE_BATTERYLO
-  C:082BH         SYMBOL        __HIL_ENABLE_ADC
-  C:0842H         SYMBOL        __HIL_ENABLE_ADCCOLLECT
-  C:0838H         SYMBOL        __HIL_SELECT_ADCCH
-  C:0800H         LINE#         29
-  C:0802H         LINE#         30
-  C:0804H         LINE#         31
-  C:0806H         LINE#         32
-  C:0808H         LINE#         33
-  C:080AH         LINE#         34
-  C:080CH         LINE#         35
-  C:080EH         LINE#         36
-  C:0810H         LINE#         38
-  C:0812H         LINE#         39
-  C:0815H         LINE#         40
-  C:0818H         LINE#         40
-  C:081AH         LINE#         40
-  C:081DH         LINE#         41
-  C:081FH         LINE#         42
-  C:0821H         LINE#         43
-  C:0823H         LINE#         44
-  C:0826H         LINE#         44
-  C:0828H         LINE#         45
-  C:082BH         LINE#         56
-  C:082EH         LINE#         57
-  C:0831H         LINE#         58
-  C:0834H         LINE#         59
-  C:0837H         LINE#         61
-  C:0838H         LINE#         72
-  C:083BH         LINE#         73
-  C:083EH         LINE#         74
-  C:0841H         LINE#         75
-  C:0842H         LINE#         82
-  C:0845H         LINE#         83
-  C:0846H         LINE#         89
-  C:0848H         LINE#         91
-  C:084AH         LINE#         92
-  C:084CH         LINE#         93
-  C:084FH         LINE#         98
-  C:0851H         LINE#         111
-  C:0853H         LINE#         108
-  C:0856H         LINE#         113
-  C:0858H         LINE#         115
-  C:0859H         LINE#         116
-  C:085BH         LINE#         117
-  C:085DH         LINE#         118
-  C:085FH         LINE#         119
-  C:0862H         LINE#         121
-  C:0863H         LINE#         123
-  C:0865H         LINE#         124
-  C:0867H         LINE#         125
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  14:29:29  PAGE 7
+  C:090AH         SYMBOL        __HIL_CHECK_BATT_VOLTAGE
+  C:0934H         SYMBOL        __HIL_DISABLE_BATTERYLO
+  C:08EFH         SYMBOL        __HIL_ENABLE_ADC
+  C:0906H         SYMBOL        __HIL_ENABLE_ADCCOLLECT
+  C:08FCH         SYMBOL        __HIL_SELECT_ADCCH
+  C:08C4H         LINE#         29
+  C:08C6H         LINE#         30
+  C:08C8H         LINE#         31
+  C:08CAH         LINE#         32
+  C:08CCH         LINE#         33
+  C:08CEH         LINE#         34
+  C:08D0H         LINE#         35
+  C:08D2H         LINE#         36
+  C:08D4H         LINE#         38
+  C:08D6H         LINE#         39
+  C:08D9H         LINE#         40
+  C:08DCH         LINE#         40
+  C:08DEH         LINE#         40
+  C:08E1H         LINE#         41
+  C:08E3H         LINE#         42
+  C:08E5H         LINE#         43
+  C:08E7H         LINE#         44
+  C:08EAH         LINE#         44
+  C:08ECH         LINE#         45
+  C:08EFH         LINE#         56
+  C:08F2H         LINE#         57
+  C:08F5H         LINE#         58
+  C:08F8H         LINE#         59
+  C:08FBH         LINE#         61
+  C:08FCH         LINE#         72
+  C:08FFH         LINE#         73
+  C:0902H         LINE#         74
+  C:0905H         LINE#         75
+  C:0906H         LINE#         82
+  C:0909H         LINE#         83
+  C:090AH         LINE#         89
+  C:090CH         LINE#         91
+  C:090EH         LINE#         92
+  C:0910H         LINE#         93
+  C:0913H         LINE#         98
+  C:0915H         LINE#         111
+  C:0917H         LINE#         108
+  C:091AH         LINE#         113
+  C:091CH         LINE#         115
+  C:091DH         LINE#         116
+  C:091FH         LINE#         117
+  C:0921H         LINE#         118
+  C:0923H         LINE#         119
+  C:0926H         LINE#         121
+  C:0927H         LINE#         123
+  C:0929H         LINE#         124
+  C:092BH         LINE#         125
+  C:092EH         LINE#         125
+  C:0930H         LINE#         125
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/10/2018  14:44:03  PAGE 7
 
 
-  C:086AH         LINE#         125
-  C:086CH         LINE#         125
-  C:086FH         LINE#         126
-  C:0870H         LINE#         134
-  C:0873H         LINE#         135
-  C:0876H         LINE#         136
-  C:0879H         LINE#         137
-  C:087CH         LINE#         138
-  C:087FH         LINE#         139
-  C:0882H         LINE#         143
-  C:0884H         LINE#         144
-  C:0886H         LINE#         147
-  C:0889H         LINE#         147
-  C:088BH         LINE#         147
-  C:088EH         LINE#         148
-  C:088FH         LINE#         165
-  C:0892H         LINE#         166
-  C:0895H         LINE#         167
-  C:0898H         LINE#         168
-  C:089BH         LINE#         169
-  C:089EH         LINE#         170
-  C:08A1H         LINE#         173
-  C:08A4H         LINE#         173
-  C:08A6H         LINE#         173
-  C:08A9H         LINE#         176
-  C:08ACH         LINE#         177
-  C:08AFH         LINE#         178
-  C:08B2H         LINE#         179
-  C:08B5H         LINE#         180
-  C:08B8H         LINE#         181
-  C:08BBH         LINE#         184
+  C:0933H         LINE#         126
+  C:0934H         LINE#         134
+  C:0937H         LINE#         135
+  C:093AH         LINE#         136
+  C:093DH         LINE#         137
+  C:0940H         LINE#         138
+  C:0943H         LINE#         139
+  C:0946H         LINE#         143
+  C:0948H         LINE#         144
+  C:094AH         LINE#         147
+  C:094DH         LINE#         147
+  C:094FH         LINE#         147
+  C:0952H         LINE#         148
+  C:0953H         LINE#         165
+  C:0956H         LINE#         166
+  C:0959H         LINE#         167
+  C:095CH         LINE#         168
+  C:095FH         LINE#         169
+  C:0962H         LINE#         170
+  C:0965H         LINE#         173
+  C:0968H         LINE#         173
+  C:096AH         LINE#         173
+  C:096DH         LINE#         176
+  C:0970H         LINE#         177
+  C:0973H         LINE#         178
+  C:0976H         LINE#         179
+  C:0979H         LINE#         180
+  C:097CH         LINE#         181
+  C:097FH         LINE#         184
   -------         ENDMOD        HILSTRAPPER
 
   -------         MODULE        KMAIN
   C:0000H         SYMBOL        _ICE_DUMMY_
+  C:0AAFH         PUBLIC        main
+  C:0AB5H         PUBLIC        dummyCodePath
+  C:0A9CH         PUBLIC        _kmain
+  -------         PROC          MAIN
+  C:0AAFH         LINE#         26
+  C:0AAFH         LINE#         27
+  C:0AB2H         LINE#         29
+  -------         ENDPROC       MAIN
+  -------         PROC          _KMAIN
+  C:0A9CH         LINE#         32
+  C:0A9CH         LINE#         37
+  C:0AA5H         LINE#         38
+  -------         ENDPROC       _KMAIN
+  -------         PROC          DUMMYCODEPATH
+  C:0AB5H         LINE#         41
+  C:0AB5H         LINE#         42
+  C:0AB8H         LINE#         43
+  -------         ENDPROC       DUMMYCODEPATH
   -------         ENDMOD        KMAIN
 
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?DBUG_CMAIN?CFUNCTEST
+  -------         MODULE        KTHREADS
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:0A78H         PUBLIC        kthreads_isr
+  C:0ABBH         PUBLIC        enable_threads
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/10/2018  14:44:03  PAGE 8
 
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_INCREMENT?CFUNCTEST
 
-*** WARNING L10: CANNOT DETERMINE ROOT SEGMENT
+  C:0ABEH         PUBLIC        kthreads_compile_init
+  -------         PROC          ENABLE_THREADS
+  C:0ABBH         LINE#         21
+  C:0ABBH         LINE#         24
+  C:0ABDH         LINE#         25
+  -------         ENDPROC       ENABLE_THREADS
+  -------         PROC          KTHREADS_ISR
+  -------         DO            
+  D:0006H         SYMBOL        debug_filler
+  -------         ENDDO         
+  C:0A78H         LINE#         27
+  C:0A83H         LINE#         30
+  C:0A86H         LINE#         31
+  C:0A86H         LINE#         32
+  -------         ENDPROC       KTHREADS_ISR
+  -------         PROC          KTHREADS_COMPILE_INIT
+  C:0ABEH         LINE#         35
+  C:0ABEH         LINE#         38
+  -------         ENDPROC       KTHREADS_COMPILE_INIT
+  -------         ENDMOD        KTHREADS
 
-*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
-    SYMBOL:  _CMAIN
-    MODULE:  .\Objects\BootLoader.obj (BOOTLOADER)
+  -------         MODULE        REGISTERS
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0008H         PUBLIC        rsrv0
+  D:000BH         PUBLIC        ra0
+  D:000EH         PUBLIC        ra1
+  D:0011H         PUBLIC        a0
+  D:0014H         PUBLIC        a1
+  D:0017H         PUBLIC        a2
+  D:001AH         PUBLIC        a3
+  D:001DH         PUBLIC        a4
+  D:0020H         PUBLIC        rs0
+  D:0023H         PUBLIC        a5
+  D:0026H         PUBLIC        rs1
+  D:0029H         PUBLIC        a6
+  D:002CH         PUBLIC        rs2
+  D:002FH         PUBLIC        a7
+  D:0032H         PUBLIC        rs3
+  D:0035H         PUBLIC        rs4
+  D:0038H         PUBLIC        rs5
+  D:003BH         PUBLIC        t0
+  D:003EH         PUBLIC        t1
+  D:0041H         PUBLIC        t2
+  D:0044H         PUBLIC        t3
+  D:0047H         PUBLIC        acc
+  D:004AH         PUBLIC        t4
+  D:004DH         PUBLIC        bcc
+  D:0050H         PUBLIC        t5
+  D:0053H         PUBLIC        t6
+  D:0056H         PUBLIC        t7
+  D:0059H         PUBLIC        nic
+  D:005CH         PUBLIC        ntsd
+  D:005FH         PUBLIC        bte
+  D:0062H         PUBLIC        ntsm
+  D:0065H         PUBLIC        btm
+  D:0068H         PUBLIC        bts
+  D:006BH         PUBLIC        ltl
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/10/2018  14:44:03  PAGE 9
 
-*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
-    SYMBOL:  _CMAIN
-    MODULE:  .\Objects\BootLoader.obj (BOOTLOADER)
-    ADDRESS: 090BH
+
+  D:006EH         PUBLIC        msz
+  D:0071H         PUBLIC        psw
+  D:0074H         PUBLIC        ssz
+  D:0077H         PUBLIC        sp
+  D:007AH         PUBLIC        ss
+  -------         ENDMOD        REGISTERS
 
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 014EH BYTE (16%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0239H BYTE (27%) *
 ******************************************************************************
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  09/28/2018  14:29:29  PAGE 8
 
-
-
-Program Size: data=9.0 xdata=0 code=334
-LINK/LOCATE RUN COMPLETE.  5 WARNING(S),  0 ERROR(S)
+Program Size: data=126.0 xdata=0 code=713
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

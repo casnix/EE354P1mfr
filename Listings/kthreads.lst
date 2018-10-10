@@ -1,0 +1,63 @@
+C51 COMPILER V9.59.0.0   KTHREADS                                                          10/10/2018 14:44:03 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE KTHREADS
+OBJECT MODULE PLACED IN .\Objects\kthreads.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE kthreads.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -kthreads.lst) TABS(2) OBJECT(.\Objects\kthreads.obj)
+
+line level    source
+
+   1          // Matt Rienzo, kthreads.c 9/28/2018
+   2          // Last modified 10/10/2018
+   3          
+   4          #include "./include/c/Registers.h"
+   5          #include "./include/c/Types.h"
+   6          
+   7          //
+   8          // External references
+   9          
+  10          //
+  11          //
+  12          
+  13          //
+  14          // Function prototypes
+  15          void kthreads_isr(void);
+  16          byte enable_threads(void);
+  17          void kthreads_compile_init(void);
+  18          //
+  19          //
+  20          
+  21          byte enable_threads(void){
+  22   1        
+  23   1        // return false unless all conditions are true
+  24   1        return FALSE;
+  25   1      }
+  26          
+  27          void kthreads_isr(void) interrupt 0 {
+  28   1        unsigned int debug_filler;
+  29   1        
+  30   1        debug_filler = 0;
+  31   1        while(1)
+  32   1          debug_filler++;
+  33   1      }
+  34          
+  35          void kthreads_compile_init(void){ // Literally exists to satiate BL51's ruthless desire to make me unhappy
+  36   1        // Literall NO code path will lead to execution of this, but BL51 freaks if this isn't here.
+  37   1        
+  38   1        enable_threads();
+  39   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     27    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

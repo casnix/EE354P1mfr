@@ -189,6 +189,5 @@ __HIL_C_test:
 		; Order of operation:
 		ret
 #endif
-		
-		
+
 end

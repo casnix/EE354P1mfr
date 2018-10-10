@@ -3,6 +3,7 @@
 ; created : 17:04:29, Saturday, August 25, 2018
 ; ----------------------------------------------------- 
 ;-- Matt Rienzo, BootLoader.asm 8/25/2018
+
 #include "./include/asm/Registers.inc"
 #include "./include/asm/ShortStack.inc"
 #include "./include/asm/MacroLang.inc"
@@ -15,10 +16,6 @@ setup	segment	code
 boot	segment	code
 exit	segment	code
 memory	segment	code
-	
-org		0x0000
-	ljmp		__setup
-
 
 
 ;-- Segment definition
@@ -36,6 +33,10 @@ rseg	memory
         mov     a,      s7
 #endif
         add     a,      #0x01
+		mov		ssz,	a
+		mov		a,		#0x00
+		add		a,		ssz
+		
 #ifdef      DEBUG
         mov     s6,     msz
         subb    a,      s6
@@ -137,7 +138,7 @@ rseg	setup
 rseg	boot
 	extrn		code	(__HIL_init)
 	extrn		code	(__HAL_init)
-	extrn		code	(_Cmain)
+	extrn		code	(_kmain)
 	__entry:
 	; Do three things:	(1) tell the Hardware Interaction Layer to initialize
 	;					(2) tell the Hardware Abstration Layer to initialize
@@ -146,12 +147,12 @@ rseg	boot
 		sspop	acc
 		cjne	a,		#0x00,	__entry_HIL_error
 		
-		acall	__HAL_init
+		lcall	__HAL_init
 		sspop	acc
 		cjne	a,		#0x00,	__entry_HAL_error
 		
         mov     a,      #0xe4
-		acall	_Cmain
+		acall	_kmain
 		sspop	acc
 		cjne	a,		#0x00,	__entry_main_error
 		

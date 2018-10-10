@@ -1,0 +1,129 @@
+C51 COMPILER V9.59.0.0   REGISTERS                                                         10/10/2018 14:44:03 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE REGISTERS
+OBJECT MODULE PLACED IN .\Objects\Registers.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Registers.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings
+                    -\Registers.lst) TABS(2) OBJECT(.\Objects\Registers.obj)
+
+line level    source
+
+   1          // Matt Rienzo, Registers.c 9/28/2018
+   2          // Last modified 9/28/2018
+   3          
+   4          // Don't let the decimal numbers fool you.
+   5          //   These are absolute register addresses.
+   6          #define aa0 0
+   7          #define aa1 1
+   8          #define aa2 2
+   9          #define aa3 3
+  10          #define aa4 4
+  11          #define aa5 5
+  12          #define aa6 6
+  13          #define aa7 7
+  14          #define ab0 8
+  15          #define ab1 9
+  16          #define ab2 10
+  17          #define ab3 11
+  18          #define ab4 12
+  19          #define ab5 13
+  20          #define ab6 14
+  21          #define ab7 15
+  22          #define ac0 16
+  23          #define ac1 17
+  24          #define ac2 18
+  25          #define ac3 19
+  26          #define ac4 20
+  27          #define ac5 21
+  28          #define ac6 22
+  29          #define ac7 23
+  30          
+  31          //-- SFRs
+  32          #define aacc  0xe0
+  33          #define apsw  0xd0
+  34          #define abcc  0xf0
+  35          
+  36          //-- Special SFRs (lol)
+  37          #define as0 0x18
+  38          #define as1 0x19
+  39          #define as2 0x1a
+  40          #define as3 0x1b
+  41          #define as4 0x1c
+  42          #define as5 0x1d
+  43          #define as6 0x1e
+  44          #define as7 0x1f
+  45          
+  46          // Short stack address "register" and short stack size "register"
+  47          #define ass 0x20
+  48          #define assz  0x21
+  49          #define amsz  0x22
+  50          
+  51          #define asp  0x81
+  52          
+  53          
+  54          // Thread available registers
+C51 COMPILER V9.59.0.0   REGISTERS                                                         10/10/2018 14:44:03 PAGE 2   
+
+  55          unsigned char* a0 = (unsigned char*)aa0;
+  56          unsigned char* a1 = (unsigned char*)aa1;
+  57          unsigned char* a2 = (unsigned char*)aa2;
+  58          unsigned char* a3 = (unsigned char*)aa3;
+  59          unsigned char* a4 = (unsigned char*)aa4;
+  60          unsigned char* a5 = (unsigned char*)aa5;
+  61          unsigned char* a6 = (unsigned char*)aa6;
+  62          unsigned char* a7 = (unsigned char*)aa7;
+  63          
+  64          // Thread descriptor registers
+  65          unsigned char* t0 = (unsigned char*)ab0;
+  66          unsigned char* t1 = (unsigned char*)ab1;
+  67          unsigned char* t2 = (unsigned char*)ab2;
+  68          unsigned char* t3 = (unsigned char*)ab3;
+  69          unsigned char* t4 = (unsigned char*)ab4;
+  70          unsigned char* t5 = (unsigned char*)ab5;
+  71          unsigned char* t6 = (unsigned char*)ab6;
+  72          unsigned char* t7 = (unsigned char*)ab7;
+  73          
+  74          // R51 (Rienzo's 8051) asynchronous software thread engine state registers
+  75          unsigned char* ra0 = (unsigned char*)ac0;
+  76          unsigned char* ra1 = (unsigned char*)ac1;
+  77          unsigned char* bte = (unsigned char*)ac2;
+  78          unsigned char* btm = (unsigned char*)ac3;
+  79          unsigned char* rsrv0 = (unsigned char*)ac4;
+  80          unsigned char* ltl = (unsigned char*)ac5;
+  81          unsigned char* bts = (unsigned char*)ac6;
+  82          unsigned char* ntsd = (unsigned char*)ac7;
+  83          unsigned char* ntsm = (unsigned char*)as0;
+  84          unsigned char* nic = (unsigned char*)as1;
+  85          unsigned char* rs0 = (unsigned char*)as2;
+  86          unsigned char* rs1 = (unsigned char*)as3;
+  87          unsigned char* rs2 = (unsigned char*)as4;
+  88          unsigned char* rs3 = (unsigned char*)as5;
+  89          unsigned char* rs4 = (unsigned char*)as6;
+  90          unsigned char* rs5 = (unsigned char*)as7;
+  91          
+  92          // SFRs
+  93          unsigned char* acc = (unsigned char*)aacc;
+  94          unsigned char* psw = (unsigned char*)apsw;
+  95          unsigned char* bcc = (unsigned char*)abcc;
+  96          
+  97          // Short stack regs
+  98          unsigned char* ss = (unsigned char*)ass;
+  99          unsigned char* ssz = (unsigned char*)assz;
+ 100          unsigned char* msz = (unsigned char*)amsz;
+ 101          
+ 102          // Stack pointer
+ 103          unsigned char* sp = (unsigned char*)asp;
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =    117    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
