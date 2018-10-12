@@ -32,6 +32,8 @@ void main(){
 void _kmain(){
 	// Set up 
 	
+	// ensure that threading is disabled
+	*bte = FALSE;
 	
 	// THis is just filler for one debug
 	sp = 0x30;

@@ -6,8 +6,11 @@
 
 #define	TRUE	0xFF
 #define FALSE	0x00
+#define	NULL16	0x0000
+#define	NULL8		FALSE
 
 typedef unsigned char byte;
 typedef unsigned int dbyte;
+typedef unsigned char boolean;
 
 #endif // __TYPES_H__

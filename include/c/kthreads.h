@@ -8,5 +8,5 @@
 
 extern byte enable_threads(void);
 extern void kthreads_compile_init(void);
-
+extern boolean decodeThreadPriority(byte);
 #endif // __KTHREADS_H__

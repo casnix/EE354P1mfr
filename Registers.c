@@ -32,6 +32,7 @@
 #define aacc	0xe0
 #define apsw	0xd0
 #define abcc	0xf0
+#define asp  0x81
 
 //-- Special SFRs (lol)
 #define as0	0x18
@@ -48,10 +49,8 @@
 #define assz	0x21
 #define amsz	0x22
 
-#define asp  0x81
-
-
 // Thread available registers
+// bank 0
 unsigned char* a0 = (unsigned char*)aa0;
 unsigned char* a1 = (unsigned char*)aa1;
 unsigned char* a2 = (unsigned char*)aa2;
@@ -62,32 +61,35 @@ unsigned char* a6 = (unsigned char*)aa6;
 unsigned char* a7 = (unsigned char*)aa7;
 
 // Thread descriptor registers
-unsigned char* t0 = (unsigned char*)ab0;
-unsigned char* t1 = (unsigned char*)ab1;
-unsigned char* t2 = (unsigned char*)ab2;
-unsigned char* t3 = (unsigned char*)ab3;
-unsigned char* t4 = (unsigned char*)ab4;
-unsigned char* t5 = (unsigned char*)ab5;
-unsigned char* t6 = (unsigned char*)ab6;
-unsigned char* t7 = (unsigned char*)ab7;
+// bank 1
+unsigned char* trid = (unsigned char*)ab0;
+unsigned char* trps = (unsigned char*)ab1;
+unsigned char* trml = (unsigned char*)ab2;
+unsigned char* tseg = (unsigned char*)ab3;
+unsigned char* trpp = (unsigned char*)ab4;
+unsigned char* tsup = (unsigned char*)ab5;
+unsigned char* trms = (unsigned char*)ab6;
+unsigned char* trsv = (unsigned char*)ab7;
 
 // R51 (Rienzo's 8051) asynchronous software thread engine state registers
+// bank 2
 unsigned char* ra0 = (unsigned char*)ac0;
 unsigned char* ra1 = (unsigned char*)ac1;
 unsigned char* bte = (unsigned char*)ac2;
 unsigned char* btm = (unsigned char*)ac3;
-unsigned char* rsrv0 = (unsigned char*)ac4;
-unsigned char* ltl = (unsigned char*)ac5;
-unsigned char* bts = (unsigned char*)ac6;
-unsigned char* ntsd = (unsigned char*)ac7;
-unsigned char* ntsm = (unsigned char*)as0;
-unsigned char* nic = (unsigned char*)as1;
-unsigned char* rs0 = (unsigned char*)as2;
-unsigned char* rs1 = (unsigned char*)as3;
-unsigned char* rs2 = (unsigned char*)as4;
-unsigned char* rs3 = (unsigned char*)as5;
-unsigned char* rs4 = (unsigned char*)as6;
-unsigned char* rs5 = (unsigned char*)as7;
+unsigned char* nic = (unsigned char*)ac4;
+unsigned char* bts = (unsigned char*)ac5;
+unsigned char* ntsd = (unsigned char*)ac6;
+unsigned char* ntsm = (unsigned char*)ac7;
+// bank 3
+unsigned char* rs0 = (unsigned char*)as0;
+unsigned char* rs1 = (unsigned char*)as1;
+unsigned char* rs2 = (unsigned char*)as2;
+unsigned char* rs3 = (unsigned char*)as3;
+unsigned char* rs4 = (unsigned char*)as4;
+unsigned char* rs5 = (unsigned char*)as5;
+unsigned char* rs6 = (unsigned char*)as6;
+unsigned char* rs7 = (unsigned char*)as7;
 
 // SFRs
 unsigned char* acc = (unsigned char*)aacc;

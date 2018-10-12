@@ -65,22 +65,20 @@ extern unsigned char* a6;
 extern unsigned char* a7;
 
 // Thread descriptor registers
-extern unsigned char* t0;
-extern unsigned char* t1;
-extern unsigned char* t2;
-extern unsigned char* t3;
-extern unsigned char* t4;
-extern unsigned char* t5;
-extern unsigned char* t6;
-extern unsigned char* t7;
+extern unsigned char* trid;
+extern unsigned char* trps;
+extern unsigned char* trml;
+extern unsigned char* tseg;
+extern unsigned char* trpp;
+extern unsigned char* tsup;
+extern unsigned char* trms;
+extern unsigned char* trsv;
 
 // R51 (Rienzo's 8051) asynchronous software thread engine state registers
 extern unsigned char* ra0;
 extern unsigned char* ra1;
 extern unsigned char* bte;
 extern unsigned char* btm;
-extern unsigned char* rsrv0;
-extern unsigned char* ltl;
 extern unsigned char* bts;
 extern unsigned char* ntsd;
 extern unsigned char* ntsm;
@@ -91,6 +89,8 @@ extern unsigned char* rs2;
 extern unsigned char* rs3;
 extern unsigned char* rs4;
 extern unsigned char* rs5;
+extern unsigned char* rs6;
+extern unsigned char* rs7;
 
 // SFRs
 extern unsigned char* acc;
