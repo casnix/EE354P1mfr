@@ -8,9 +8,10 @@
 #define FALSE	0x00
 #define	NULL16	0x0000
 #define	NULL8		FALSE
+#define	NULLBYTE	0x00
 
 typedef unsigned char byte;
 typedef unsigned int dbyte;
 typedef unsigned char boolean;
 
-#endif // __TYPES_H__
+#endif //__TYPES_H__

@@ -105,4 +105,4 @@ extern unsigned char* msz;
 // Stack pointer
 extern unsigned char* sp;
 
-#endif // __REGISTERS_H__
+#endif //__REGISTERS_H__

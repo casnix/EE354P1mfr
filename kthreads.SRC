@@ -1,0 +1,483 @@
+; kthreads.SRC generated from: kthreads.c
+; COMPILER INVOKED BY:
+;        C:\Keil_v5\C51\BIN\C51.EXE kthreads.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\kthreads.lst) TABS(2) OBJECT(.\Objects\kthreads.obj)
+
+
+NAME	KTHREADS
+
+?PR?enable_threads?KTHREADS              SEGMENT CODE 
+?PR?kthreads_isr?KTHREADS                SEGMENT CODE 
+?DT?kthreads_isr?KTHREADS                SEGMENT DATA OVERLAYABLE 
+?PR?_decodeThreadPriority?KTHREADS       SEGMENT CODE 
+?PR?kthreads_compile_init?KTHREADS       SEGMENT CODE 
+	EXTRN	DATA (tseg)
+	EXTRN	DATA (trid)
+	EXTRN	DATA (nic)
+	EXTRN	DATA (ntsd)
+	EXTRN	DATA (bte)
+	EXTRN	DATA (bts)
+	EXTRN	DATA (tsup)
+	EXTRN	DATA (trsv)
+	EXTRN	CODE (?C?CLDPTR)
+	EXTRN	CODE (?C?CSTPTR)
+	EXTRN	CODE (?C?CILDPTR)
+	PUBLIC	intCount
+	PUBLIC	threadmap
+	PUBLIC	topThread
+	PUBLIC	kthreads_compile_init
+	PUBLIC	_decodeThreadPriority
+	PUBLIC	kthreads_isr
+	PUBLIC	enable_threads
+
+	XSEG  AT  07FBH
+      topThread:   DS   1
+
+	XSEG  AT  07F8H
+      threadmap:   DS   2
+
+	XSEG  AT  07FAH
+       intCount:   DS   1
+
+	RSEG  ?DT?kthreads_isr?KTHREADS
+?kthreads_isr?BYTE:
+tsegFromERAM?142:   DS   1
+	ORG  1
+threadInQeue?143:   DS   1
+; // Matt Rienzo, kthreads.c 9/28/2018
+; // Last modified 10/14/2018
+; 
+; #pragma SRC
+; 
+; #include "./include/c/Registers.h"
+; #include "./include/c/Types.h"
+; #include "./include/c/ThreadStates.h"
+; 
+; //
+; // External references
+; 
+; //
+; //
+; 
+; //
+; // Function prototypes
+; void kthreads_isr(void);
+; byte enable_threads(void);
+; void kthreads_compile_init(void);
+; byte decodeThreadPriority(byte*);
+; //
+; //
+; 
+; //
+; // Global variables -- fit in the last 8 bytes of ERAM (2 + 1 + 1 + ? ) = 
+; unsigned int xdata threadmap _at_ (204*10); //TODO: Store this in ERAM, two bytes at 204*10
+; byte xdata intCount _at_ (204*10+2); //TODO: Store this in ERAM, one byte at 204*10+2
+; byte xdata topThread _at_ (204*10+3); //TODO: Store this in ERAM, one byte at 204*10+3
+; //
+; //
+; 
+; byte enable_threads(void){
+
+	RSEG  ?PR?enable_threads?KTHREADS
+enable_threads:
+	USING	0
+			; SOURCE LINE # 33
+; 	// return false unless all set up conditions are true
+; 	return FALSE;
+			; SOURCE LINE # 35
+	MOV  	R7,#00H
+; 	
+; 	// If we pass our test, flip BTE on and return true
+; 	*bte = TRUE;
+			; SOURCE LINE # 38
+; 	return TRUE;
+			; SOURCE LINE # 39
+; }
+			; SOURCE LINE # 40
+	RET  	
+; END OF enable_threads
+
+CSEG	AT	0002BH
+	LJMP	kthreads_isr
+
+; 
+; void kthreads_isr(void) interrupt 5 using 3 { // Will use TIMER2
+
+	RSEG  ?PR?kthreads_isr?KTHREADS
+	USING	3
+kthreads_isr:
+	PUSH 	ACC
+	PUSH 	B
+	PUSH 	DPH
+	PUSH 	DPL
+	PUSH 	PSW
+	USING	3
+	MOV  	PSW,#018H
+			; SOURCE LINE # 42
+; 	byte desiredThreadWaitLo;
+; 	byte desiredThreadWaitHi;
+; 	byte tsegFromERAM;
+; 	byte threadInQeue = NULLBYTE;
+			; SOURCE LINE # 46
+	MOV  	threadInQeue?143,#00H
+; 	
+; 	// 1) Check if threading is even enabled
+; 	if(*bte == FALSE) // Threads aren't enabled, so we shouldn't do anything
+			; SOURCE LINE # 49
+	MOV  	R3,bte
+	MOV  	R2,bte+01H
+	MOV  	R1,bte+02H
+	LCALL	?C?CLDPTR
+	JNZ  	$ + 5H
+	LJMP 	?C0003
+; 		return; 
+; 	
+; 	// 2) Check if our current thread is done with it's work
+; 	if(*tseg == TR_FINISH){
+			; SOURCE LINE # 53
+; 		// unmalloc the space in TRID->malloc in ERAM, freeing the space in EEPROM
+; 		// update threadmap string
+; 	}
+			; SOURCE LINE # 56
+; 	
+; 	// 3) Check for thread signals
+; 	if((*bts == TRUE) && (*ntsd == *trid)){ // Is it the current thread?
+			; SOURCE LINE # 59
+; 		// Read signal, determine what to do with it
+; 	}
+			; SOURCE LINE # 61
+; 	
+; 	// 4) Check for priority change
+; 	if(*tsup == TRUE){
+			; SOURCE LINE # 64
+	MOV  	R3,tsup
+	MOV  	R2,tsup+01H
+	MOV  	R1,tsup+02H
+	LCALL	?C?CLDPTR
+	CPL  	A
+	JNZ  	?C0006
+; 		// Reset TSUP
+; 		*tsup = FALSE;
+			; SOURCE LINE # 66
+	LCALL	?C?CSTPTR
+; 		// The thread sets TSEG on it's own, so we'll compare against interrupt count in step five
+; 	}
+			; SOURCE LINE # 68
+?C0006:
+; 	
+; 	// 5) Check interrupt counter against thread priority
+; 	// These are more magic numbers:
+; 	//		Hold priority is the highest, and gets all the thread power until a priority change
+; 	//		High priority gives a thread 15 timer counts
+; 	//		Normal priority gives a thread 10 timer counts
+; 	//		Low priority gives a thread 5 timer counts
+; 	//		Wait priority makes the thread wait until the thread number in TRSV finishes
+; 	//		WaitHi priority makes the thread wait until the threads in the MSB of threadmap are finished, as defined by TRSV
+; 	intCount = decodeThreadPriority(tseg);
+			; SOURCE LINE # 78
+	MOV  	R3,tseg
+	MOV  	R2,tseg+01H
+	MOV  	R1,tseg+02H
+	LCALL	_decodeThreadPriority
+	MOV  	DPTR,#intCount
+	MOV  	A,R7
+	MOVX 	@DPTR,A
+; 	if((*tseg == TSEG_HOLD)){// Do nothing and just exit
+			; SOURCE LINE # 79
+	MOV  	R3,tseg
+	MOV  	R2,tseg+01H
+	MOV  	R1,tseg+02H
+	LCALL	?C?CLDPTR
+	MOV  	R7,A
+	XRL  	A,#0EEH
+	JNZ  	$ + 5H
+	LJMP 	?C0003
+; 		return;
+; 	}else if((*tseg == TSEG_HIGH) && (*nic < intCount)){// We aren't quite at 15 ticks
+			; SOURCE LINE # 81
+	MOV  	A,R7
+	CPL  	A
+	JNZ  	?C0009
+	MOV  	R3,nic
+	MOV  	R2,nic+01H
+	MOV  	R1,nic+02H
+	LCALL	?C?CLDPTR
+	MOV  	R7,A
+	MOV  	DPTR,#intCount
+	MOVX 	A,@DPTR
+	MOV  	R6,A
+	MOV  	A,R7
+	CLR  	C
+	SUBB 	A,R6
+	JNC  	?C0009
+; 		*nic = (*nic) + 0x01;
+			; SOURCE LINE # 82
+	SJMP 	?C0028
+; 		return;
+; 	}else if((*tseg == TSEG_NORMAL) && (*nic < intCount)){// We aren't quite at 10 ticks
+			; SOURCE LINE # 84
+?C0009:
+	MOV  	R3,tseg
+	MOV  	R2,tseg+01H
+	MOV  	R1,tseg+02H
+	LCALL	?C?CLDPTR
+	XRL  	A,#0CCH
+	JNZ  	?C0011
+	MOV  	R3,nic
+	MOV  	R2,nic+01H
+	MOV  	R1,nic+02H
+	LCALL	?C?CLDPTR
+	MOV  	R7,A
+	MOV  	DPTR,#intCount
+	MOVX 	A,@DPTR
+	MOV  	R6,A
+	MOV  	A,R7
+	CLR  	C
+	SUBB 	A,R6
+	JNC  	?C0011
+; 		*nic = (*nic) + 0x01;
+			; SOURCE LINE # 85
+?C0027:
+	SJMP 	?C0028
+; 		return;
+; 	}else if((*tseg == TSEG_LOW) && (*nic < intCount)){// We aren't quite at 5 ticks
+			; SOURCE LINE # 87
+?C0011:
+	MOV  	R3,tseg
+	MOV  	R2,tseg+01H
+	MOV  	R1,tseg+02H
+	LCALL	?C?CLDPTR
+	XRL  	A,#0BBH
+	JNZ  	?C0008
+	MOV  	R3,nic
+	MOV  	R2,nic+01H
+	MOV  	R1,nic+02H
+	LCALL	?C?CLDPTR
+	MOV  	R7,A
+	MOV  	DPTR,#intCount
+	MOVX 	A,@DPTR
+	MOV  	R6,A
+	MOV  	A,R7
+	CLR  	C
+	SUBB 	A,R6
+	JNC  	?C0008
+; 		*nic = (*nic) + 0x01;
+			; SOURCE LINE # 88
+?C0028:
+	MOV  	A,#01H
+	LCALL	?C?CILDPTR
+	SJMP 	?C0003
+; 		return;
+; 	}
+			; SOURCE LINE # 90
+?C0008:
+; 	
+; 	// 6) If we passed step five, we should switch to the next thread
+; 	desiredThreadWaitLo = ((unsigned char)threadmap) & *trsv;
+			; SOURCE LINE # 93
+	MOV  	R3,trsv
+	MOV  	R2,trsv+01H
+	MOV  	R1,trsv+02H
+	LCALL	?C?CLDPTR
+	MOV  	R5,A
+	MOV  	DPTR,#threadmap
+	INC  	DPTR
+	MOVX 	A,@DPTR
+	ANL  	A,R5
+;---- Variable 'desiredThreadWaitLo?140' assigned to Register 'R4' ----
+	MOV  	R4,A
+; 	desiredThreadWaitHi = ((unsigned char)(threadmap >> 8)) & *trsv;
+			; SOURCE LINE # 94
+	MOV  	DPTR,#threadmap
+	MOVX 	A,@DPTR
+	ANL  	A,R5
+	MOV  	R7,A
+;---- Variable 'desiredThreadWaitHi?141' assigned to Register 'R7' ----
+; 	
+; 	// The thread IN qeue is the thread after the thread AT qeue
+; 	if(*trid == topThread){// We're at the top of our qeue, so let's wrap around (like a thread stack.  cool, huh?)
+			; SOURCE LINE # 97
+	MOV  	R3,trid
+	MOV  	R2,trid+01H
+	MOV  	R1,trid+02H
+	LCALL	?C?CLDPTR
+	MOV  	R6,A
+	MOV  	DPTR,#topThread
+	MOVX 	A,@DPTR
+	CJNE 	A,AR6,?C0014
+; 		threadInQeue = NULLBYTE;
+			; SOURCE LINE # 98
+	MOV  	threadInQeue?143,#00H
+; 	}else{
+			; SOURCE LINE # 99
+	SJMP 	?C0015
+?C0014:
+; 		threadInQeue = *trid + 0x01;
+			; SOURCE LINE # 100
+	MOV  	A,R6
+	INC  	A
+	MOV  	threadInQeue?143,A
+; 	}
+			; SOURCE LINE # 101
+?C0015:
+; 	
+; 	// Make sure that the current thread ID is not the next one too (in case of one thread, or other threads waiting)
+; 	if(threadInQeue == *trid){
+			; SOURCE LINE # 104
+	MOV  	A,threadInQeue?143
+	CJNE 	A,AR6,?C0016
+; 		// Do nothing but reset NIC.  It's possible that this thread will spawn another at some point, or a waiting thread will activate
+; 		*nic = NULLBYTE;
+			; SOURCE LINE # 106
+	MOV  	R3,nic
+	MOV  	R2,nic+01H
+	MOV  	R1,nic+02H
+	CLR  	A
+	LCALL	?C?CSTPTR
+	SJMP 	?C0003
+; 		return;
+; 	}
+			; SOURCE LINE # 108
+?C0016:
+; 	
+; 	// Grab TSEG from the next thread's state memory in ERAM
+; 	if((tsegFromERAM == TSEG_WAIT) && (desiredThreadWaitLo != *trsv)){// We have not reached our desired state
+			; SOURCE LINE # 111
+	MOV  	A,tsegFromERAM?142
+	XRL  	A,#0AAH
+	JNZ  	?C0017
+	MOV  	R3,trsv
+	MOV  	R2,trsv+01H
+	MOV  	R1,trsv+02H
+	LCALL	?C?CLDPTR
+	XRL  	A,R4
+	JZ   	?C0017
+; 		// Skip this thread, and go to the next
+; 		threadInQeue++;
+			; SOURCE LINE # 113
+	INC  	threadInQeue?143
+; 	}else if((tsegFromERAM == TSEG_WAITHI) && (desiredThreadWaitHi != *trsv)){// We have not reached our desired state
+			; SOURCE LINE # 114
+	SJMP 	?C0018
+?C0017:
+	MOV  	A,tsegFromERAM?142
+	XRL  	A,#0DDH
+	JNZ  	?C0018
+	MOV  	R3,trsv
+	MOV  	R2,trsv+01H
+	MOV  	R1,trsv+02H
+	LCALL	?C?CLDPTR
+	XRL  	A,R7
+	JZ   	?C0018
+; 		// Skip this thread, and go to the next
+; 		threadInQeue++;
+			; SOURCE LINE # 116
+	INC  	threadInQeue?143
+; 	}
+			; SOURCE LINE # 117
+?C0018:
+; 	
+; 	// Pop the return address off the stack
+; #pragma ASM
+; 	pop #0x10	; -- ra0
+	  pop #0x10	; -- ra0
+; 	pop #0x11 ; -- ra1
+	  pop #0x11 ; -- ra1
+; #pragma ENDASM
+; 	
+; 	//1-- Copy the current stack into the current thread's memory page.
+; 	//2-- Copy the current short stack into the current thread's memory page
+; 	//3-- Move the return address into the current thread's program counter in memory page
+; 	//4-- Move the current thread's register bank 1 into the current thread's memory page
+; 	//5-- Move the current thread's thread descriptors into the current thread's memory page
+; 	//6-- Leave the current thread's malloc map alone -- it's already in the current thread's memory page
+; 	
+; 	//1-- Move the next thread's thread descriptors from page to the current thread's descriptors
+; 	//2-- Move the next thread's register bank 1 from page into the current thread's register bank 1
+; 	//3-- Move the next thread's program counter from page into RA0 and RA1
+; 	//4-- Move the next thread's short stack from page into the current thread's short stack
+; 	//5-- Move the next thread's stack from page into the current thread's stack
+; 	//6-- Push RA0 and RA1 onto the stack
+; #pragma ASM
+; 	push #0x11 ; -- ra1
+	  push #0x11 ; -- ra1
+; 	push #0x10 ; -- ra0
+	  push #0x10 ; -- ra0
+; #pragma ENDASM
+; }
+			; SOURCE LINE # 142
+?C0003:
+	POP  	PSW
+	POP  	DPL
+	POP  	DPH
+	POP  	B
+	POP  	ACC
+	RETI 	
+; END OF kthreads_isr
+
+; 
+; byte decodeThreadPriority(byte *thread_priority){
+
+	RSEG  ?PR?_decodeThreadPriority?KTHREADS
+_decodeThreadPriority:
+	USING	0
+			; SOURCE LINE # 144
+;---- Variable 'thread_priority?244' assigned to Register 'R1/R2/R3' ----
+; 	if(*thread_priority == TSEG_HIGH)
+			; SOURCE LINE # 145
+	LCALL	?C?CLDPTR
+	MOV  	R5,A
+	MOV  	R4,#00H
+	CPL  	A
+	JNZ  	?C0020
+; 		return 0x0F;
+			; SOURCE LINE # 146
+	MOV  	R7,#0FH
+	RET  	
+?C0020:
+; 	else if(*thread_priority == TSEG_NORMAL)
+			; SOURCE LINE # 147
+	MOV  	A,R5
+	XRL  	A,#0CCH
+	ORL  	A,R4
+	JNZ  	?C0023
+; 		return 0x0A;
+			; SOURCE LINE # 148
+	MOV  	R7,#0AH
+	RET  	
+?C0023:
+; 	else if(*thread_priority == TSEG_LOW)
+			; SOURCE LINE # 149
+	LCALL	?C?CLDPTR
+	XRL  	A,#0BBH
+	JNZ  	?C0022
+; 		return 0x05;
+			; SOURCE LINE # 150
+	MOV  	R7,#05H
+	RET  	
+?C0022:
+; 	
+; 	return 0x00;
+			; SOURCE LINE # 152
+	MOV  	R7,#00H
+; }
+			; SOURCE LINE # 153
+?C0021:
+	RET  	
+; END OF _decodeThreadPriority
+
+; 
+; ///--- Keep at bottom of file.
+; void kthreads_compile_init(void){ // Literally exists to satiate BL51's ruthless desire to make me unhappy
+
+	RSEG  ?PR?kthreads_compile_init?KTHREADS
+kthreads_compile_init:
+	USING	0
+			; SOURCE LINE # 156
+; 	// Literally NO code path will lead to execution of this, but BL51 freaks if this isn't here.
+; 	
+; 	enable_threads();
+			; SOURCE LINE # 159
+	LJMP 	enable_threads
+; END OF kthreads_compile_init
+
+	END

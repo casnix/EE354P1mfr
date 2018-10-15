@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    10/10/2018  14:44:03  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    10/14/2018  21:16:36  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
@@ -18,6 +18,7 @@ INPUT MODULES INCLUDED:
   .\Objects\kthreads.obj (KTHREADS)
   .\Objects\Registers.obj (REGISTERS)
   C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?CSTPTR)
   C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
 
 
@@ -42,14 +43,15 @@ LINK MAP OF MODULE:  .\Objects\xBootStrapper (BOOTLOADER)
             CODE    0A0CH     003FH     UNIT         MEMORY
             CODE    0A4BH     002DH     UNIT         BOOT
             CODE    0A78H     0015H     UNIT         ?PR?KTHREADS_ISR?KTHREADS
-            CODE    0A8DH     000FH     UNIT         SETUP
-            CODE    0A9CH     000AH     UNIT         ?PR?_KMAIN?KMAIN
-            CODE    0AA6H     0009H     UNIT         HAL
-            CODE    0AAFH     0006H     UNIT         ?PR?MAIN?KMAIN
-            CODE    0AB5H     0006H     UNIT         ?PR?DUMMYCODEPATH?KMAIN
-            CODE    0ABBH     0003H     UNIT         ?PR?ENABLE_THREADS?KTHREADS
-            CODE    0ABEH     0003H     UNIT         ?PR?KTHREADS_COMPILE_INIT?KTHREADS
-            CODE    0AC1H     0002H     UNIT         EXIT
+            CODE    0A8DH     0012H     UNIT         ?PR?KMAIN?KMAIN
+            CODE    0A9FH     0012H     UNIT         ?C?LIB_CODE
+            CODE    0AB1H     000FH     UNIT         SETUP
+            CODE    0AC0H     0009H     UNIT         HAL
+            CODE    0AC9H     0006H     UNIT         ?PR?MAIN?KMAIN
+            CODE    0ACFH     0006H     UNIT         ?PR?DUMMYCODEPATH?KMAIN
+            CODE    0AD5H     0003H     UNIT         ?PR?ENABLE_THREADS?KTHREADS
+            CODE    0AD8H     0003H     UNIT         ?PR?KTHREADS_COMPILE_INIT?KTHREADS
+            CODE    0ADBH     0002H     UNIT         EXIT
 
 
 
@@ -57,11 +59,11 @@ OVERLAY MAP OF MODULE:   .\Objects\xBootStrapper (BOOTLOADER)
 
 
 SEGMENT
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/14/2018  21:16:36  PAGE 2
+
+
   +--> CALLED SEGMENT
 ---------------------
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/10/2018  14:44:03  PAGE 2
-
-
 ?C_C51STARTUP
   +--> ?PR?MAIN?KMAIN
   +--> ?C_INITSEG
@@ -70,7 +72,7 @@ SEGMENT
   +--> ?PR?DUMMYCODEPATH?KMAIN
 
 ?PR?DUMMYCODEPATH?KMAIN
-  +--> ?PR?_KMAIN?KMAIN
+  +--> ?PR?KMAIN?KMAIN
   +--> ?PR?KTHREADS_COMPILE_INIT?KTHREADS
 
 ?PR?KTHREADS_COMPILE_INIT?KTHREADS
@@ -84,11 +86,11 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (BOOTLOADER)
   ----------------------------------
 
   -------         MODULE        BOOTLOADER
-  C:0A8DH         SEGMENT       SETUP
+  C:0AB1H         SEGMENT       SETUP
   C:0A4BH         SEGMENT       BOOT
-  C:0AC1H         SEGMENT       EXIT
+  C:0ADBH         SEGMENT       EXIT
   C:0A0CH         SEGMENT       MEMORY
-  C:0A8DH         PUBLIC        __SETUP
+  C:0AB1H         PUBLIC        __SETUP
   C:0A30H         PUBLIC        __SSPOP
   C:0A0CH         PUBLIC        __SSPUSH
   N:0000H         SYMBOL        A0
@@ -117,11 +119,11 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (BOOTLOADER)
   N:0015H         SYMBOL        C5
   N:0016H         SYMBOL        C6
   N:0017H         SYMBOL        C7
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/14/2018  21:16:36  PAGE 3
+
+
   N:0022H         SYMBOL        MSZ
   N:0018H         SYMBOL        S0
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/10/2018  14:44:03  PAGE 3
-
-
   N:0019H         SYMBOL        S1
   N:001AH         SYMBOL        S2
   N:001BH         SYMBOL        S3
@@ -136,7 +138,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (BOOTLOADER)
   C:0A72H         SYMBOL        __ENTRY_HAL_ERROR
   C:0A6FH         SYMBOL        __ENTRY_HIL_ERROR
   C:0A75H         SYMBOL        __ENTRY_MAIN_ERROR
-  C:0AC1H         SYMBOL        __SHUTDOWN
+  C:0ADBH         SYMBOL        __SHUTDOWN
   C:0A44H         SYMBOL        __SSPOP_CONTINUE
   C:0A1EH         SYMBOL        __SSPUSH_CONTINUE
   C:0A0CH         LINE#         29
@@ -171,17 +173,17 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (BOOTLOADER)
   C:0A46H         LINE#         114
   C:0A48H         LINE#         115
   C:0A4AH         LINE#         116
-  C:0A8DH         LINE#         124
-  C:0A90H         LINE#         125
-  C:0A93H         LINE#         126
-  C:0A96H         LINE#         131
-  C:0A99H         LINE#         134
+  C:0AB1H         LINE#         124
+  C:0AB4H         LINE#         125
+  C:0AB7H         LINE#         126
+  C:0ABAH         LINE#         131
+  C:0ABDH         LINE#         134
   C:0A4BH         LINE#         146
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/14/2018  21:16:36  PAGE 4
+
+
   C:0A4DH         LINE#         147
   C:0A50H         LINE#         147
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/10/2018  14:44:03  PAGE 4
-
-
   C:0A52H         LINE#         148
   C:0A55H         LINE#         150
   C:0A58H         LINE#         151
@@ -196,12 +198,12 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (BOOTLOADER)
   C:0A6FH         LINE#         162
   C:0A72H         LINE#         164
   C:0A75H         LINE#         166
-  C:0AC1H         LINE#         172
+  C:0ADBH         LINE#         172
   -------         ENDMOD        BOOTLOADER
 
   -------         MODULE        HALSTRAPPER
-  C:0AA6H         SEGMENT       HAL
-  C:0AA6H         PUBLIC        __HAL_INIT
+  C:0AC0H         SEGMENT       HAL
+  C:0AC0H         PUBLIC        __HAL_INIT
   N:0000H         SYMBOL        A0
   N:0001H         SYMBOL        A1
   N:0002H         SYMBOL        A2
@@ -237,14 +239,14 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (BOOTLOADER)
   N:001EH         SYMBOL        S6
   N:001FH         SYMBOL        S7
   N:0020H         SYMBOL        SS
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/14/2018  21:16:36  PAGE 5
+
+
   N:0021H         SYMBOL        SSZ
-  C:0AA6H         LINE#         22
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/10/2018  14:44:03  PAGE 5
-
-
-  C:0AA9H         LINE#         22
-  C:0AABH         LINE#         22
-  C:0AAEH         LINE#         23
+  C:0AC0H         LINE#         22
+  C:0AC3H         LINE#         22
+  C:0AC5H         LINE#         22
+  C:0AC8H         LINE#         23
   -------         ENDMOD        HALSTRAPPER
 
   -------         MODULE        HILSTRAPPER
@@ -297,11 +299,11 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (BOOTLOADER)
   N:001AH         SYMBOL        S2
   N:001BH         SYMBOL        S3
   N:001CH         SYMBOL        S4
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/14/2018  21:16:36  PAGE 6
+
+
   N:001DH         SYMBOL        S5
   N:001EH         SYMBOL        S6
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/10/2018  14:44:03  PAGE 6
-
-
   N:001FH         SYMBOL        S7
   N:0020H         SYMBOL        SS
   N:0021H         SYMBOL        SSZ
@@ -357,11 +359,11 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (BOOTLOADER)
   C:0927H         LINE#         123
   C:0929H         LINE#         124
   C:092BH         LINE#         125
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/14/2018  21:16:36  PAGE 7
+
+
   C:092EH         LINE#         125
   C:0930H         LINE#         125
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/10/2018  14:44:03  PAGE 7
-
-
   C:0933H         LINE#         126
   C:0934H         LINE#         134
   C:0937H         LINE#         135
@@ -395,38 +397,39 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (BOOTLOADER)
 
   -------         MODULE        KMAIN
   C:0000H         SYMBOL        _ICE_DUMMY_
-  C:0AAFH         PUBLIC        main
-  C:0AB5H         PUBLIC        dummyCodePath
-  C:0A9CH         PUBLIC        _kmain
+  C:0A8DH         PUBLIC        kmain
+  C:0AC9H         PUBLIC        main
+  C:0ACFH         PUBLIC        dummyCodePath
   -------         PROC          MAIN
-  C:0AAFH         LINE#         26
-  C:0AAFH         LINE#         27
-  C:0AB2H         LINE#         29
+  C:0AC9H         LINE#         26
+  C:0AC9H         LINE#         27
+  C:0ACCH         LINE#         28
   -------         ENDPROC       MAIN
-  -------         PROC          _KMAIN
-  C:0A9CH         LINE#         32
-  C:0A9CH         LINE#         37
-  C:0AA5H         LINE#         38
-  -------         ENDPROC       _KMAIN
+  -------         PROC          KMAIN
+  C:0A8DH         LINE#         31
+  C:0A8DH         LINE#         35
+  C:0A97H         LINE#         38
+  C:0A9EH         LINE#         39
+  -------         ENDPROC       KMAIN
   -------         PROC          DUMMYCODEPATH
-  C:0AB5H         LINE#         41
-  C:0AB5H         LINE#         42
-  C:0AB8H         LINE#         43
+  C:0ACFH         LINE#         42
+  C:0ACFH         LINE#         43
+  C:0AD2H         LINE#         44
   -------         ENDPROC       DUMMYCODEPATH
   -------         ENDMOD        KMAIN
 
   -------         MODULE        KTHREADS
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/14/2018  21:16:36  PAGE 8
+
+
   C:0000H         SYMBOL        _ICE_DUMMY_
   C:0A78H         PUBLIC        kthreads_isr
-  C:0ABBH         PUBLIC        enable_threads
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/10/2018  14:44:03  PAGE 8
-
-
-  C:0ABEH         PUBLIC        kthreads_compile_init
+  C:0AD5H         PUBLIC        enable_threads
+  C:0AD8H         PUBLIC        kthreads_compile_init
   -------         PROC          ENABLE_THREADS
-  C:0ABBH         LINE#         21
-  C:0ABBH         LINE#         24
-  C:0ABDH         LINE#         25
+  C:0AD5H         LINE#         21
+  C:0AD5H         LINE#         24
+  C:0AD7H         LINE#         25
   -------         ENDPROC       ENABLE_THREADS
   -------         PROC          KTHREADS_ISR
   -------         DO            
@@ -438,50 +441,50 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (BOOTLOADER)
   C:0A86H         LINE#         32
   -------         ENDPROC       KTHREADS_ISR
   -------         PROC          KTHREADS_COMPILE_INIT
-  C:0ABEH         LINE#         35
-  C:0ABEH         LINE#         38
+  C:0AD8H         LINE#         35
+  C:0AD8H         LINE#         38
   -------         ENDPROC       KTHREADS_COMPILE_INIT
   -------         ENDMOD        KTHREADS
 
   -------         MODULE        REGISTERS
   C:0000H         SYMBOL        _ICE_DUMMY_
-  D:0008H         PUBLIC        rsrv0
-  D:000BH         PUBLIC        ra0
-  D:000EH         PUBLIC        ra1
-  D:0011H         PUBLIC        a0
-  D:0014H         PUBLIC        a1
-  D:0017H         PUBLIC        a2
-  D:001AH         PUBLIC        a3
-  D:001DH         PUBLIC        a4
-  D:0020H         PUBLIC        rs0
-  D:0023H         PUBLIC        a5
-  D:0026H         PUBLIC        rs1
-  D:0029H         PUBLIC        a6
-  D:002CH         PUBLIC        rs2
-  D:002FH         PUBLIC        a7
-  D:0032H         PUBLIC        rs3
-  D:0035H         PUBLIC        rs4
-  D:0038H         PUBLIC        rs5
-  D:003BH         PUBLIC        t0
-  D:003EH         PUBLIC        t1
-  D:0041H         PUBLIC        t2
-  D:0044H         PUBLIC        t3
-  D:0047H         PUBLIC        acc
-  D:004AH         PUBLIC        t4
-  D:004DH         PUBLIC        bcc
-  D:0050H         PUBLIC        t5
-  D:0053H         PUBLIC        t6
-  D:0056H         PUBLIC        t7
-  D:0059H         PUBLIC        nic
-  D:005CH         PUBLIC        ntsd
-  D:005FH         PUBLIC        bte
-  D:0062H         PUBLIC        ntsm
-  D:0065H         PUBLIC        btm
-  D:0068H         PUBLIC        bts
-  D:006BH         PUBLIC        ltl
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/10/2018  14:44:03  PAGE 9
+  D:0008H         PUBLIC        ra0
+  D:000BH         PUBLIC        ra1
+  D:000EH         PUBLIC        a0
+  D:0011H         PUBLIC        a1
+  D:0014H         PUBLIC        a2
+  D:0017H         PUBLIC        a3
+  D:001AH         PUBLIC        a4
+  D:001DH         PUBLIC        rs0
+  D:0020H         PUBLIC        a5
+  D:0023H         PUBLIC        rs1
+  D:0026H         PUBLIC        a6
+  D:0029H         PUBLIC        rs2
+  D:002CH         PUBLIC        a7
+  D:002FH         PUBLIC        rs3
+  D:0032H         PUBLIC        rs4
+  D:0035H         PUBLIC        rs5
+  D:0038H         PUBLIC        rs6
+  D:003BH         PUBLIC        rs7
+  D:003EH         PUBLIC        acc
+  D:0041H         PUBLIC        bcc
+  D:0044H         PUBLIC        tseg
+  D:0047H         PUBLIC        trid
+  D:004AH         PUBLIC        ntsd
+  D:004DH         PUBLIC        nic
+  D:0050H         PUBLIC        bte
+  D:0053H         PUBLIC        trml
+  D:0056H         PUBLIC        ntsm
+  D:0059H         PUBLIC        btm
+  D:005CH         PUBLIC        trms
+  D:005FH         PUBLIC        trpp
+  D:0062H         PUBLIC        bts
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/14/2018  21:16:36  PAGE 9
 
 
+  D:0065H         PUBLIC        trps
+  D:0068H         PUBLIC        tsup
+  D:006BH         PUBLIC        trsv
   D:006EH         PUBLIC        msz
   D:0071H         PUBLIC        psw
   D:0074H         PUBLIC        ssz
@@ -489,9 +492,13 @@ SYMBOL TABLE OF MODULE:  .\Objects\xBootStrapper (BOOTLOADER)
   D:007AH         PUBLIC        ss
   -------         ENDMOD        REGISTERS
 
+  -------         MODULE        ?C?CSTPTR
+  C:0A9FH         PUBLIC        ?C?CSTPTR
+  -------         ENDMOD        ?C?CSTPTR
+
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0239H BYTE (27%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0241H BYTE (28%) *
 ******************************************************************************
 
-Program Size: data=126.0 xdata=0 code=713
+Program Size: data=126.0 xdata=0 code=739
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

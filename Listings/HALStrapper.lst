@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  HALSTRAPPER                                                          10/10/2018 14:44:02 PAGE     1
+A51 MACRO ASSEMBLER  HALSTRAPPER                                                          10/14/2018 21:16:36 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -65,7 +65,7 @@ LOC  OBJ            LINE     SOURCE
   0020          +1    55     ss      equ     0x20    ; short stack 0 address
   0021          +1    56     ssz     equ 0x21        ; short stack size (index)
   0022          +1    57     msz     equ     0x22    ; short stack max size (to avoid overflow, but with stack wrapping/
-A51 MACRO ASSEMBLER  HALSTRAPPER                                                          10/10/2018 14:44:02 PAGE     2
+A51 MACRO ASSEMBLER  HALSTRAPPER                                                          10/14/2018 21:16:36 PAGE     2
 
                              overwrites)
                       58     
@@ -106,7 +106,7 @@ LOC  OBJ            LINE     SOURCE
                       93             sspushl #0x00
 0008 22               97             ret
                       98     end
-A51 MACRO ASSEMBLER  HALSTRAPPER                                                          10/10/2018 14:44:02 PAGE     3
+A51 MACRO ASSEMBLER  HALSTRAPPER                                                          10/14/2018 21:16:36 PAGE     3
 
 SYMBOL TABLE LISTING
 ------ ----- -------

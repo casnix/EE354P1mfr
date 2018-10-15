@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  BOOTLOADER                                                           10/10/2018 14:44:02 PAGE     1
+A51 MACRO ASSEMBLER  BOOTLOADER                                                           10/14/2018 21:16:36 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -65,7 +65,7 @@ LOC  OBJ            LINE     SOURCE
                 +1    55     
                 +1    56     ; SHORT STACK -- see the Short Stack section after the END instruction for an explanation
                 +1    57     ;  of what this is
-A51 MACRO ASSEMBLER  BOOTLOADER                                                           10/10/2018 14:44:02 PAGE     2
+A51 MACRO ASSEMBLER  BOOTLOADER                                                           10/14/2018 21:16:36 PAGE     2
 
                 +1    58     ; Short stack address "register" and short stack size "register"
   0020          +1    59     ss      equ     0x20    ; short stack 0 address
@@ -133,7 +133,7 @@ LOC  OBJ            LINE     SOURCE
                      120                     ; Reset our ssz, wrapping our stack
 000F 752100          121                     mov             ssz,    #0x00
                      122             
-A51 MACRO ASSEMBLER  BOOTLOADER                                                           10/10/2018 14:44:02 PAGE     3
+A51 MACRO ASSEMBLER  BOOTLOADER                                                           10/14/2018 21:16:36 PAGE     3
 
 0012                 123             __sspush_continue:
                      124                     ; Set our offset
@@ -201,7 +201,7 @@ LOC  OBJ            LINE     SOURCE
 003C C019            186             push    s1
 003E 22              187                     ret
                      188     
-A51 MACRO ASSEMBLER  BOOTLOADER                                                           10/10/2018 14:44:02 PAGE     4
+A51 MACRO ASSEMBLER  BOOTLOADER                                                           10/14/2018 21:16:36 PAGE     4
 
                      189     
                      190     
@@ -211,7 +211,7 @@ LOC  OBJ            LINE     SOURCE
                      194                     ;---SHORT STACK
 0000 752023          195                     mov             ss,             #0x23
 0003 752100          196                     mov             ssz,    #0x00
-0006 75220B          197                     mov             msz,    #0x0B   ; 11 bytes longs
+0006 75220A          197                     mov             msz,    #0x0A   ; 10 bytes longs
                      198                     ; The last slot in the short stack will be #([ss]+[msz])
                      199                     
                      200                     ;---STACK
@@ -226,7 +226,7 @@ LOC  OBJ            LINE     SOURCE
 ----                 209     rseg    boot
                      210             extrn           code    (__HIL_init)
                      211             extrn           code    (__HAL_init)
-                     212             extrn           code    (_kmain)
+                     212             extrn           code    (kmain)
 0000                 213             __entry:
                      214             ; Do three things:      (1) tell the Hardware Interaction Layer to initialize
                      215             ;                                       (2) tell the Hardware Abstration Layer to i
@@ -241,7 +241,7 @@ LOC  OBJ            LINE     SOURCE
 0012 B40012          227                     cjne    a,              #0x00,  __entry_HAL_error
                      228                     
 0015 74E4            229             mov     a,      #0xe4
-0017 1100     F      230                     acall   _kmain
+0017 1100     F      230                     acall   kmain
                      231                     sspop   acc
 001E B40009          234                     cjne    a,              #0x00,  __entry_main_error
                      235                     
@@ -260,7 +260,7 @@ LOC  OBJ            LINE     SOURCE
                      248                     ; Endless looooooop
 0000 0100     F      249                     ajmp    __shutdown
                      250     end
-A51 MACRO ASSEMBLER  BOOTLOADER                                                           10/10/2018 14:44:02 PAGE     5
+A51 MACRO ASSEMBLER  BOOTLOADER                                                           10/14/2018 21:16:36 PAGE     5
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -296,6 +296,7 @@ C5 . . . . . . . .  N NUMB   0015H   A
 C6 . . . . . . . .  N NUMB   0016H   A   
 C7 . . . . . . . .  N NUMB   0017H   A   
 EXIT . . . . . . .  C SEG    0002H       REL=UNIT
+KMAIN. . . . . . .  C ADDR   -----       EXT
 MEMORY . . . . . .  C SEG    003FH       REL=UNIT
 MSZ. . . . . . . .  N NUMB   0022H   A   
 S0 . . . . . . . .  N NUMB   0018H   A   
@@ -310,7 +311,6 @@ SETUP. . . . . . .  C SEG    000FH       REL=UNIT
 SP . . . . . . . .  D ADDR   0081H   A   
 SS . . . . . . . .  N NUMB   0020H   A   
 SSZ. . . . . . . .  N NUMB   0021H   A   
-_KMAIN . . . . . .  C ADDR   -----       EXT
 __ENTRY. . . . . .  C ADDR   0000H   R   SEG=BOOT
 __ENTRY_HAL_ERROR.  C ADDR   0027H   R   SEG=BOOT
 __ENTRY_HIL_ERROR.  C ADDR   0024H   R   SEG=BOOT
@@ -329,5 +329,5 @@ REGISTER BANK(S) USED: 0
 
 
 ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
-A51 MACRO ASSEMBLER  BOOTLOADER                                                           10/10/2018 14:44:02 PAGE     6
+A51 MACRO ASSEMBLER  BOOTLOADER                                                           10/14/2018 21:16:36 PAGE     6
 

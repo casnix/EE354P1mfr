@@ -15,21 +15,20 @@ extern void __setup(void);
 
 //
 // Function prototypes
-void main(void);	// This memory structure gets destroyed, and it's kind of hackish
-									// but Keil C51 just absolutely insists that a C function called main() be placed at 
-									// 0x0000, disallowing me from setting up memory my way first.
-void _kmain(void);
+void main(void);	// The memory structure associated with main() gets destroyed immediately after boot,
+									// and it's kind of hackish but Keil C51 just absolutely insists that a C function 
+									// called main() be placed at 0x0000, disallowing me from setting up memory my way first.
+void kmain(void);
 void dummyCodePath();
 //
 //
 
 void main(){
 	__setup();
-	//kmain(); // This will not ever run, but BL51 will not overlay memory for kmain() if it's only called from assembly...
 	dummyCodePath();
 }
 
-void _kmain(){
+void kmain(){
 	// Set up 
 	
 	// ensure that threading is disabled
@@ -41,6 +40,6 @@ void _kmain(){
 
 /// -- keep at bottom of page
 void dummyCodePath(void){
-	_kmain();
+	kmain();
 	kthreads_compile_init();
 }

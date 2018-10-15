@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  HILSTRAPPER                                                          10/10/2018 14:44:02 PAGE     1
+A51 MACRO ASSEMBLER  HILSTRAPPER                                                          10/14/2018 21:16:36 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -65,7 +65,7 @@ LOC  OBJ            LINE     SOURCE
   0020          +1    55     ss      equ     0x20    ; short stack 0 address
   0021          +1    56     ssz     equ 0x21        ; short stack size (index)
   0022          +1    57     msz     equ     0x22    ; short stack max size (to avoid overflow, but with stack wrapping/
-A51 MACRO ASSEMBLER  HILSTRAPPER                                                          10/10/2018 14:44:02 PAGE     2
+A51 MACRO ASSEMBLER  HILSTRAPPER                                                          10/14/2018 21:16:36 PAGE     2
 
                              overwrites)
                       58     
@@ -133,7 +133,7 @@ LOC  OBJ            LINE     SOURCE
                      120     HIL             segment code
                      121             
                      122     public  __HIL_init
-A51 MACRO ASSEMBLER  HILSTRAPPER                                                          10/10/2018 14:44:02 PAGE     3
+A51 MACRO ASSEMBLER  HILSTRAPPER                                                          10/14/2018 21:16:36 PAGE     3
 
                      123     
                              
@@ -201,7 +201,7 @@ LOC  OBJ            LINE     SOURCE
 0041 22              188             ret
                      189     
                      190         ; __HIL_enable_ADCCollect : Enables ADC collection on selected channel
-A51 MACRO ASSEMBLER  HILSTRAPPER                                                          10/10/2018 14:44:02 PAGE     4
+A51 MACRO ASSEMBLER  HILSTRAPPER                                                          10/14/2018 21:16:36 PAGE     4
 
                      191         ; args: none
                      192         ; rets: none
@@ -269,7 +269,7 @@ LOC  OBJ            LINE     SOURCE
 007F 751A10          255                     mov             s2,                     #0x10
                      256     
                      257     
-A51 MACRO ASSEMBLER  HILSTRAPPER                                                          10/10/2018 14:44:02 PAGE     5
+A51 MACRO ASSEMBLER  HILSTRAPPER                                                          10/14/2018 21:16:36 PAGE     5
 
                      258                     ; Move RETADDR to top of stack again
 0082 D0F0            259                     pop             bcc
@@ -323,7 +323,7 @@ LOC  OBJ            LINE     SOURCE
                              
                      314     
                      315     end
-A51 MACRO ASSEMBLER  HILSTRAPPER                                                          10/10/2018 14:44:02 PAGE     6
+A51 MACRO ASSEMBLER  HILSTRAPPER                                                          10/14/2018 21:16:36 PAGE     6
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -391,7 +391,7 @@ __HIL_ENABLE_ADCCOLLECT.  C ADDR   0042H   R   SEG=HIL
 __HIL_INIT . . . . . . .  C ADDR   0000H   R   SEG=HIL
 __HIL_SELECT_ADCCH . . .  C ADDR   0038H   R   SEG=HIL
 __SSPOP. . . . . . . . .  C ADDR   -----       EXT
-A51 MACRO ASSEMBLER  HILSTRAPPER                                                          10/10/2018 14:44:02 PAGE     7
+A51 MACRO ASSEMBLER  HILSTRAPPER                                                          10/14/2018 21:16:36 PAGE     7
 
 __SSPUSH . . . . . . . .  C ADDR   -----       EXT
 

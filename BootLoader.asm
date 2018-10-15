@@ -123,12 +123,13 @@ rseg	setup
 		;---SHORT STACK
 		mov		ss,		#0x23
 		mov		ssz,	#0x00
-		mov		msz,	#0x0B	; 11 bytes longs
+		mov		msz,	#0x0A	; 10 bytes longs
 		; The last slot in the short stack will be #([ss]+[msz])
 		
 		;---STACK
 		; Set SP to 0x30
 		mov		sp,		#0x30
+		; The stack can only grow up to 0x7f now, making it a max size of 79 bytes
 		
 		; enter our program
 		ljmp	__entry
@@ -138,7 +139,7 @@ rseg	setup
 rseg	boot
 	extrn		code	(__HIL_init)
 	extrn		code	(__HAL_init)
-	extrn		code	(_kmain)
+	extrn		code	(kmain)
 	__entry:
 	; Do three things:	(1) tell the Hardware Interaction Layer to initialize
 	;					(2) tell the Hardware Abstration Layer to initialize
@@ -152,7 +153,7 @@ rseg	boot
 		cjne	a,		#0x00,	__entry_HAL_error
 		
         mov     a,      #0xe4
-		acall	_kmain
+		acall	kmain
 		sspop	acc
 		cjne	a,		#0x00,	__entry_main_error
 		

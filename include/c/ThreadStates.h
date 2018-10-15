@@ -11,6 +11,6 @@
 #define TSEG_NORMAL	0xCC
 #define TSEG_LOW		0xBB
 #define TSEG_WAIT		0xAA
-#define TSEG_WAITHI	0xDD
+#define	TSEG_WAITHI	0xDD
 
 #endif
